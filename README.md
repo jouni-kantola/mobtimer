@@ -11,14 +11,9 @@ Start the application in development mode:
 
 `npm start`
 
-If you prefer running the neu CLI globally:
-
-1. `npm install -g @neutralinojs/neu`
-1. `neu run`
-
 ## Release
 
-`npm run build` (or `neu build --release` via the neu CLI) to create binaries.
+`npm run build` to create binaries.
 
 ## Read more
 
