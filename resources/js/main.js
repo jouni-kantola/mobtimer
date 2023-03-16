@@ -62,7 +62,7 @@ async function runningTimer() {
   }
 }
 
-timerValueElement.addEventListener("change", (e) => {
+timerValueElement.addEventListener("input", (e) => {
   timerValue = Math.max(1, e.target.value);
   e.target.value = timerValue;
   timerValueDefault = timerValue;
