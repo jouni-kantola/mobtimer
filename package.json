@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "update": "npx @neutralinojs/neu update",
     "start": "npx @neutralinojs/neu run -- --window-enable-inspector",
-    "build": "npx @neutralinojs/neu build --release"
+    "build": "npx @neutralinojs/neu build --release",
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",
@@ -20,6 +21,12 @@
   },
   "homepage": "https://github.com/stefanforsberg/mobtimerneujs#readme",
   "devDependencies": {
-    "@neutralinojs/neu": "^9.4.0"
+    "@neutralinojs/neu": "^9.4.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.0",
+    "prettier": "^2.8.4"
+  },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
   }
 }
