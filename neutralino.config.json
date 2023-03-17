@@ -24,7 +24,7 @@
     },
     "modes": {
         "window": {
-            "title": "mobtimer",
+            "title": "Mob timer",
             "width": 800,
             "height": 500,
             "minWidth": 400,
