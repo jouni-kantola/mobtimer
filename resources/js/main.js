@@ -21,22 +21,25 @@ function updateTimeDisplay() {
 }
 
 async function setCurrentUser() {
-    document
-        .querySelectorAll(".user input[type=text]")
-        .forEach(e => e.parentElement.classList.remove("current"));
-    let currentUser = document.querySelector(
+    const previousUser = document.querySelector(".user.current");
+    if (previousUser)
+        previousUser.classList.remove("current");
+
+    const nextUser = document.querySelector(
         ".user[data-index='" + activeUser + "']"
     );
-    currentUser.classList.add("current");
+    nextUser.classList.add("current");
 
-    startButtonElement.innerText = `Start session for ${currentUser.children[1].value}`;
+    const nextUserName = nextUser.querySelector("input[data-mob-user]").value;
+
+    startButtonElement.innerText = `Start session for ${nextUserName}`;
 
     await Neutralino.os.setTray({
         icon: "/resources/icons/trayIcon.png",
         menuItems: [
             {
                 id: "currentUser",
-                text: `Driver: ${currentUser.children[1].value}`,
+                text: `Driver: ${nextUserName}`,
             },
         ],
     });
