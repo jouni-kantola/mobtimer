@@ -112,7 +112,7 @@ startButtonElement.addEventListener("click", async () => {
     clockIntervalId = setInterval(runningTimer, 1000);
 });
 
-let initApp = async () => {
+async function initApp() {
     let mobUsers;
 
     try {
