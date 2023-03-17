@@ -21,7 +21,7 @@
     },
     "homepage": "https://github.com/stefanforsberg/mobtimerneujs#readme",
     "devDependencies": {
-        "@neutralinojs/neu": "^9.4.0",
+        "@neutralinojs/neu": "^9.5.0",
         "husky": "^8.0.3",
         "lint-staged": "^13.2.0",
         "prettier": "^2.8.4"
