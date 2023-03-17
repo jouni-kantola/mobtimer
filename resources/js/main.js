@@ -101,7 +101,7 @@ startButtonElement.addEventListener("click", async () => {
 
     running = true;
 
-    let currentUser = document.querySelector(".user.current input[type=text]");
+    const currentUser = document.querySelector(".user.current input[type=text]");
     await Neutralino.os.showNotification(
         "New session",
         `Let's go ${currentUser.value} 😘`
