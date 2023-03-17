@@ -17,9 +17,7 @@ function updateTimeDisplay() {
     const divisor_for_seconds = divisor_for_minutes % 60;
     const seconds = Math.ceil(divisor_for_seconds);
 
-    timerDisplayElement.innerText = `${minutes > 9 ? minutes : "0" + minutes}:${
-        seconds > 9 ? seconds : "0" + seconds
-    }`;
+    timerDisplayElement.innerText = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
 }
 
 async function setCurrentUser() {
