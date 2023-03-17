@@ -44,25 +44,13 @@ async function runningTimer() {
     updateTimeDisplay();
     if (timerValue <= 0) {
         running = false;
-        const allUsers = Array.from(document.querySelectorAll(".user"));
+        const allUsers = document.querySelectorAll(".user");
 
-        let checkUser = activeUser;
+        for (let i = 1; i < allUsers.length + 1; i++) {
+            const checkUser = (activeUser + i) % (allUsers.length + 1);
 
-        for (let i = 0; i < allUsers.length; i++) {
-            checkUser = (activeUser + i + 1) % (allUsers.length + 1);
-
-            if (
-                document.querySelector(
-                    ".user[data-index='" +
-                    checkUser +
-                    "'] input[type=checkbox]:checked"
-                )
-            ) {
-                activeUser = parseInt(
-                    document.querySelector(
-                        ".user[data-index='" + checkUser + "']"
-                    ).dataset.index
-                );
+            if (document.querySelector(`.user[data-index="${checkUser}"] input[type=checkbox]:checked`)) {
+                activeUser = checkUser;
                 break;
             }
         }
