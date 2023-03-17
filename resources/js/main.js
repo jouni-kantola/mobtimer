@@ -112,7 +112,7 @@ startButtonElement.addEventListener("click", async () => {
 });
 
 let initApp = async () => {
-    let mobUsers = {};
+    let mobUsers;
 
     try {
         mobUsers = JSON.parse(await Neutralino.storage.getData("mobUsers"));
