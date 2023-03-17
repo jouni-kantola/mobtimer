@@ -25,9 +25,7 @@ async function setCurrentUser() {
     if (previousUser)
         previousUser.classList.remove("current");
 
-    const nextUser = document.querySelector(
-        ".user[data-index='" + activeUser + "']"
-    );
+    const nextUser = document.querySelector(`.user[data-index="${activeUser}"]`);
     nextUser.classList.add("current");
 
     const nextUserName = nextUser.querySelector("input[data-mob-user]").value;
