@@ -8,7 +8,7 @@ let activeUser = 1;
 let running = false;
 let clockIntervalId = "";
 let timerValue = timerValueElement.value;
-let timerValueDefault = timerValueElement.value;
+let timerValueDefault = timerValue;
 
 function updateTimeDisplay() {
     const divisor_for_minutes = timerValue % (60 * 60);
