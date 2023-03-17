@@ -1,32 +1,32 @@
 {
-  "name": "mobtimerneujs",
-  "version": "1.0.0",
-  "description": "Mob timer",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "update": "npx @neutralinojs/neu update",
-    "start": "npx @neutralinojs/neu run -- --window-enable-inspector",
-    "build": "npx @neutralinojs/neu build --release",
-    "prepare": "husky install"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/stefanforsberg/mobtimerneujs.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/stefanforsberg/mobtimerneujs/issues"
-  },
-  "homepage": "https://github.com/stefanforsberg/mobtimerneujs#readme",
-  "devDependencies": {
-    "@neutralinojs/neu": "^9.4.0",
-    "husky": "^8.0.3",
-    "lint-staged": "^13.2.0",
-    "prettier": "^2.8.4"
-  },
-  "lint-staged": {
-    "**/*": "prettier --write --ignore-unknown"
-  }
+    "name": "mobtimerneujs",
+    "version": "1.0.0",
+    "description": "Mob timer",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "update": "npx @neutralinojs/neu update",
+        "start": "npx @neutralinojs/neu run -- --window-enable-inspector",
+        "build": "npx @neutralinojs/neu build --release",
+        "prepare": "husky install"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/stefanforsberg/mobtimerneujs.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/stefanforsberg/mobtimerneujs/issues"
+    },
+    "homepage": "https://github.com/stefanforsberg/mobtimerneujs#readme",
+    "devDependencies": {
+        "@neutralinojs/neu": "^9.4.0",
+        "husky": "^8.0.3",
+        "lint-staged": "^13.2.0",
+        "prettier": "^2.8.4"
+    },
+    "lint-staged": {
+        "**/*": "prettier --write --ignore-unknown"
+    }
 }

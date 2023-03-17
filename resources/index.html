@@ -1,37 +1,48 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8" />
-    <title>MobTimer</title>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/picocss/1.5.2/pico.min.css"
-      integrity="sha512-3gFq2IXMVlAQaUyahzhjDRivv0yqyXTb7xiy6ivTaG5Uz4hKI54uYxpQefdomgDVQ11eJVUbXG0YdPMDISiGgg=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
-    <main class="container">
-      <div
-        id="timerDisplay"
-        style="padding: 15px; border: solid 1px #f2bfd7; border-radius: 5px; text-align: center; font-size: 4rem; background: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, #ffe4f1 100%)"
-      ></div>
+    <head>
+        <meta charset="UTF-8" />
+        <title>MobTimer</title>
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/picocss/1.5.2/pico.min.css"
+            integrity="sha512-3gFq2IXMVlAQaUyahzhjDRivv0yqyXTb7xiy6ivTaG5Uz4hKI54uYxpQefdomgDVQ11eJVUbXG0YdPMDISiGgg=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+        />
+        <link rel="stylesheet" href="styles.css" />
+    </head>
+    <body>
+        <main class="container">
+            <div
+                id="timerDisplay"
+                style="
+                    padding: 15px;
+                    border: solid 1px #f2bfd7;
+                    border-radius: 5px;
+                    text-align: center;
+                    font-size: 4rem;
+                    background: linear-gradient(
+                        180deg,
+                        rgba(255, 255, 255, 0.25) 0%,
+                        #ffe4f1 100%
+                    );
+                "
+            ></div>
 
-      <hr />
+            <hr />
 
-      <input id="timerValue" type="number" value="600" min="1" />
+            <input id="timerValue" type="number" value="600" min="1" />
 
-      <hr />
+            <hr />
 
-      <button id="startButton">Start</button>
+            <button id="startButton">Start</button>
 
-      <hr />
+            <hr />
 
-      <form id="mobUsers"></form>
-    </main>
-    <script src="js/neutralino.js"></script>
-    <script src="js/main.js"></script>
-  </body>
+            <form id="mobUsers"></form>
+        </main>
+        <script src="js/neutralino.js"></script>
+        <script src="js/main.js"></script>
+    </body>
 </html>

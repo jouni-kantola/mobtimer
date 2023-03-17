@@ -1,32 +1,31 @@
 [data-theme="light"],
 :root:not([data-theme="dark"]) {
-  --primary: #eb378a;
-  --primary-hover: #ffb9d9;
-  --primary-focus: #ffb9d9;
-  ;
-  --primary-inverse: #FFF;
+    --primary: #eb378a;
+    --primary-hover: #ffb9d9;
+    --primary-focus: #ffb9d9;
+    --primary-inverse: #fff;
 }
 html {
-    background: #F6EDEE;
+    background: #f6edee;
 }
 
-input:not([type=checkbox]):not([type=radio]) {
+input:not([type="checkbox"]):not([type="radio"]) {
     margin-bottom: 0;
 }
 
 div.user {
-  grid-template-columns: 1fr minmax(auto, 95%); 
-  align-items: center; 
-  margin-bottom: var(--spacing);
+    grid-template-columns: 1fr minmax(auto, 95%);
+    align-items: center;
+    margin-bottom: var(--spacing);
 }
 
-.current input[type=text] {
-  background: linear-gradient(135deg, #bafdf7, #fcf4ac, #fbb7f3);
-  animation: animate 2.5s linear infinite;
+.current input[type="text"] {
+    background: linear-gradient(135deg, #bafdf7, #fcf4ac, #fbb7f3);
+    animation: animate 2.5s linear infinite;
 }
 
 @keyframes animate {
-  100%{
-    filter: hue-rotate(360deg);
-  }
+    100% {
+        filter: hue-rotate(360deg);
+    }
 }
