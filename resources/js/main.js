@@ -11,12 +11,8 @@ let timerValue = timerValueElement.value;
 let timerValueDefault = timerValue;
 
 function updateTimeDisplay() {
-    const divisor_for_minutes = timerValue % (60 * 60);
-    const minutes = Math.floor(divisor_for_minutes / 60);
-
-    const divisor_for_seconds = divisor_for_minutes % 60;
-    const seconds = Math.ceil(divisor_for_seconds);
-
+    const minutes = Math.floor(timerValue / 60);
+    const seconds = timerValue % 60;
     timerDisplayElement.innerText = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
 }
 
