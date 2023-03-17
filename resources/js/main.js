@@ -59,8 +59,8 @@ async function runningTimer() {
             if (
                 document.querySelector(
                     ".user[data-index='" +
-                        checkUser +
-                        "'] input[type=checkbox]:checked"
+                    checkUser +
+                    "'] input[type=checkbox]:checked"
                 )
             ) {
                 activeUser = parseInt(
@@ -120,16 +120,11 @@ let initApp = async () => {
         mobUsers = ["User 1", "User 2", "User 3", "User 4", "User 5", "Break"];
     }
 
-    let mobUserHtml = "";
-
-    mobUsers.forEach((m, i) => {
-        mobUserHtml += `<div class="grid user" data-index="${i + 1}">
-      <input type="checkbox" role="switch" checked />
-      <input type="text" placeholder="User 1" value="${m}" />
-    </div>`;
-    });
-
-    document.getElementById("mobUsers").innerHTML = mobUserHtml;
+    document.getElementById("mobUsers").innerHTML = mobUsers.map((m, i) =>
+`<div class="grid user" data-index="${i + 1}">
+    <input type="checkbox" role="switch" checked />
+    <input type="text" placeholder="User 1" value="${m}" />
+</div>`).join("");
 
     document.querySelectorAll(".user input[type=text]").forEach(u => {
         u.addEventListener("change", async () => {
