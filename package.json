@@ -1,6 +1,6 @@
 {
-    "name": "mobtimerneujs",
-    "version": "1.0.0",
+    "name": "mobtimer",
+    "version": "2.0.0",
     "description": "Mob timer",
     "main": "index.js",
     "scripts": {
@@ -12,14 +12,14 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/stefanforsberg/mobtimerneujs.git"
+        "url": "git+https://github.com/jouni-kantola/mobtimer.git"
     },
-    "author": "",
+    "author": "Jouni Kantola <jouni@kantola.se> (https://github.com/jouni-kantola)",
     "license": "ISC",
     "bugs": {
-        "url": "https://github.com/stefanforsberg/mobtimerneujs/issues"
+        "url": "https://github.com/jouni-kantola/mobtimer/issues"
     },
-    "homepage": "https://github.com/stefanforsberg/mobtimerneujs#readme",
+    "homepage": "https://github.com/jouni-kantola/mobtimer#readme",
     "devDependencies": {
         "@neutralinojs/neu": "^9.5.0",
         "husky": "^8.0.3",
