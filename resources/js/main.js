@@ -121,22 +121,24 @@ let initApp = async () => {
     }
 
     document.getElementById("mobUsers").innerHTML = mobUsers.map((m, i) =>
-`<div class="grid user" data-index="${i + 1}">
+        `<div class="grid user" data-index="${i + 1}">
     <input type="checkbox" role="switch" checked />
     <input type="text" placeholder="Name" value="${m}" data-mob-user="${m}" />
 </div>`).join("");
 
-    document.querySelectorAll(".user input[type=text]").forEach(u => {
-        u.addEventListener("change", async () => {
-            await Neutralino.storage.setData(
-                "mobUsers",
-                JSON.stringify(
-                    Array.from(
-                        document.querySelectorAll("input[data-mob-user]")
-                    ).map(x => x.value)
-                )
-            );
-        });
+    async function storeUsers() {
+        await Neutralino.storage.setData(
+            "mobUsers",
+            JSON.stringify(
+                Array.from(
+                    document.querySelectorAll("input[data-mob-user]")
+                ).map(x => x.value)
+            )
+        );
+    }
+
+    document.querySelectorAll("input[data-mob-user]").forEach(u => {
+        u.addEventListener("change", storeUsers);
 
         u.addEventListener("dblclick", async udbclick => {
             if (!udbclick.target.previousElementSibling.checked) {
