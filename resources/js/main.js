@@ -123,7 +123,7 @@ let initApp = async () => {
     document.getElementById("mobUsers").innerHTML = mobUsers.map((m, i) =>
 `<div class="grid user" data-index="${i + 1}">
     <input type="checkbox" role="switch" checked />
-    <input type="text" placeholder="Name" value="${m}" />
+    <input type="text" placeholder="Name" value="${m}" data-mob-user="${m}" />
 </div>`).join("");
 
     document.querySelectorAll(".user input[type=text]").forEach(u => {
@@ -132,7 +132,7 @@ let initApp = async () => {
                 "mobUsers",
                 JSON.stringify(
                     Array.from(
-                        document.querySelectorAll(".user input[type=text]")
+                        document.querySelectorAll("input[data-mob-user]")
                     ).map(x => x.value)
                 )
             );
