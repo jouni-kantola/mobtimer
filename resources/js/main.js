@@ -94,6 +94,10 @@ startButtonElement.addEventListener("click", async () => {
     clockIntervalId = setInterval(runningTimer, 1000);
 });
 
+Neutralino.events.on("trayMenuItemClicked", async e => {
+    await Neutralino.window.show();
+});
+
 async function initApp() {
     let mobUsers;
 
@@ -138,10 +142,6 @@ async function initApp() {
 
     updateTimeDisplay();
     await setCurrentUser();
-
-    await Neutralino.events.on("trayMenuItemClicked", async e => {
-        await Neutralino.window.show();
-    });
 };
 
 initApp();
