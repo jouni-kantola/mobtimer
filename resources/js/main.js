@@ -6,6 +6,7 @@ const startButtonElement = document.getElementById("startButton");
 
 const state = {
     activeUser: 1,
+    getCurrentUser: () => document.querySelector(".user.current input[data-mob-user]").value
 }
 
 let running = false;
@@ -17,6 +18,18 @@ function updateTimeDisplay() {
     const minutes = Math.floor(timerValue / 60);
     const seconds = timerValue % 60;
     timerDisplayElement.innerText = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+}
+
+async function setTray() {
+    await Neutralino.os.setTray({
+        icon: "/resources/icons/trayIcon.png",
+        menuItems: [
+            {
+                id: "currentUser",
+                text: `Driver: ${state.getCurrentUser()}`,
+            },
+        ],
+    });
 }
 
 async function setCurrentUser() {
@@ -31,15 +44,7 @@ async function setCurrentUser() {
 
     startButtonElement.innerText = `Start session for ${nextUserName}`;
 
-    await Neutralino.os.setTray({
-        icon: "/resources/icons/trayIcon.png",
-        menuItems: [
-            {
-                id: "currentUser",
-                text: `Driver: ${nextUserName}`,
-            },
-        ],
-    });
+    setTray();
 }
 
 async function runningTimer() {
