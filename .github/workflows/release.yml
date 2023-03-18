@@ -24,4 +24,4 @@ jobs:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: true
           files: |
-            mobtimer-release.zip
+            **/mobtimer-release.zip
