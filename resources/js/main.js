@@ -70,9 +70,12 @@ async function setCurrentUser() {
 }
 
 async function onTick() {
-    state.secondsRemaining--;
+    if (state.secondsRemaining-- > 0) {
+        updateTimeDisplay();
+        await updateTray();
+    } else {
+        resetTimer();
 
-    if (state.secondsRemaining <= 0) {
         const allUsers = document.querySelectorAll(".user");
 
         for (let i = 1; i < allUsers.length + 1; i++) {
@@ -91,13 +94,9 @@ async function onTick() {
 
         await setCurrentUser();
 
-        resetTimer();
 
         await Neutralino.window.show();
     }
-
-    updateTimeDisplay();
-    await updateTray();
 }
 
 timerValueElement.addEventListener("input", e => {
