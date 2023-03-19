@@ -7,12 +7,17 @@ const startButtonElement = document.getElementById("startButton");
 const state = {
     activeUser: 1,
     getCurrentUser: () => document.querySelector(".user.current input[data-mob-user]").value,
-    running: false,
+    isRunning() { return !!state.clockIntervalId },
     clockIntervalId: null,
 }
 
 let timerValue = timerValueElement.value;
 let timerValueDefault = timerValue;
+
+function resetTimer() {
+    clearInterval(state.clockIntervalId);
+    state.clockIntervalId = null;
+}
 
 function updateTimeDisplay() {
     const minutes = Math.floor(timerValue / 60);
@@ -51,7 +56,6 @@ async function runningTimer() {
     timerValue--;
     updateTimeDisplay();
     if (timerValue <= 0) {
-        state.running = false;
         const allUsers = document.querySelectorAll(".user");
 
         for (let i = 1; i < allUsers.length + 1; i++) {
@@ -65,7 +69,7 @@ async function runningTimer() {
 
         await setCurrentUser();
 
-        clearInterval(state.clockIntervalId);
+        resetTimer();
 
         timerValue = timerValueDefault;
         updateTimeDisplay();
@@ -82,14 +86,12 @@ timerValueElement.addEventListener("input", e => {
 });
 
 startButtonElement.addEventListener("click", async () => {
-    if (state.running) {
+    if (state.isRunning()) {
         await Neutralino.window.hide();
         return false;
     }
 
     startButtonElement.innerText = `Session running 🚀. Double click other user to switch/restart.`;
-
-    state.running = true;
 
     const currentUser = document.querySelector(".user.current input[type=text]");
     await Neutralino.os.showNotification(
@@ -139,8 +141,7 @@ async function initApp() {
             if (!udbclick.target.previousElementSibling.checked) {
                 return;
             }
-            clearInterval(state.clockIntervalId);
-            state.running = false;
+            resetTimer();
             state.activeUser = parseInt(udbclick.target.parentElement.dataset.index);
             await setCurrentUser();
             timerValue = timerValueDefault;
