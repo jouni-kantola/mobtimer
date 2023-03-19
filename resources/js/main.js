@@ -1,5 +1,5 @@
 import { defaultUsers } from "./config.js";
-import { createTeam, generateMemberMarkup } from "./team.js";
+import { createTeam, generateMemberMarkup, getNextMemberIndex } from "./team.js";
 
 Neutralino.init();
 
@@ -79,14 +79,9 @@ async function onTick() {
         const allUsers = document.querySelectorAll(".user");
 
         for (let i = 1; i < allUsers.length + 1; i++) {
-            const checkUser =
-                (state.activeUserIndex + i) % (allUsers.length + 1);
+            const checkUser = getNextMemberIndex(state.activeUserIndex, i, allUsers.length);
 
-            if (
-                document.querySelector(
-                    `.user[data-index="${checkUser}"] input[type=checkbox]:checked`
-                )
-            ) {
+            if (state.team[checkUser - 1].isHere) {
                 state.activeUserIndex = checkUser;
                 break;
             }

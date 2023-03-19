@@ -17,3 +17,7 @@ export function generateMemberMarkup(team) {
         )
         .join("");
 }
+
+export function getNextMemberIndex(recentActiveIndex, nextIndex, teamSize) {
+    return (recentActiveIndex + nextIndex) % (teamSize + 1) || 1;
+}

@@ -1,6 +1,6 @@
 import test from "ava";
 import { defaultUsers } from "../resources/js/config.js";
-import { createTeam, generateMemberMarkup } from "../resources/js/team.js";
+import { createTeam, generateMemberMarkup, getNextMemberIndex } from "../resources/js/team.js";
 
 test("map team to users", t => {
     const team = createTeam(defaultUsers);
@@ -26,4 +26,12 @@ test("generate team members html", t => {
     const markup = generateMemberMarkup(team);
 
     t.is(markup, expected);
+});
+
+test("get next team member's index", t => {
+    t.is(getNextMemberIndex(1, 1, 1), 1);
+    t.is(getNextMemberIndex(1, 1, 3), 2);
+    t.is(getNextMemberIndex(1, 2, 3), 3);
+    t.is(getNextMemberIndex(1, 3, 3), 1);
+    t.is(getNextMemberIndex(1, 4, 3), 1);
 });
