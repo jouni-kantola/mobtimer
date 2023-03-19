@@ -1,5 +1,5 @@
 import { defaultUsers } from "./config.js";
-import { createTeam, generateMemberMarkup, getNextMemberIndex } from "./team.js";
+import { createTeam, generateMemberMarkup, whosNextAfter } from "./team.js";
 
 Neutralino.init();
 
@@ -76,19 +76,12 @@ async function onTick() {
     } else {
         resetTimer();
 
-        const allUsers = document.querySelectorAll(".user");
-
-        for (let i = 1; i < allUsers.length + 1; i++) {
-            const checkUser = getNextMemberIndex(state.activeUserIndex, i, allUsers.length);
-
-            if (state.team[checkUser - 1].isHere) {
-                state.activeUserIndex = checkUser;
-                break;
-            }
-        }
+        state.activeUserIndex = whosNextAfter(
+            state.activeUserIndex,
+            state.team
+        );
 
         await setCurrentUser();
-
 
         await Neutralino.window.show();
     }
@@ -129,15 +122,15 @@ Neutralino.events.on("trayMenuItemClicked", async e => {
 async function initApp() {
     let users = defaultUsers;
     try {
-        users = JSON.parse(
-            await Neutralino.storage.getData("mobUsers")
-        );
+        users = JSON.parse(await Neutralino.storage.getData("mobUsers"));
     } catch (err) {
         await saveUsers(defaultUsers);
     }
 
     state.team = createTeam(users);
-    document.getElementById("mobUsers").innerHTML = generateMemberMarkup(state.team);
+    document.getElementById("mobUsers").innerHTML = generateMemberMarkup(
+        state.team
+    );
 
     document.querySelectorAll("input[data-mob-user]").forEach(u => {
         u.addEventListener("change", async () => {

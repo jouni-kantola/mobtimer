@@ -21,3 +21,13 @@ export function generateMemberMarkup(team) {
 export function getNextMemberIndex(recentActiveIndex, nextIndex, teamSize) {
     return (recentActiveIndex + nextIndex) % (teamSize + 1) || 1;
 }
+
+export function whosNextAfter(recentActiveIndex, team) {
+    for (let i = 1; i < team.length + 1; i++) {
+        const nextMemberIndex = getNextMemberIndex(recentActiveIndex, i, team.length);
+
+        if (team[nextMemberIndex - 1].isHere) {
+            return nextMemberIndex;
+        }
+    }
+}
