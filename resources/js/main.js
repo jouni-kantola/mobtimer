@@ -32,13 +32,17 @@ function resetTimer() {
     state.secondsRemaining = state.iterationLengthInSeconds;
 }
 
-function updateTimeDisplay() {
+function formatTimeRemaining() {
     const minutes = Math.floor(state.secondsRemaining / 60);
     const seconds = state.secondsRemaining % 60;
-    timerDisplayElement.innerText = `${String(minutes).padStart(
-        2,
-        "0"
-    )}:${String(seconds).padStart(2, "0")}`;
+    const timeLeft = `${String(minutes).padStart(2, "0")}:${String(
+        seconds
+    ).padStart(2, "0")}`;
+    return timeLeft;
+}
+
+function updateTimeDisplay() {
+    timerDisplayElement.innerText = formatTimeRemaining();
 }
 
 async function setTray() {
