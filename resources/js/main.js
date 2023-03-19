@@ -166,6 +166,12 @@ async function initApp() {
         });
     });
 
+    document.querySelectorAll(".user input[type=checkbox]").forEach(i => {
+        i.addEventListener("change", () => {
+            state.team[i.dataset.index - 1].isHere = i.checked;
+        });
+    });
+
     updateTimeDisplay();
     await setCurrentUser();
 }

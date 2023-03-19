@@ -11,7 +11,7 @@ export function generateMemberMarkup(team) {
         .map(
             ({ name, index, isHere }) =>
                 `<div class="grid user" data-index="${index}">
-<input type="checkbox" role="switch" ${isHere && "checked"} />
+<input type="checkbox" role="switch" ${isHere && "checked"} data-index="${index}" />
 <input type="text" placeholder="Name" value="${name}" data-mob-user="${name}" />
 </div>`
         )

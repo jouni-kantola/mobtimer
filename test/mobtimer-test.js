@@ -16,7 +16,7 @@ test("generate team members html", t => {
         .map(
             (m, i) =>
                 `<div class="grid user" data-index="${i + 1}">
-<input type="checkbox" role="switch" checked />
+<input type="checkbox" role="switch" checked data-index="${i + 1}" />
 <input type="text" placeholder="Name" value="${m}" data-mob-user="${m}" />
 </div>`
         )
