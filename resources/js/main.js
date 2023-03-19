@@ -45,7 +45,7 @@ function updateTimeDisplay() {
     timerDisplayElement.innerText = formatTimeRemaining();
 }
 
-async function setTray() {
+async function updateTray() {
     await Neutralino.os.setTray({
         icon: "/resources/icons/trayIcon.png",
         menuItems: [
@@ -103,7 +103,7 @@ async function onTick() {
     }
 
     updateTimeDisplay();
-    await setTray();
+    await updateTray();
 }
 
 timerValueElement.addEventListener("input", e => {
