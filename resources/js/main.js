@@ -9,10 +9,10 @@ const state = {
     getCurrentUser: () => document.querySelector(".user.current input[data-mob-user]").value,
     isRunning() { return !!state.clockIntervalId },
     clockIntervalId: null,
-    timerValue: timerValueElement.value,
+    secondsRemaining: timerValueElement.value,
 }
 
-let timerValueDefault = state.timerValue;
+let timerValueDefault = state.secondsRemaining;
 
 function resetTimer() {
     clearInterval(state.clockIntervalId);
@@ -20,8 +20,8 @@ function resetTimer() {
 }
 
 function updateTimeDisplay() {
-    const minutes = Math.floor(state.timerValue / 60);
-    const seconds = state.timerValue % 60;
+    const minutes = Math.floor(state.secondsRemaining / 60);
+    const seconds = state.secondsRemaining % 60;
     timerDisplayElement.innerText = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
 }
 
@@ -53,9 +53,9 @@ async function setCurrentUser() {
 }
 
 async function runningTimer() {
-    state.timerValue--;
+    state.secondsRemaining--;
     updateTimeDisplay();
-    if (state.timerValue <= 0) {
+    if (state.secondsRemaining <= 0) {
         const allUsers = document.querySelectorAll(".user");
 
         for (let i = 1; i < allUsers.length + 1; i++) {
@@ -71,7 +71,7 @@ async function runningTimer() {
 
         resetTimer();
 
-        state.timerValue = timerValueDefault;
+        state.secondsRemaining = timerValueDefault;
         updateTimeDisplay();
 
         await Neutralino.window.show();
@@ -79,9 +79,9 @@ async function runningTimer() {
 }
 
 timerValueElement.addEventListener("input", e => {
-    state.timerValue = Math.max(1, e.target.value);
-    e.target.value = state.timerValue;
-    timerValueDefault = state.timerValue;
+    state.secondsRemaining = Math.max(1, e.target.value);
+    e.target.value = state.secondsRemaining;
+    timerValueDefault = state.secondsRemaining;
     updateTimeDisplay();
 });
 
@@ -144,7 +144,7 @@ async function initApp() {
             resetTimer();
             state.activeUser = parseInt(udbclick.target.parentElement.dataset.index);
             await setCurrentUser();
-            state.timerValue = timerValueDefault;
+            state.secondsRemaining = timerValueDefault;
             updateTimeDisplay();
         });
     });
