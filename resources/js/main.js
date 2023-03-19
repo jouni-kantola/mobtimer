@@ -38,14 +38,10 @@ async function setTray() {
     });
 }
 
-async function saveUsers() {
+async function saveUsers(users) {
     await Neutralino.storage.setData(
         "mobUsers",
-        JSON.stringify(
-            Array.from(
-                document.querySelectorAll("input[data-mob-user]")
-            ).map(x => x.value)
-        )
+        JSON.stringify(users)
     );
 }
 
@@ -123,7 +119,9 @@ async function initApp() {
     try {
         state.mobUsers = JSON.parse(await Neutralino.storage.getData("mobUsers"));
     } catch (err) {
-        state.mobUsers = ["User 1", "User 2", "User 3", "User 4", "User 5", "Break"];
+        const fallbackUsers = ["User 1", "User 2", "User 3", "User 4", "User 5", "Break"];
+        state.mobUsers = fallbackUsers;
+        await saveUsers(fallbackUsers);
     }
 
     document.getElementById("mobUsers").innerHTML = state.mobUsers.map((m, i) =>
@@ -133,7 +131,13 @@ async function initApp() {
 </div>`).join("");
 
     document.querySelectorAll("input[data-mob-user]").forEach(u => {
-        u.addEventListener("change", saveUsers);
+        u.addEventListener("change", async () => {
+            await saveUsers(
+                Array.from(
+                    document.querySelectorAll("input[data-mob-user]")
+                ).map(x => x.value)
+            )
+        });
 
         u.addEventListener("dblclick", async udbclick => {
             if (!udbclick.target.previousElementSibling.checked) {
