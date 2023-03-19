@@ -15,7 +15,9 @@ Note: In Windows, use `cmd.exe` to ensure `--window-enable-inspector` is passed 
 
 ## Release
 
-`npm run build` to create binaries.
+Pushing a tag to GitHub following the format `v*` (e.g. `v2.0.0`) will automatically publish a release.
+
+To create binaries locally, execute `npm run build`.
 
 ## Read more
 
