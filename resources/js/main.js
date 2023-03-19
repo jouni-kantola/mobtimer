@@ -1,4 +1,5 @@
 import { defaultUsers } from "./config.js";
+import { createTeam, generateMemberMarkup } from "./team.js";
 
 Neutralino.init();
 
@@ -141,15 +142,8 @@ async function initApp() {
         await saveUsers(defaultUsers);
     }
 
-    document.getElementById("mobUsers").innerHTML = state.mobUsers
-        .map(
-            (m, i) =>
-                `<div class="grid user" data-index="${i + 1}">
-    <input type="checkbox" role="switch" checked />
-    <input type="text" placeholder="Name" value="${m}" data-mob-user="${m}" />
-</div>`
-        )
-        .join("");
+    const team = createTeam(state.mobUsers);
+    document.getElementById("mobUsers").innerHTML = generateMemberMarkup(team);
 
     document.querySelectorAll("input[data-mob-user]").forEach(u => {
         u.addEventListener("change", async () => {
