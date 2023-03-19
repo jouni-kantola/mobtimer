@@ -9,10 +9,9 @@ const state = {
     getCurrentUser: () => document.querySelector(".user.current input[data-mob-user]").value,
     isRunning() { return !!state.clockIntervalId },
     clockIntervalId: null,
+    iterationLengthInSeconds: timerValueElement.value, 
     secondsRemaining: timerValueElement.value,
 }
-
-let iterationLengthInSeconds = state.secondsRemaining;
 
 function resetTimer() {
     clearInterval(state.clockIntervalId);
@@ -71,7 +70,7 @@ async function runningTimer() {
 
         resetTimer();
 
-        state.secondsRemaining = iterationLengthInSeconds;
+        state.secondsRemaining = state.iterationLengthInSeconds;
         updateTimeDisplay();
 
         await Neutralino.window.show();
@@ -81,7 +80,7 @@ async function runningTimer() {
 timerValueElement.addEventListener("input", e => {
     state.secondsRemaining = Math.max(1, e.target.value);
     e.target.value = state.secondsRemaining;
-    iterationLengthInSeconds = state.secondsRemaining;
+    state.iterationLengthInSeconds = state.secondsRemaining;
     updateTimeDisplay();
 });
 
@@ -144,7 +143,7 @@ async function initApp() {
             resetTimer();
             state.activeUserIndex = parseInt(udbclick.target.parentElement.dataset.index);
             await setCurrentUser();
-            state.secondsRemaining = iterationLengthInSeconds;
+            state.secondsRemaining = state.iterationLengthInSeconds;
             updateTimeDisplay();
         });
     });
