@@ -12,7 +12,7 @@ const state = {
     secondsRemaining: timerValueElement.value,
 }
 
-let timerValueDefault = state.secondsRemaining;
+let iterationLengthInSeconds = state.secondsRemaining;
 
 function resetTimer() {
     clearInterval(state.clockIntervalId);
@@ -71,7 +71,7 @@ async function runningTimer() {
 
         resetTimer();
 
-        state.secondsRemaining = timerValueDefault;
+        state.secondsRemaining = iterationLengthInSeconds;
         updateTimeDisplay();
 
         await Neutralino.window.show();
@@ -81,7 +81,7 @@ async function runningTimer() {
 timerValueElement.addEventListener("input", e => {
     state.secondsRemaining = Math.max(1, e.target.value);
     e.target.value = state.secondsRemaining;
-    timerValueDefault = state.secondsRemaining;
+    iterationLengthInSeconds = state.secondsRemaining;
     updateTimeDisplay();
 });
 
@@ -144,7 +144,7 @@ async function initApp() {
             resetTimer();
             state.activeUserIndex = parseInt(udbclick.target.parentElement.dataset.index);
             await setCurrentUser();
-            state.secondsRemaining = timerValueDefault;
+            state.secondsRemaining = iterationLengthInSeconds;
             updateTimeDisplay();
         });
     });
