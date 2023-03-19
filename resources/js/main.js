@@ -38,7 +38,7 @@ async function setTray() {
     });
 }
 
-async function storeUsers() {
+async function saveUsers() {
     await Neutralino.storage.setData(
         "mobUsers",
         JSON.stringify(
@@ -133,7 +133,7 @@ async function initApp() {
 </div>`).join("");
 
     document.querySelectorAll("input[data-mob-user]").forEach(u => {
-        u.addEventListener("change", storeUsers);
+        u.addEventListener("change", saveUsers);
 
         u.addEventListener("dblclick", async udbclick => {
             if (!udbclick.target.previousElementSibling.checked) {
