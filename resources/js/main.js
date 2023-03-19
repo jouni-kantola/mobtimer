@@ -5,7 +5,7 @@ const timerDisplayElement = document.getElementById("timerDisplay");
 const startButtonElement = document.getElementById("startButton");
 
 const state = {
-    activeUser: 1,
+    activeUserIndex: 1,
     getCurrentUser: () => document.querySelector(".user.current input[data-mob-user]").value,
     isRunning() { return !!state.clockIntervalId },
     clockIntervalId: null,
@@ -42,7 +42,7 @@ async function setCurrentUser() {
     if (previousUser)
         previousUser.classList.remove("current");
 
-    const nextUser = document.querySelector(`.user[data-index="${state.activeUser}"]`);
+    const nextUser = document.querySelector(`.user[data-index="${state.activeUserIndex}"]`);
     nextUser.classList.add("current");
 
     const nextUserName = nextUser.querySelector("input[data-mob-user]").value;
@@ -59,10 +59,10 @@ async function runningTimer() {
         const allUsers = document.querySelectorAll(".user");
 
         for (let i = 1; i < allUsers.length + 1; i++) {
-            const checkUser = (state.activeUser + i) % (allUsers.length + 1);
+            const checkUser = (state.activeUserIndex + i) % (allUsers.length + 1);
 
             if (document.querySelector(`.user[data-index="${checkUser}"] input[type=checkbox]:checked`)) {
-                state.activeUser = checkUser;
+                state.activeUserIndex = checkUser;
                 break;
             }
         }
@@ -142,7 +142,7 @@ async function initApp() {
                 return;
             }
             resetTimer();
-            state.activeUser = parseInt(udbclick.target.parentElement.dataset.index);
+            state.activeUserIndex = parseInt(udbclick.target.parentElement.dataset.index);
             await setCurrentUser();
             state.secondsRemaining = timerValueDefault;
             updateTimeDisplay();
