@@ -9,7 +9,7 @@ const state = {
     getCurrentUser: () => document.querySelector(".user.current input[data-mob-user]").value,
     isRunning() { return !!state.clockIntervalId },
     clockIntervalId: null,
-    iterationLengthInSeconds: timerValueElement.value, 
+    iterationLengthInSeconds: timerValueElement.value,
     secondsRemaining: timerValueElement.value,
 }
 
@@ -54,7 +54,7 @@ async function setCurrentUser() {
 
 async function runningTimer() {
     state.secondsRemaining--;
-    updateTimeDisplay();
+
     if (state.secondsRemaining <= 0) {
         const allUsers = document.querySelectorAll(".user");
 
@@ -71,10 +71,10 @@ async function runningTimer() {
 
         resetTimer();
 
-        updateTimeDisplay();
-
         await Neutralino.window.show();
     }
+
+    updateTimeDisplay();
 }
 
 timerValueElement.addEventListener("input", e => {
