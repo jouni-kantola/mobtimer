@@ -51,7 +51,7 @@ async function setTray() {
         menuItems: [
             {
                 id: "currentUser",
-                text: `Driver: ${state.getCurrentUser()}`,
+                text: `Driver: ${state.getCurrentUser()} (${formatTimeRemaining()})`,
             },
         ],
     });
@@ -73,8 +73,6 @@ async function setCurrentUser() {
     const nextUserName = nextUser.querySelector("input[data-mob-user]").value;
 
     startButtonElement.innerText = `Start session for ${nextUserName}`;
-
-    setTray();
 }
 
 async function onTick() {
@@ -105,6 +103,7 @@ async function onTick() {
     }
 
     updateTimeDisplay();
+    await setTray();
 }
 
 timerValueElement.addEventListener("input", e => {
