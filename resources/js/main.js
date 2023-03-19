@@ -38,6 +38,17 @@ async function setTray() {
     });
 }
 
+async function storeUsers() {
+    await Neutralino.storage.setData(
+        "mobUsers",
+        JSON.stringify(
+            Array.from(
+                document.querySelectorAll("input[data-mob-user]")
+            ).map(x => x.value)
+        )
+    );
+}
+
 async function setCurrentUser() {
     const previousUser = document.querySelector(".user.current");
     if (previousUser)
@@ -120,17 +131,6 @@ async function initApp() {
     <input type="checkbox" role="switch" checked />
     <input type="text" placeholder="Name" value="${m}" data-mob-user="${m}" />
 </div>`).join("");
-
-    async function storeUsers() {
-        await Neutralino.storage.setData(
-            "mobUsers",
-            JSON.stringify(
-                Array.from(
-                    document.querySelectorAll("input[data-mob-user]")
-                ).map(x => x.value)
-            )
-        );
-    }
 
     document.querySelectorAll("input[data-mob-user]").forEach(u => {
         u.addEventListener("change", storeUsers);
