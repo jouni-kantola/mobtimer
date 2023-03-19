@@ -17,7 +17,7 @@ const state = {
     clockIntervalId: null,
     iterationLengthInSeconds: timerValueElement.value,
     secondsRemaining: timerValueElement.value,
-    mobUsers: defaultUsers,
+    team: null,
 };
 
 function resetTimer() {
@@ -133,17 +133,17 @@ Neutralino.events.on("trayMenuItemClicked", async e => {
 });
 
 async function initApp() {
+    let users = defaultUsers;
     try {
-        state.mobUsers = JSON.parse(
+        users = JSON.parse(
             await Neutralino.storage.getData("mobUsers")
         );
     } catch (err) {
-        state.mobUsers = defaultUsers;
         await saveUsers(defaultUsers);
     }
 
-    const team = createTeam(state.mobUsers);
-    document.getElementById("mobUsers").innerHTML = generateMemberMarkup(team);
+    state.team = createTeam(users);
+    document.getElementById("mobUsers").innerHTML = generateMemberMarkup(state.team);
 
     document.querySelectorAll("input[data-mob-user]").forEach(u => {
         u.addEventListener("change", async () => {
