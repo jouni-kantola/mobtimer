@@ -16,6 +16,7 @@ const state = {
 function resetTimer() {
     clearInterval(state.clockIntervalId);
     state.clockIntervalId = null;
+    state.secondsRemaining = state.iterationLengthInSeconds;
 }
 
 function updateTimeDisplay() {
@@ -70,7 +71,6 @@ async function runningTimer() {
 
         resetTimer();
 
-        state.secondsRemaining = state.iterationLengthInSeconds;
         updateTimeDisplay();
 
         await Neutralino.window.show();
@@ -143,7 +143,6 @@ async function initApp() {
             resetTimer();
             state.activeUserIndex = parseInt(udbclick.target.parentElement.dataset.index);
             await setCurrentUser();
-            state.secondsRemaining = state.iterationLengthInSeconds;
             updateTimeDisplay();
         });
     });
