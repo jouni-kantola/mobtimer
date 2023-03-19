@@ -11,7 +11,9 @@ export function generateMemberMarkup(team) {
         .map(
             ({ name, index, isHere }) =>
                 `<div class="grid user" data-index="${index}">
-<input type="checkbox" role="switch" ${isHere && "checked"} data-index="${index}" />
+<input type="checkbox" role="switch" ${
+                    isHere && "checked"
+                } data-index="${index}" />
 <input type="text" placeholder="Name" value="${name}" data-mob-user="${name}" />
 </div>`
         )
@@ -20,7 +22,11 @@ export function generateMemberMarkup(team) {
 
 export function whosNextAfter(recentActiveIndex, team) {
     for (let i = 1; i < team.length + 1; i++) {
-        const nextMemberIndex = getNextMemberIndex(recentActiveIndex, i, team.length);
+        const nextMemberIndex = getNextMemberIndex(
+            recentActiveIndex,
+            i,
+            team.length
+        );
 
         if (team[nextMemberIndex - 1].isHere) {
             return nextMemberIndex;
