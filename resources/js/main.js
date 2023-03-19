@@ -11,6 +11,7 @@ const state = {
     clockIntervalId: null,
     iterationLengthInSeconds: timerValueElement.value,
     secondsRemaining: timerValueElement.value,
+    mobUsers: ["User 1", "User 2", "User 3", "User 4", "User 5", "Break"],
 }
 
 function resetTimer() {
@@ -108,15 +109,13 @@ Neutralino.events.on("trayMenuItemClicked", async e => {
 });
 
 async function initApp() {
-    let mobUsers;
-
     try {
-        mobUsers = JSON.parse(await Neutralino.storage.getData("mobUsers"));
+        state.mobUsers = JSON.parse(await Neutralino.storage.getData("mobUsers"));
     } catch (err) {
-        mobUsers = ["User 1", "User 2", "User 3", "User 4", "User 5", "Break"];
+        state.mobUsers = ["User 1", "User 2", "User 3", "User 4", "User 5", "Break"];
     }
 
-    document.getElementById("mobUsers").innerHTML = mobUsers.map((m, i) =>
+    document.getElementById("mobUsers").innerHTML = state.mobUsers.map((m, i) =>
         `<div class="grid user" data-index="${i + 1}">
     <input type="checkbox" role="switch" checked />
     <input type="text" placeholder="Name" value="${m}" data-mob-user="${m}" />
