@@ -8,9 +8,9 @@ const state = {
     activeUser: 1,
     getCurrentUser: () => document.querySelector(".user.current input[data-mob-user]").value,
     running: false,
+    clockIntervalId: null,
 }
 
-let clockIntervalId = "";
 let timerValue = timerValueElement.value;
 let timerValueDefault = timerValue;
 
@@ -65,7 +65,7 @@ async function runningTimer() {
 
         await setCurrentUser();
 
-        clearInterval(clockIntervalId);
+        clearInterval(state.clockIntervalId);
 
         timerValue = timerValueDefault;
         updateTimeDisplay();
@@ -99,7 +99,7 @@ startButtonElement.addEventListener("click", async () => {
 
     await Neutralino.window.hide();
 
-    clockIntervalId = setInterval(runningTimer, 1000);
+    state.clockIntervalId = setInterval(runningTimer, 1000);
 });
 
 Neutralino.events.on("trayMenuItemClicked", async e => {
@@ -139,7 +139,7 @@ async function initApp() {
             if (!udbclick.target.previousElementSibling.checked) {
                 return;
             }
-            clearInterval(clockIntervalId);
+            clearInterval(state.clockIntervalId);
             state.running = false;
             state.activeUser = parseInt(udbclick.target.parentElement.dataset.index);
             await setCurrentUser();
