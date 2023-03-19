@@ -3,7 +3,6 @@ import { defaultUsers } from "../resources/js/config.js";
 import {
     createTeam,
     generateMemberMarkup,
-    getNextMemberIndex,
     whosNextAfter,
 } from "../resources/js/team.js";
 
@@ -31,14 +30,6 @@ test("generate team members html", t => {
     const markup = generateMemberMarkup(team);
 
     t.is(markup, expected);
-});
-
-test("get next team member's index", t => {
-    t.is(getNextMemberIndex(1, 1, 1), 1);
-    t.is(getNextMemberIndex(1, 1, 3), 2);
-    t.is(getNextMemberIndex(1, 2, 3), 3);
-    t.is(getNextMemberIndex(1, 3, 3), 1);
-    t.is(getNextMemberIndex(1, 4, 3), 1);
 });
 
 test("whos next when everyone here", t => {
