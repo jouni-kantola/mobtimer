@@ -1,5 +1,14 @@
 Neutralino.init();
 
+const defaultUsers = [
+    "User 1",
+    "User 2",
+    "User 3",
+    "User 4",
+    "User 5",
+    "Break",
+];
+
 const timerValueElement = document.getElementById("timerValue");
 const timerDisplayElement = document.getElementById("timerDisplay");
 const startButtonElement = document.getElementById("startButton");
@@ -14,7 +23,7 @@ const state = {
     clockIntervalId: null,
     iterationLengthInSeconds: timerValueElement.value,
     secondsRemaining: timerValueElement.value,
-    mobUsers: ["User 1", "User 2", "User 3", "User 4", "User 5", "Break"],
+    mobUsers: defaultUsers,
 };
 
 function resetTimer() {
@@ -132,16 +141,8 @@ async function initApp() {
             await Neutralino.storage.getData("mobUsers")
         );
     } catch (err) {
-        const fallbackUsers = [
-            "User 1",
-            "User 2",
-            "User 3",
-            "User 4",
-            "User 5",
-            "Break",
-        ];
-        state.mobUsers = fallbackUsers;
-        await saveUsers(fallbackUsers);
+        state.mobUsers = defaultUsers;
+        await saveUsers(defaultUsers);
     }
 
     document.getElementById("mobUsers").innerHTML = state.mobUsers
