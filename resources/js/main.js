@@ -52,7 +52,7 @@ async function setCurrentUser() {
     setTray();
 }
 
-async function runningTimer() {
+async function onTick() {
     state.secondsRemaining--;
 
     if (state.secondsRemaining <= 0) {
@@ -100,7 +100,7 @@ startButtonElement.addEventListener("click", async () => {
 
     await Neutralino.window.hide();
 
-    state.clockIntervalId = setInterval(runningTimer, 1000);
+    state.clockIntervalId = setInterval(onTick, 1000);
 });
 
 Neutralino.events.on("trayMenuItemClicked", async e => {
