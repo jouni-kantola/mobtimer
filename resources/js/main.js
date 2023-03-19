@@ -6,13 +6,16 @@ const startButtonElement = document.getElementById("startButton");
 
 const state = {
     activeUserIndex: 1,
-    getCurrentUser: () => document.querySelector(".user.current input[data-mob-user]").value,
-    isRunning() { return !!state.clockIntervalId },
+    getCurrentUser: () =>
+        document.querySelector(".user.current input[data-mob-user]").value,
+    isRunning() {
+        return !!state.clockIntervalId;
+    },
     clockIntervalId: null,
     iterationLengthInSeconds: timerValueElement.value,
     secondsRemaining: timerValueElement.value,
     mobUsers: ["User 1", "User 2", "User 3", "User 4", "User 5", "Break"],
-}
+};
 
 function resetTimer() {
     clearInterval(state.clockIntervalId);
@@ -23,7 +26,10 @@ function resetTimer() {
 function updateTimeDisplay() {
     const minutes = Math.floor(state.secondsRemaining / 60);
     const seconds = state.secondsRemaining % 60;
-    timerDisplayElement.innerText = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+    timerDisplayElement.innerText = `${String(minutes).padStart(
+        2,
+        "0"
+    )}:${String(seconds).padStart(2, "0")}`;
 }
 
 async function setTray() {
@@ -39,18 +45,16 @@ async function setTray() {
 }
 
 async function saveUsers(users) {
-    await Neutralino.storage.setData(
-        "mobUsers",
-        JSON.stringify(users)
-    );
+    await Neutralino.storage.setData("mobUsers", JSON.stringify(users));
 }
 
 async function setCurrentUser() {
     const previousUser = document.querySelector(".user.current");
-    if (previousUser)
-        previousUser.classList.remove("current");
+    if (previousUser) previousUser.classList.remove("current");
 
-    const nextUser = document.querySelector(`.user[data-index="${state.activeUserIndex}"]`);
+    const nextUser = document.querySelector(
+        `.user[data-index="${state.activeUserIndex}"]`
+    );
     nextUser.classList.add("current");
 
     const nextUserName = nextUser.querySelector("input[data-mob-user]").value;
@@ -67,9 +71,14 @@ async function onTick() {
         const allUsers = document.querySelectorAll(".user");
 
         for (let i = 1; i < allUsers.length + 1; i++) {
-            const checkUser = (state.activeUserIndex + i) % (allUsers.length + 1);
+            const checkUser =
+                (state.activeUserIndex + i) % (allUsers.length + 1);
 
-            if (document.querySelector(`.user[data-index="${checkUser}"] input[type=checkbox]:checked`)) {
+            if (
+                document.querySelector(
+                    `.user[data-index="${checkUser}"] input[type=checkbox]:checked`
+                )
+            ) {
                 state.activeUserIndex = checkUser;
                 break;
             }
@@ -100,7 +109,9 @@ startButtonElement.addEventListener("click", async () => {
 
     startButtonElement.innerText = `Session running 🚀. Double click other user to switch/restart.`;
 
-    const currentUser = document.querySelector(".user.current input[type=text]");
+    const currentUser = document.querySelector(
+        ".user.current input[type=text]"
+    );
     await Neutralino.os.showNotification(
         "New session",
         `Let's go ${currentUser.value} 😘`
@@ -117,18 +128,31 @@ Neutralino.events.on("trayMenuItemClicked", async e => {
 
 async function initApp() {
     try {
-        state.mobUsers = JSON.parse(await Neutralino.storage.getData("mobUsers"));
+        state.mobUsers = JSON.parse(
+            await Neutralino.storage.getData("mobUsers")
+        );
     } catch (err) {
-        const fallbackUsers = ["User 1", "User 2", "User 3", "User 4", "User 5", "Break"];
+        const fallbackUsers = [
+            "User 1",
+            "User 2",
+            "User 3",
+            "User 4",
+            "User 5",
+            "Break",
+        ];
         state.mobUsers = fallbackUsers;
         await saveUsers(fallbackUsers);
     }
 
-    document.getElementById("mobUsers").innerHTML = state.mobUsers.map((m, i) =>
-        `<div class="grid user" data-index="${i + 1}">
+    document.getElementById("mobUsers").innerHTML = state.mobUsers
+        .map(
+            (m, i) =>
+                `<div class="grid user" data-index="${i + 1}">
     <input type="checkbox" role="switch" checked />
     <input type="text" placeholder="Name" value="${m}" data-mob-user="${m}" />
-</div>`).join("");
+</div>`
+        )
+        .join("");
 
     document.querySelectorAll("input[data-mob-user]").forEach(u => {
         u.addEventListener("change", async () => {
@@ -136,7 +160,7 @@ async function initApp() {
                 Array.from(
                     document.querySelectorAll("input[data-mob-user]")
                 ).map(x => x.value)
-            )
+            );
         });
 
         u.addEventListener("dblclick", async udbclick => {
@@ -144,7 +168,9 @@ async function initApp() {
                 return;
             }
             resetTimer();
-            state.activeUserIndex = parseInt(udbclick.target.parentElement.dataset.index);
+            state.activeUserIndex = parseInt(
+                udbclick.target.parentElement.dataset.index
+            );
             await setCurrentUser();
             updateTimeDisplay();
         });
@@ -152,6 +178,6 @@ async function initApp() {
 
     updateTimeDisplay();
     await setCurrentUser();
-};
+}
 
 initApp();
