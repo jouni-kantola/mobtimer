@@ -6,10 +6,10 @@ const startButtonElement = document.getElementById("startButton");
 
 const state = {
     activeUser: 1,
-    getCurrentUser: () => document.querySelector(".user.current input[data-mob-user]").value
+    getCurrentUser: () => document.querySelector(".user.current input[data-mob-user]").value,
+    running: false,
 }
 
-let running = false;
 let clockIntervalId = "";
 let timerValue = timerValueElement.value;
 let timerValueDefault = timerValue;
@@ -51,7 +51,7 @@ async function runningTimer() {
     timerValue--;
     updateTimeDisplay();
     if (timerValue <= 0) {
-        running = false;
+        state.running = false;
         const allUsers = document.querySelectorAll(".user");
 
         for (let i = 1; i < allUsers.length + 1; i++) {
@@ -82,14 +82,14 @@ timerValueElement.addEventListener("input", e => {
 });
 
 startButtonElement.addEventListener("click", async () => {
-    if (running) {
+    if (state.running) {
         await Neutralino.window.hide();
         return false;
     }
 
     startButtonElement.innerText = `Session running 🚀. Double click other user to switch/restart.`;
 
-    running = true;
+    state.running = true;
 
     const currentUser = document.querySelector(".user.current input[type=text]");
     await Neutralino.os.showNotification(
@@ -140,7 +140,7 @@ async function initApp() {
                 return;
             }
             clearInterval(clockIntervalId);
-            running = false;
+            state.running = false;
             state.activeUser = parseInt(udbclick.target.parentElement.dataset.index);
             await setCurrentUser();
             timerValue = timerValueDefault;
