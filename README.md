@@ -21,4 +21,4 @@ To create binaries locally, execute `npm run build`.
 
 ## Read more
 
-* [Neutralinojs docs](https://neutralino.js.org/docs/)
+-   [Neutralinojs docs](https://neutralino.js.org/docs/)
