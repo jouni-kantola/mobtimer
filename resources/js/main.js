@@ -41,12 +41,19 @@ function updateTimeDisplay() {
 
 async function updateTray() {
     const { name } = state.getCurrentUser();
+    const nextMemberIndex = whosNextAfter(state.activeUserIndex, state.team);
+    const nextMember = state.team.find(m => m.index === nextMemberIndex);
     await Neutralino.os.setTray({
         icon: "/resources/icons/trayIcon.png",
         menuItems: [
             {
                 id: "currentUser",
-                text: `Driver: ${name} (${formatTimeRemaining()})`,
+                text: `Now: ${name}`,
+            },
+            {
+                id: "next",
+                text: `Next: ${nextMember.name} (in ${formatTimeRemaining()})`,
+                disabled: true,
             },
         ],
     });
