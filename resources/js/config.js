@@ -6,3 +6,8 @@ export const defaultUsers = [
     "User 5",
     "Break",
 ];
+
+export const trayOptions = {
+    OPEN: "OPEN",
+    QUIT: "Quit",
+};

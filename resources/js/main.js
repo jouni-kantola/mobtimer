@@ -1,4 +1,4 @@
-import { defaultUsers } from "./config.js";
+import { defaultUsers, trayOptions } from "./config.js";
 import { createTeam, generateMemberMarkup, whosNextAfter } from "./team.js";
 
 Neutralino.init();
@@ -47,13 +47,24 @@ async function updateTray() {
         icon: "/resources/icons/trayIcon.png",
         menuItems: [
             {
-                id: "currentUser",
+                id: trayOptions.OPEN,
+                text: "Open",
+            },
+            {
+                text: "-",
+            },
+            {
                 text: `Now: ${name}`,
             },
             {
-                id: "next",
                 text: `Next: ${nextMember.name} (in ${formatTimeRemaining()})`,
-                disabled: true,
+            },
+            {
+                text: "-",
+            },
+            {
+                id: trayOptions.QUIT,
+                text: "Quit",
             },
         ],
     });
@@ -123,9 +134,18 @@ startButtonElement.addEventListener("click", async () => {
     state.clockIntervalId = setInterval(onTick, 1000);
 });
 
-Neutralino.events.on("trayMenuItemClicked", async e => {
-    await Neutralino.window.show();
-});
+async function onTrayMenuItemClicked(event) {
+    switch (event.detail.id) {
+        case trayOptions.OPEN:
+            await Neutralino.window.show();
+            break;
+        case trayOptions.QUIT:
+            await Neutralino.app.exit();
+            break;
+    }
+}
+
+Neutralino.events.on("trayMenuItemClicked", onTrayMenuItemClicked);
 
 async function initApp() {
     let users = defaultUsers;
