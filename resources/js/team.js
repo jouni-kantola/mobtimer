@@ -37,6 +37,16 @@ export function whosNextAfter(recentActiveIndex, team) {
     }
 }
 
+export function switchActiveMember(nextIndex, team) {
+    for (const member of team) {
+        member.isActive = member.index === nextIndex;
+    }
+}
+
+export function getActiveMember(team) {
+    return team.find(m => m.isActive);
+}
+
 function getNextMemberIndex(recentActiveIndex, nextIndex, teamSize) {
     return (recentActiveIndex + nextIndex) % (teamSize + 1) || 1;
 }

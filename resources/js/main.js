@@ -1,5 +1,11 @@
 import { defaultUsers, trayOptions } from "./config.js";
-import { createTeam, generateMemberMarkup, whosNextAfter } from "./team.js";
+import {
+    createTeam,
+    generateMemberMarkup,
+    whosNextAfter,
+    switchActiveMember,
+    getActiveMember,
+} from "./team.js";
 
 Neutralino.init();
 
@@ -83,7 +89,7 @@ function setCurrentUser() {
     );
     nextUser.classList.add("current");
 
-    const nextUserName = nextUser.querySelector("input[data-mob-user]").value;
+    const nextUserName = getActiveMember(state.team).name;
 
     startButtonElement.innerText = `Start session for ${nextUserName}`;
 }
@@ -99,6 +105,8 @@ async function onTick() {
             state.activeUserIndex,
             state.team
         );
+
+        switchActiveMember(state.activeUserIndex, state.team);
 
         setCurrentUser();
 
@@ -177,6 +185,7 @@ async function initApp() {
             state.activeUserIndex = parseInt(
                 udbclick.target.parentElement.dataset.index
             );
+            switchActiveMember(state.activeUserIndex, state.team);
             setCurrentUser();
             updateTimeDisplay();
         });
