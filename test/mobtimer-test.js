@@ -19,7 +19,7 @@ test("generate team members html", t => {
     const expected = members
         .map(
             (m, i) =>
-                `<div class="grid user" data-index="${i + 1}">
+                `<div class="grid user${i === 0 ? " current" : ""}" data-index="${i + 1}">
 <input type="checkbox" role="switch" checked data-index="${i + 1}" />
 <input type="text" placeholder="Name" value="${m}" data-mob-user="${m}" />
 </div>`
