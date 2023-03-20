@@ -94,6 +94,7 @@ async function onTick() {
         await updateTray();
     } else {
         resetTimer();
+        updateTimeDisplay();
 
         const { index } = whosNextAfter(
             getActiveMember(state.team).index,
