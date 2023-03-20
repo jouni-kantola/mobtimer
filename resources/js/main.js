@@ -116,14 +116,11 @@ timerValueElement.addEventListener("input", e => {
 });
 
 startButtonElement.addEventListener("click", async () => {
-    if (state.isRunning()) {
-        await Neutralino.window.hide();
-        return false;
-    }
+    await Neutralino.window.hide();
+
+    if (state.isRunning()) return false;
 
     startButtonElement.innerText = `Session running 🚀. Double click other user to switch/restart.`;
-
-    await Neutralino.window.hide();
 
     state.clockIntervalId = setInterval(onTick, 1000);
 });
