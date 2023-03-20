@@ -3,7 +3,7 @@ export function createTeam(members) {
         index: i + 1,
         name,
         isHere: true,
-        isActive: i === 0
+        isActive: i === 0,
     }));
 }
 
@@ -11,7 +11,9 @@ export function generateMemberMarkup(team) {
     return team
         .map(
             ({ name, index, isHere, isActive }) =>
-                `<div class="grid user${isActive ? " current" : ""}" data-index="${index}">
+                `<div class="grid user${
+                    isActive ? " current" : ""
+                }" data-index="${index}">
 <input type="checkbox" role="switch" ${
                     isHere && "checked"
                 } data-index="${index}" />
