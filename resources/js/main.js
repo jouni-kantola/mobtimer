@@ -82,7 +82,7 @@ async function saveUsers(users) {
 
 function prepareForNextMember() {
     const previous = document.querySelector(".user.current");
-    if (previous) previous.classList.remove("current");
+    previous.classList.remove("current");
 
     const next = document.querySelector(
         `.user[data-index="${state.activeUserIndex}"]`
