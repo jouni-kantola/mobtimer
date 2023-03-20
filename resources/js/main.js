@@ -27,6 +27,7 @@ function resetTimer() {
     clearInterval(state.clockIntervalId);
     state.clockIntervalId = null;
     state.secondsRemaining = state.iterationLengthInSeconds;
+    updateTimeDisplay();
 }
 
 function formatTimeRemaining() {
@@ -94,7 +95,6 @@ async function onTick() {
         await updateTray();
     } else {
         resetTimer();
-        updateTimeDisplay();
 
         const { index } = whosNextAfter(
             getActiveMember(state.team).index,
@@ -181,7 +181,6 @@ async function initApp() {
                 state.team
             );
             prepareForNextMember();
-            updateTimeDisplay();
         });
     });
 
