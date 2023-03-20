@@ -14,7 +14,6 @@ const timerDisplayElement = document.getElementById("timerDisplay");
 const startButtonElement = document.getElementById("startButton");
 
 const state = {
-    activeUserIndex: 1,
     isRunning() {
         return !!state.clockIntervalId;
     },
@@ -97,14 +96,11 @@ async function onTick() {
         resetTimer();
 
         const { index } = whosNextAfter(
-            state.activeUserIndex,
+            getActiveMember(state.team).index,
             state.team
         );
 
-        state.activeUserIndex = index;
-
         switchActiveMember(index, state.team);
-
         prepareForNextMember();
 
         await Neutralino.window.show();
@@ -179,10 +175,10 @@ async function initApp() {
                 return;
             }
             resetTimer();
-            state.activeUserIndex = parseInt(
-                udbclick.target.parentElement.dataset.index
+            switchActiveMember(
+                parseInt(udbclick.target.parentElement.dataset.index),
+                state.team
             );
-            switchActiveMember(state.activeUserIndex, state.team);
             prepareForNextMember();
             updateTimeDisplay();
         });
