@@ -10,7 +10,7 @@ const startButtonElement = document.getElementById("startButton");
 const state = {
     activeUserIndex: 1,
     getCurrentUser: () =>
-        document.querySelector(".user.current input[data-mob-user]").value,
+        state.team.find(m => m.index === state.activeUserIndex).name,
     isRunning() {
         return !!state.clockIntervalId;
     },
