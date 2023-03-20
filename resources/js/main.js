@@ -10,7 +10,7 @@ const startButtonElement = document.getElementById("startButton");
 const state = {
     activeUserIndex: 1,
     getCurrentUser: () =>
-        state.team.find(m => m.index === state.activeUserIndex).name,
+        state.team.find(m => m.index === state.activeUserIndex),
     isRunning() {
         return !!state.clockIntervalId;
     },
@@ -40,12 +40,13 @@ function updateTimeDisplay() {
 }
 
 async function updateTray() {
+    const { name } = state.getCurrentUser();
     await Neutralino.os.setTray({
         icon: "/resources/icons/trayIcon.png",
         menuItems: [
             {
                 id: "currentUser",
-                text: `Driver: ${state.getCurrentUser()} (${formatTimeRemaining()})`,
+                text: `Driver: ${name} (${formatTimeRemaining()})`,
             },
         ],
     });
