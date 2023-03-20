@@ -81,17 +81,17 @@ async function saveUsers(users) {
 }
 
 function prepareForNextMember() {
-    const previousUser = document.querySelector(".user.current");
-    if (previousUser) previousUser.classList.remove("current");
+    const previous = document.querySelector(".user.current");
+    if (previous) previous.classList.remove("current");
 
-    const nextUser = document.querySelector(
+    const next = document.querySelector(
         `.user[data-index="${state.activeUserIndex}"]`
     );
-    nextUser.classList.add("current");
+    next.classList.add("current");
 
-    const nextUserName = getActiveMember(state.team).name;
+    const { name } = getActiveMember(state.team);
 
-    startButtonElement.innerText = `Start session for ${nextUserName}`;
+    startButtonElement.innerText = `Start session for ${name}`;
 }
 
 async function onTick() {
