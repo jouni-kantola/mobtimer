@@ -74,7 +74,7 @@ async function saveUsers(users) {
     await Neutralino.storage.setData("mobUsers", JSON.stringify(users));
 }
 
-async function setCurrentUser() {
+function setCurrentUser() {
     const previousUser = document.querySelector(".user.current");
     if (previousUser) previousUser.classList.remove("current");
 
@@ -100,7 +100,7 @@ async function onTick() {
             state.team
         );
 
-        await setCurrentUser();
+        setCurrentUser();
 
         await Neutralino.window.show();
     }
@@ -177,7 +177,7 @@ async function initApp() {
             state.activeUserIndex = parseInt(
                 udbclick.target.parentElement.dataset.index
             );
-            await setCurrentUser();
+            setCurrentUser();
             updateTimeDisplay();
         });
     });
@@ -189,7 +189,7 @@ async function initApp() {
     });
 
     updateTimeDisplay();
-    await setCurrentUser();
+    setCurrentUser();
 }
 
 initApp();
