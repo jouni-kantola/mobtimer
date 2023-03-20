@@ -123,14 +123,6 @@ startButtonElement.addEventListener("click", async () => {
 
     startButtonElement.innerText = `Session running 🚀. Double click other user to switch/restart.`;
 
-    const currentUser = document.querySelector(
-        ".user.current input[type=text]"
-    );
-    await Neutralino.os.showNotification(
-        "New session",
-        `Let's go ${currentUser.value} 😘`
-    );
-
     await Neutralino.window.hide();
 
     state.clockIntervalId = setInterval(onTick, 1000);
