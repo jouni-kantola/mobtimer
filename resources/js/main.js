@@ -15,8 +15,6 @@ const startButtonElement = document.getElementById("startButton");
 
 const state = {
     activeUserIndex: 1,
-    getCurrentUser: () =>
-        state.team.find(m => m.index === state.activeUserIndex),
     isRunning() {
         return !!state.clockIntervalId;
     },
@@ -46,8 +44,8 @@ function updateTimeDisplay() {
 }
 
 async function updateTray() {
-    const { name } = state.getCurrentUser();
-    const nextMemberIndex = whosNextAfter(state.activeUserIndex, state.team);
+    const { index, name } = getActiveMember(state.team);
+    const nextMemberIndex = whosNextAfter(index, state.team);
     const nextMember = state.team.find(m => m.index === nextMemberIndex);
     await Neutralino.os.setTray({
         icon: "/resources/icons/trayIcon.png",
