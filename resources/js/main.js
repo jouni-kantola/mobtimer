@@ -84,12 +84,10 @@ function prepareForNextMember() {
     const previous = document.querySelector(".user.current");
     previous.classList.remove("current");
 
-    const next = document.querySelector(
-        `.user[data-index="${state.activeUserIndex}"]`
-    );
-    next.classList.add("current");
+    const { index, name } = getActiveMember(state.team);
 
-    const { name } = getActiveMember(state.team);
+    const next = document.querySelector(`.user[data-index="${index}"]`);
+    next.classList.add("current");
 
     startButtonElement.innerText = `Start session for ${name}`;
 }
