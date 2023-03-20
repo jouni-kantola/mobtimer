@@ -120,7 +120,7 @@ startButtonElement.addEventListener("click", async () => {
 
     if (state.isRunning()) return false;
 
-    startButtonElement.innerText = `Session running 🚀. Double click other user to switch/restart.`;
+    startButtonElement.innerText = `Session running 🚀. Double click any user to switch/restart.`;
 
     state.clockIntervalId = setInterval(onTick, 1000);
 });
