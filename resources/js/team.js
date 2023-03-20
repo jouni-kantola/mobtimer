@@ -31,10 +31,13 @@ export function whosNextAfter(recentActiveIndex, team) {
             team.length
         );
 
-        if (team[nextMemberIndex - 1].isHere) {
-            return nextMemberIndex;
-        }
+        const upcomingMember = getMemberByIndex(nextMemberIndex, team);
+        if (upcomingMember.isHere) return upcomingMember;
     }
+}
+
+function getMemberByIndex(index, team) {
+    return team.find(m => m.index === index);
 }
 
 export function switchActiveMember(nextIndex, team) {

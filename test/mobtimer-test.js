@@ -36,8 +36,12 @@ test("whos next when everyone here", t => {
     const members = ["User 1", "User 2"];
     const team = createTeam(members);
 
-    t.is(whosNextAfter(1, team), 2);
-    t.is(whosNextAfter(2, team), 1);
+    const after1 = whosNextAfter(1, team)
+    const after2 = whosNextAfter(2, team)
+    t.is(after1.index, 2);
+    t.is(after1.name, "User 2");
+    t.is(after2.index, 1);
+    t.is(after2.name, "User 1");
 });
 
 test("skip member who's away", t => {
@@ -45,9 +49,12 @@ test("skip member who's away", t => {
     const team = createTeam(members);
     team[1].isHere = false;
 
-    t.is(whosNextAfter(1, team), 3);
+    const after1 = whosNextAfter(1, team);
+    t.is(after1.index, 3);
 
     team[1].isHere = true;
     team.at(-1).isHere = false;
-    t.is(whosNextAfter(2, team), 1);
+
+    const after2 = whosNextAfter(2, team); 
+    t.is(after2.index, 1);
 });

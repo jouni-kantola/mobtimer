@@ -45,8 +45,7 @@ function updateTimeDisplay() {
 
 async function updateTray() {
     const { index, name } = getActiveMember(state.team);
-    const nextMemberIndex = whosNextAfter(index, state.team);
-    const nextMember = state.team.find(m => m.index === nextMemberIndex);
+    const nextMember = whosNextAfter(index, state.team);
     await Neutralino.os.setTray({
         icon: "/resources/icons/trayIcon.png",
         menuItems: [
@@ -97,12 +96,14 @@ async function onTick() {
     } else {
         resetTimer();
 
-        state.activeUserIndex = whosNextAfter(
+        const { index } = whosNextAfter(
             state.activeUserIndex,
             state.team
         );
 
-        switchActiveMember(state.activeUserIndex, state.team);
+        state.activeUserIndex = index;
+
+        switchActiveMember(index, state.team);
 
         prepareForNextMember();
 
