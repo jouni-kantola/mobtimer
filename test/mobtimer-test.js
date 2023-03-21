@@ -58,3 +58,20 @@ test("skip member who's away", t => {
     const after2 = whosNextAfter(2, team); 
     t.is(after2.index, 1);
 });
+
+test("single user always next", t => {
+    const members = ["User 1"];
+    const team = createTeam(members);
+    const after1 = whosNextAfter(1, team);
+    t.is(after1.index, 1);
+});
+
+test("next member when alone is themselves", t => {
+    const members = ["User 1", "User 2", "User 3"];
+    const team = createTeam(members);
+    team[0].isHere = false;
+    team[2].isHere = false;
+
+    const after1 = whosNextAfter(2, team);
+    t.is(after1.index, team[1].index);
+});

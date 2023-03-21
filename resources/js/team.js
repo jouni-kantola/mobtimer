@@ -24,6 +24,9 @@ export function generateMemberMarkup(team) {
 }
 
 export function whosNextAfter(recentActiveIndex, team) {
+    const presentMembers = team.filter(m => m.isHere);
+    if (presentMembers.length === 1) return presentMembers[0];
+
     for (let i = 1; i < team.length + 1; i++) {
         const nextMemberIndex = getNextMemberIndex(
             recentActiveIndex,
