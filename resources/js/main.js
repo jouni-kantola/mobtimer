@@ -6,6 +6,7 @@ import {
     switchActiveMember,
     getActiveMember,
 } from "./team.js";
+import { secondsToMinutesAndSeconds } from "./clock.js";
 
 Neutralino.init();
 
@@ -31,12 +32,7 @@ function resetTimer() {
 }
 
 function formatTimeRemaining() {
-    const minutes = Math.floor(state.secondsRemaining / 60);
-    const seconds = state.secondsRemaining % 60;
-    const timeLeft = `${String(minutes).padStart(2, "0")}:${String(
-        seconds
-    ).padStart(2, "0")}`;
-    return timeLeft;
+    return secondsToMinutesAndSeconds(state.secondsRemaining);
 }
 
 function updateTimeDisplay() {
