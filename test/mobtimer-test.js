@@ -1,4 +1,5 @@
 import test from "ava";
+import { startTimer } from "../resources/js/clock.js";
 import { defaultUsers } from "../resources/js/config.js";
 import {
     createTeam,
@@ -74,4 +75,21 @@ test("next member when alone is themselves", t => {
 
     const after1 = whosNextAfter(2, team);
     t.is(after1.index, team[1].index);
+});
+
+test("determine if running", t => {
+    const seconds = 1;
+    const timer = startTimer(seconds);
+    t.true(timer.isRunning);
+});
+
+test("stopped when interval ends", async t => {
+    const seconds = 1;
+    const timer = startTimer(seconds);
+
+    t.true(timer.isRunning);
+    await new Promise((resolve, _) => {
+        setTimeout(resolve, 1500);
+    });
+    t.false(timer.isRunning);
 });
