@@ -110,3 +110,11 @@ test("callbacks every tick", async t => {
         });
     });
 });
+
+test("notify when countdown done", async t => {
+    await new Promise((resolve, _) => {
+        startTimer(1, undefined, resolve); 
+    });
+
+    t.pass();
+});

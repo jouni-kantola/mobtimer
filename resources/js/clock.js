@@ -1,11 +1,13 @@
 class Timer {
     #secondsLeft;
     #onTick;
+    #onEnd;
     #clockIntervalId;
 
-    constructor(seconds, onTick) {
+    constructor(seconds, onTick, onEnd) {
         this.#secondsLeft = seconds;
         this.#onTick = onTick;
+        this.#onEnd = onEnd;
         this.#clockIntervalId = null;
     }
 
@@ -18,6 +20,7 @@ class Timer {
             if (--this.#secondsLeft === 0) {
                 clearInterval(this.#clockIntervalId);
                 this.#clockIntervalId = null;
+                this.#onEnd && this.#onEnd();
             } else {
                 this.#onTick && this.#onTick();
             }
@@ -25,8 +28,8 @@ class Timer {
     }
 }
 
-export function startTimer(seconds, onTick) {
-    const timer = new Timer(seconds, onTick);
+export function startTimer(seconds, onTick, onEnd) {
+    const timer = new Timer(seconds, onTick, onEnd);
     timer.start();
     return timer;
 }
