@@ -95,3 +95,18 @@ test("stopped when interval ends", async t => {
     });
     t.false(timer.isRunning);
 });
+
+test("callbacks every tick", async t => {
+    const seconds = 2;
+    let timesCalled = 0;
+
+    await new Promise((resolve, _) => {
+        startTimer(seconds, () => {
+            timesCalled++;
+            if (timesCalled === 2) {
+                t.pass();
+                resolve();
+            }
+        });
+    });
+});

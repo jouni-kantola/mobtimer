@@ -1,22 +1,33 @@
-let secondsLeft = 0;
-let clockIntervalId = null;
+class Timer {
+    #secondsLeft;
+    #onTick;
+    #clockIntervalId;
 
-const timer = new (class {
-    get isRunning() {
-        return clockIntervalId !== null;
+    constructor(seconds, onTick) {
+        this.#secondsLeft = seconds;
+        this.#onTick = onTick;
+        this.#clockIntervalId = null;
     }
-})();
 
-export function startTimer(seconds) {
-    secondsLeft = seconds;
-    clockIntervalId = setInterval(() => {
-        secondsLeft--;
-        if (secondsLeft <= 0) {
-            clearInterval(clockIntervalId);
-            clockIntervalId = null;
-        }
-    }, 1000);
+    get isRunning() {
+        return !!this.#clockIntervalId;
+    }
 
+    start() {
+        this.#clockIntervalId = setInterval(() => {
+            if (--this.#secondsLeft < 0) {
+                clearInterval(this.#clockIntervalId);
+                this.#clockIntervalId = null;
+            } else {
+                this.#onTick && this.#onTick();
+            }
+        }, 1000);
+    }
+}
+
+export function startTimer(seconds, onTick) {
+    const timer = new Timer(seconds, onTick);
+    timer.start();
     return timer;
 }
 
