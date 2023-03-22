@@ -20,7 +20,9 @@ test("generate team members html", t => {
     const expected = members
         .map(
             (m, i) =>
-                `<div class="grid user${i === 0 ? " current" : ""}" data-index="${i + 1}">
+                `<div class="grid user${
+                    i === 0 ? " current" : ""
+                }" data-index="${i + 1}">
 <input type="checkbox" role="switch" checked data-index="${i + 1}" />
 <input type="text" placeholder="Name" value="${m}" data-mob-user="${m}" />
 </div>`
@@ -37,8 +39,8 @@ test("whos next when everyone here", t => {
     const members = ["User 1", "User 2"];
     const team = createTeam(members);
 
-    const after1 = whosNextAfter(1, team)
-    const after2 = whosNextAfter(2, team)
+    const after1 = whosNextAfter(1, team);
+    const after2 = whosNextAfter(2, team);
     t.is(after1.index, 2);
     t.is(after1.name, "User 2");
     t.is(after2.index, 1);
@@ -56,7 +58,7 @@ test("skip member who's away", t => {
     team[1].isHere = true;
     team.at(-1).isHere = false;
 
-    const after2 = whosNextAfter(2, team); 
+    const after2 = whosNextAfter(2, team);
     t.is(after2.index, 1);
 });
 
