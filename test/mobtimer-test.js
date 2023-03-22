@@ -97,7 +97,7 @@ test("stopped when interval ends", async t => {
 });
 
 test("callbacks every tick", async t => {
-    const seconds = 2;
+    const seconds = 3;
     let timesCalled = 0;
 
     await new Promise((resolve, _) => {

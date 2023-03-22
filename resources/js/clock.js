@@ -15,7 +15,7 @@ class Timer {
 
     start() {
         this.#clockIntervalId = setInterval(() => {
-            if (--this.#secondsLeft < 0) {
+            if (--this.#secondsLeft === 0) {
                 clearInterval(this.#clockIntervalId);
                 this.#clockIntervalId = null;
             } else {
