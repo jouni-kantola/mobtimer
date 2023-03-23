@@ -102,7 +102,11 @@ timerValueElement.addEventListener("input", e => {
     updateTimeDisplay();
 });
 
-startButtonElement.addEventListener("click", async () => {
+timerValueElement.addEventListener("keydown", event => {
+    if (event.key === "Enter" && !state.timer?.isRunning) startSession();
+});
+
+async function startSession() {
     await Neutralino.window.hide();
 
     if (state.timer?.isRunning) return false;
@@ -110,7 +114,9 @@ startButtonElement.addEventListener("click", async () => {
     startButtonElement.innerText = `Session running 🚀. Double click any user to switch/restart.`;
 
     state.timer = startTimer(state.iterationLengthInSeconds, onTick, onEnd);
-});
+}
+
+startButtonElement.addEventListener("click", startSession);
 
 async function onTrayMenuItemClicked(event) {
     switch (event.detail.id) {
