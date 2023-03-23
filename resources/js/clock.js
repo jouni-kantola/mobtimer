@@ -30,6 +30,10 @@ class Timer {
             }
         }, 1000);
     }
+
+    change(seconds) {
+        this.#secondsLeft = seconds;
+    }
 }
 
 export function startTimer(seconds, onTick, onEnd) {

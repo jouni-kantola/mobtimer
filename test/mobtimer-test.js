@@ -129,3 +129,11 @@ test("provide formatted time left", async t => {
 
     t.is("09:59", timer.timeLeft);
 });
+
+test("can change timer", async t => {
+    const timer = startTimer(600);
+    timer.change(300);
+    t.is("05:00", timer.timeLeft);
+    timer.change(1);
+    t.is("00:01", timer.timeLeft);
+});
