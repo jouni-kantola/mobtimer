@@ -66,14 +66,14 @@ async function saveUsers(users) {
 
 function prepareForNextMember() {
     const previous = document.querySelector(".user.current");
-    previous.classList.remove("current");
-
     const { index, name } = getActiveMember(state.team);
-
     const next = document.querySelector(`.user[data-index="${index}"]`);
-    next.classList.add("current");
 
-    startButtonElement.innerText = `Start session for ${name}`;
+    requestAnimationFrame(() => {
+        previous.classList.remove("current");
+        next.classList.add("current");
+        startButtonElement.innerText = `Start session for ${name}`;
+    });
 }
 
 async function onTick() {
