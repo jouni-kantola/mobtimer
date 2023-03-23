@@ -20,10 +20,6 @@ const state = {
     team: null,
 };
 
-function resetTimer() {
-    updateTimeDisplay();
-}
-
 function formatTimeRemaining() {
     return state.timer?.isRunning
         ? state.timer.timeLeft
@@ -86,7 +82,7 @@ async function onTick() {
 }
 
 async function onEnd() {
-    resetTimer();
+    updateTimeDisplay();
 
     const { index } = whosNextAfter(
         getActiveMember(state.team).index,
@@ -155,7 +151,7 @@ async function initApp() {
             if (!udbclick.target.previousElementSibling.checked) {
                 return;
             }
-            resetTimer();
+            updateTimeDisplay();
             switchActiveMember(
                 parseInt(udbclick.target.parentElement.dataset.index),
                 state.team
