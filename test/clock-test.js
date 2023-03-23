@@ -58,3 +58,18 @@ test("can change timer", async t => {
     timer.change(1);
     t.is("00:01", timer.timeLeft);
 });
+
+test("can reset started timer", async t => {
+    const timer = startTimer(600);
+
+    t.true(timer.isRunning);
+
+    await new Promise((resolve, _) => {
+        setTimeout(resolve, 1500);
+    });
+
+    timer.reset();
+
+    t.false(timer.isRunning);
+    t.is("10:00", timer.timeLeft);
+});

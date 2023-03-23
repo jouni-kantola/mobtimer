@@ -1,10 +1,12 @@
 class Timer {
+    #intervalSeconds;
     #secondsLeft;
     #onTick;
     #onEnd;
     #clockIntervalId;
 
     constructor(seconds, onTick, onEnd) {
+        this.#intervalSeconds = seconds;
         this.#secondsLeft = seconds;
         this.#onTick = onTick;
         this.#onEnd = onEnd;
@@ -32,7 +34,14 @@ class Timer {
     }
 
     change(seconds) {
+        this.#intervalSeconds = seconds;
         this.#secondsLeft = seconds;
+    }
+
+    reset() {
+        clearInterval(this.#clockIntervalId);
+        this.#clockIntervalId = null;
+        this.change(this.#intervalSeconds);
     }
 }
 

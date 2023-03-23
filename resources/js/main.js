@@ -157,6 +157,9 @@ async function initApp() {
             if (!udbclick.target.previousElementSibling.checked) {
                 return;
             }
+
+            state.timer?.reset();
+
             updateTimeDisplay();
             switchActiveMember(
                 parseInt(udbclick.target.parentElement.dataset.index),
