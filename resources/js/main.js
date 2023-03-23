@@ -6,7 +6,7 @@ import {
     switchActiveMember,
     getActiveMember,
 } from "./team.js";
-import { secondsToMinutesAndSeconds } from "./clock.js";
+import { secondsToMinutesAndSeconds, startTimer } from "./clock.js";
 
 Neutralino.init();
 
@@ -15,24 +15,19 @@ const timerDisplayElement = document.getElementById("timerDisplay");
 const startButtonElement = document.getElementById("startButton");
 
 const state = {
-    isRunning() {
-        return !!state.clockIntervalId;
-    },
-    clockIntervalId: null,
+    timer: null,
     iterationLengthInSeconds: timerValueElement.value,
-    secondsRemaining: timerValueElement.value,
     team: null,
 };
 
 function resetTimer() {
-    clearInterval(state.clockIntervalId);
-    state.clockIntervalId = null;
-    state.secondsRemaining = state.iterationLengthInSeconds;
     updateTimeDisplay();
 }
 
 function formatTimeRemaining() {
-    return secondsToMinutesAndSeconds(state.secondsRemaining);
+    return state.timer?.isRunning
+        ? state.timer.timeLeft
+        : secondsToMinutesAndSeconds(state.iterationLengthInSeconds);
 }
 
 function updateTimeDisplay() {
@@ -86,39 +81,39 @@ function prepareForNextMember() {
 }
 
 async function onTick() {
-    if (state.secondsRemaining-- > 0) {
-        updateTimeDisplay();
-        await updateTray();
-    } else {
-        resetTimer();
+    updateTimeDisplay();
+    await updateTray();
+}
 
-        const { index } = whosNextAfter(
-            getActiveMember(state.team).index,
-            state.team
-        );
+async function onEnd() {
+    resetTimer();
 
-        switchActiveMember(index, state.team);
-        prepareForNextMember();
+    const { index } = whosNextAfter(
+        getActiveMember(state.team).index,
+        state.team
+    );
 
-        await Neutralino.window.show();
-    }
+    switchActiveMember(index, state.team);
+    prepareForNextMember();
+
+    await Neutralino.window.show();
 }
 
 timerValueElement.addEventListener("input", e => {
-    state.secondsRemaining = Math.max(1, e.target.value);
-    e.target.value = state.secondsRemaining;
-    state.iterationLengthInSeconds = state.secondsRemaining;
+    state.iterationLengthInSeconds = Math.max(1, e.target.value);
+    e.target.value = state.iterationLengthInSeconds;
+    state.timer?.change(state.iterationLengthInSeconds);
     updateTimeDisplay();
 });
 
 startButtonElement.addEventListener("click", async () => {
     await Neutralino.window.hide();
 
-    if (state.isRunning()) return false;
+    if (state.timer?.isRunning) return false;
 
     startButtonElement.innerText = `Session running 🚀. Double click any user to switch/restart.`;
 
-    state.clockIntervalId = setInterval(onTick, 1000);
+    state.timer = startTimer(state.iterationLengthInSeconds, onTick, onEnd);
 });
 
 async function onTrayMenuItemClicked(event) {
