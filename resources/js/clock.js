@@ -15,6 +15,10 @@ class Timer {
         return !!this.#clockIntervalId;
     }
 
+    get timeLeft() {
+        return secondsToMinutesAndSeconds(this.#secondsLeft);
+    }
+
     start() {
         this.#clockIntervalId = setInterval(() => {
             if (--this.#secondsLeft === 0) {

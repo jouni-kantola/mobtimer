@@ -118,3 +118,14 @@ test("notify when countdown done", async t => {
 
     t.pass();
 });
+
+test("provide formatted time left", async t => {
+    const seconds = 600;
+    const timer = startTimer(seconds);
+
+    await new Promise((resolve, _) => {
+        setTimeout(resolve, 1500);
+    });
+
+    t.is("09:59", timer.timeLeft);
+});
