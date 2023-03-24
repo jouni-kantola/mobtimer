@@ -181,6 +181,16 @@ async function initApp() {
     });
 
     document.querySelectorAll(".user input[type=checkbox]").forEach(i => {
+        i.addEventListener("click", event => {
+            const checkbox = event.target;
+            const isHere = checkbox.checked;
+
+            if (!isHere && state.team.filter(m => m.isHere).length === 1) {
+                event.preventDefault();
+                return false;
+            }
+        });
+
         i.addEventListener("change", event => {
             const checkbox = event.target;
             const selectedMemberIndex = parseInt(checkbox.dataset.index);
