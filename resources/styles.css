@@ -9,10 +9,11 @@ html {
     background: #f6edee;
 }
 
-main {
+body > main {
     display: flex;
     flex-direction: column;
     gap: 15px;
+    padding: 30px 0;
 }
 
 input:not([type="checkbox"]):not([type="radio"]) {
