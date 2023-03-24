@@ -60,7 +60,7 @@ async function updateTray() {
     });
 }
 
-async function saveUsers(users) {
+async function saveTeam(users) {
     await Neutralino.storage.setData("mobUsers", JSON.stringify(users));
 }
 
@@ -136,7 +136,7 @@ async function initApp() {
     try {
         users = JSON.parse(await Neutralino.storage.getData("mobUsers"));
     } catch (err) {
-        await saveUsers(defaultUsers);
+        await saveTeam(defaultUsers);
     }
 
     state.team = createTeam(users);
@@ -160,7 +160,7 @@ async function initApp() {
             clearTimeout(debounceTimeout);
             debounceTimeout = setTimeout(async () => {
                 state.team[memberIndex].name = event.target.value;
-                await saveUsers(state.team.map(m => m.name));
+                await saveTeam(state.team.map(m => m.name));
             }, 500);
         });
 
