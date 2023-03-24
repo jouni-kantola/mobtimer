@@ -29,6 +29,6 @@
         "prettier": "^2.8.6"
     },
     "lint-staged": {
-        "**/*": "prettier --write --ignore-unknown"
+        "**/*": "npx prettier --write --ignore-unknown"
     }
 }
