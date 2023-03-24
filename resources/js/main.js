@@ -181,9 +181,10 @@ async function initApp() {
     });
 
     document.querySelectorAll(".user input[type=checkbox]").forEach(i => {
-        i.addEventListener("change", () => {
-            const selectedMemberIndex = parseInt(i.dataset.index);
-            const isHere = i.checked;
+        i.addEventListener("change", event => {
+            const checkbox = event.target;
+            const selectedMemberIndex = parseInt(checkbox.dataset.index);
+            const isHere = checkbox.checked;
             const activeMember = getActiveMember(state.team);
 
             state.team[selectedMemberIndex].isHere = isHere;
