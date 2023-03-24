@@ -147,11 +147,18 @@ async function initApp() {
     document.querySelectorAll("input[data-mob-user]").forEach(u => {
         let debounceTimeout;
         u.addEventListener("input", event => {
+            const memberIndex = parseInt(
+                event.target.parentElement.dataset.index
+            );
+
+            if (memberIndex === getActiveMember(state.team).index) {
+                requestAnimationFrame(() => {
+                    startButtonElement.innerText = `Start session for ${event.target.value}`;
+                });
+            }
+
             clearTimeout(debounceTimeout);
             debounceTimeout = setTimeout(async () => {
-                const memberIndex = parseInt(
-                    event.target.parentElement.dataset.index
-                );
                 state.team[memberIndex].name = event.target.value;
                 await saveUsers(state.team.map(m => m.name));
             }, 500);
