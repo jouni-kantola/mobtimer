@@ -145,12 +145,16 @@ async function initApp() {
     );
 
     document.querySelectorAll("input[data-mob-user]").forEach(u => {
-        u.addEventListener("change", async () => {
-            await saveUsers(
-                Array.from(
-                    document.querySelectorAll("input[data-mob-user]")
-                ).map(x => x.value)
-            );
+        let debounceTimeout;
+        u.addEventListener("input", event => {
+            clearTimeout(debounceTimeout);
+            debounceTimeout = setTimeout(async () => {
+                const memberIndex = parseInt(
+                    event.target.parentElement.dataset.index
+                );
+                state.team[memberIndex].name = event.target.value;
+                await saveUsers(state.team.map(m => m.name));
+            }, 500);
         });
 
         u.addEventListener("dblclick", async udbclick => {
