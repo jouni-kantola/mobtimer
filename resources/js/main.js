@@ -171,7 +171,20 @@ async function initApp() {
 
     document.querySelectorAll(".user input[type=checkbox]").forEach(i => {
         i.addEventListener("change", () => {
-            state.team[i.dataset.index - 1].isHere = i.checked;
+            const selectedMemberIndex = parseInt(i.dataset.index);
+            const isHere = i.checked;
+            const activeMember = getActiveMember(state.team);
+
+            state.team[selectedMemberIndex - 1].isHere = isHere;
+
+            if (activeMember.index === selectedMemberIndex && !isHere) {
+                state.timer?.reset();
+                updateTimeDisplay();
+
+                const { index } = whosNextAfter(activeMember.index, state.team);
+                switchActiveMember(index, state.team);
+                prepareForNextMember();
+            }
         });
     });
 
