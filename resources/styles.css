@@ -9,6 +9,12 @@ html {
     background: #f6edee;
 }
 
+main {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
 input:not([type="checkbox"]):not([type="radio"]) {
     margin-bottom: 0;
 }
@@ -46,4 +52,8 @@ div.user {
 #mobUsers,
 .user:last-of-type {
     margin-bottom: 0;
+}
+
+#startButton {
+    margin-bottom: auto;
 }
