@@ -8,9 +8,9 @@ import {
 
 test("map team to users", t => {
     const team = createTeam(defaultUsers);
-    t.is(team[0].index, 1);
+    t.is(team[0].index, 0);
     t.is(team[0].name, "User 1");
-    t.is(team.at(-1).index, 6);
+    t.is(team.at(-1).index, 5);
     t.is(team.at(-1).name, "Break");
 });
 
@@ -21,8 +21,8 @@ test("generate team members html", t => {
             (m, i) =>
                 `<div class="grid user${
                     i === 0 ? " current" : ""
-                }" data-index="${i + 1}">
-<input type="checkbox" role="switch" checked data-index="${i + 1}" />
+                }" data-index="${i}">
+<input type="checkbox" role="switch" checked data-index="${i}" />
 <input type="text" placeholder="Name" value="${m}" data-mob-user="${m}" />
 </div>`
         )
@@ -38,11 +38,11 @@ test("whos next when everyone here", t => {
     const members = ["User 1", "User 2"];
     const team = createTeam(members);
 
-    const after1 = whosNextAfter(1, team);
-    const after2 = whosNextAfter(2, team);
-    t.is(after1.index, 2);
+    const after1 = whosNextAfter(0, team);
+    const after2 = whosNextAfter(1, team);
+    t.is(after1.index, 1);
     t.is(after1.name, "User 2");
-    t.is(after2.index, 1);
+    t.is(after2.index, 0);
     t.is(after2.name, "User 1");
 });
 
@@ -51,21 +51,21 @@ test("skip member who's away", t => {
     const team = createTeam(members);
     team[1].isHere = false;
 
-    const after1 = whosNextAfter(1, team);
-    t.is(after1.index, 3);
+    const after1 = whosNextAfter(0, team);
+    t.is(after1.index, 2);
 
     team[1].isHere = true;
     team.at(-1).isHere = false;
 
-    const after2 = whosNextAfter(2, team);
-    t.is(after2.index, 1);
+    const after2 = whosNextAfter(1, team);
+    t.is(after2.index, 0);
 });
 
 test("single user always next", t => {
     const members = ["User 1"];
     const team = createTeam(members);
-    const after1 = whosNextAfter(1, team);
-    t.is(after1.index, 1);
+    const after1 = whosNextAfter(0, team);
+    t.is(after1.index, 0);
 });
 
 test("next member when alone is themselves", t => {
@@ -74,6 +74,6 @@ test("next member when alone is themselves", t => {
     team[0].isHere = false;
     team[2].isHere = false;
 
-    const after1 = whosNextAfter(2, team);
+    const after1 = whosNextAfter(1, team);
     t.is(after1.index, team[1].index);
 });

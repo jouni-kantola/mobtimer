@@ -175,7 +175,7 @@ async function initApp() {
             const isHere = i.checked;
             const activeMember = getActiveMember(state.team);
 
-            state.team[selectedMemberIndex - 1].isHere = isHere;
+            state.team[selectedMemberIndex].isHere = isHere;
 
             if (activeMember.index === selectedMemberIndex && !isHere) {
                 state.timer?.reset();

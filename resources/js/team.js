@@ -1,9 +1,9 @@
 export function createTeam(members) {
-    return members.map((name, i) => ({
-        index: i + 1,
+    return members.map((name, index) => ({
+        index,
         name,
         isHere: true,
-        isActive: i === 0,
+        isActive: index === 0,
     }));
 }
 
@@ -27,7 +27,7 @@ export function whosNextAfter(recentActiveIndex, team) {
     const presentMembers = team.filter(m => m.isHere);
     if (presentMembers.length === 1) return presentMembers[0];
 
-    for (let i = 1; i < team.length + 1; i++) {
+    for (let i = 1; i < team.length; i++) {
         const nextMemberIndex = getNextMemberIndex(
             recentActiveIndex,
             i,
@@ -54,5 +54,5 @@ export function getActiveMember(team) {
 }
 
 function getNextMemberIndex(recentActiveIndex, nextIndex, teamSize) {
-    return (recentActiveIndex + nextIndex) % (teamSize + 1) || 1;
+    return (recentActiveIndex + nextIndex) % teamSize;
 }
