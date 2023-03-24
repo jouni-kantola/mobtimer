@@ -7,8 +7,8 @@
 /dist
 .tmp/
 
-# Neutralinojs client (minified)
-neutralino.js
+# 3rd party libs
+vendor/
 
 # Neutralinojs related files
 node_modules/
