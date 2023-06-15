@@ -7,9 +7,8 @@
 
 ## Development
 
-Start the application in development mode:
-
-`npm start`
+1. For development in Windows, copy `./lib/WebView2Loader.dll` to `./bin/`.
+1. Start the application in development mode: `npm start`
 
 Note: In Windows, use `cmd.exe` to ensure `--window-enable-inspector` is passed along correctly.
 
