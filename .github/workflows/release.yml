@@ -23,6 +23,6 @@ jobs:
             - uses: softprops/action-gh-release@v1
               with:
                   token: "${{ secrets.GITHUB_TOKEN }}"
-                  prerelease: false
+                  prerelease: true
                   files: |
                       **/mobtimer-release.zip
