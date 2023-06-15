@@ -61,7 +61,7 @@
         "resourcesPath": "/resources/",
         "extensionsPath": "/extensions/",
         "clientLibrary": "/resources/vendor/neutralino.js",
-        "binaryVersion": "4.12.0",
+        "binaryVersion": "4.11.0",
         "clientVersion": "3.10.0"
     }
 }
