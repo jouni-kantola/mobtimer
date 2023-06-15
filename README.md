@@ -13,11 +13,15 @@ Start the application in development mode:
 
 Note: In Windows, use `cmd.exe` to ensure `--window-enable-inspector` is passed along correctly.
 
+## Binaries
+
+To create binaries locally, execute `npm run build`.
+
 ## Release
 
 Pushing a tag to GitHub following the format `v*` (e.g. `v2.0.0`) will automatically publish a release.
 
-To create binaries locally, execute `npm run build`.
+Binaries for release are built on Windows to support adding Windows executable resources. This is done by running `npm run release`.
 
 ## Read more
 
