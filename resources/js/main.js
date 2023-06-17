@@ -5,6 +5,7 @@ import {
     whosNextAfter,
     switchActiveMember,
     getActiveMember,
+    getLast,
 } from "./team.js";
 import { secondsToMinutesAndSeconds, startTimer } from "./clock.js";
 
@@ -13,11 +14,13 @@ Neutralino.init();
 const timerValueElement = document.getElementById("timerValue");
 const timerDisplayElement = document.getElementById("timerDisplay");
 const startButtonElement = document.getElementById("startButton");
+const takeBreaksElement = document.getElementById("takeBreaks");
 
 const state = {
     timer: null,
     iterationLengthInSeconds: timerValueElement.value,
     team: null,
+    onBreak: false,
 };
 
 function formatTimeRemaining() {
@@ -86,18 +89,41 @@ async function onTick() {
     await updateTray(name, nextMember.name, timeRemaning);
 }
 
-async function onEnd() {
+async function onBreakTick() {
     updateTimeDisplay();
+    const { index, _ } = getActiveMember(state.team);
+    const nextMember = whosNextAfter(index, state.team);
+    const timeRemaning = formatTimeRemaining();
+    await updateTray("Break", nextMember.name, timeRemaning);
+}
 
-    const { index } = whosNextAfter(
-        getActiveMember(state.team).index,
-        state.team
-    );
+async function onEnd() {
+    if (
+        takeBreaksElement.checked
+        && getLast(state.team).index == getActiveMember(state.team).index
+        && !state.onBreak) {
+        state.onBreak = true;
+        state.timer = startTimer(
+            state.iterationLengthInSeconds,
+            onBreakTick,
+            onEnd);
+        startButtonElement.innerText = "Take a break!";
 
-    switchActiveMember(index, state.team);
-    prepareForNextMember();
+        await Neutralino.window.show();
+    } else {
+        state.onBreak = false;
+        updateTimeDisplay();
 
-    await Neutralino.window.show();
+        const { index } = whosNextAfter(
+            getActiveMember(state.team).index,
+            state.team
+        );
+
+        switchActiveMember(index, state.team);
+        prepareForNextMember();
+
+        await Neutralino.window.show();
+    }
 }
 
 timerValueElement.addEventListener("input", e => {
