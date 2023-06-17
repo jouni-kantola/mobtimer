@@ -30,9 +30,11 @@ function updateTimeDisplay() {
     timerDisplayElement.innerText = formatTimeRemaining();
 }
 
-async function updateTray() {
-    const { index, name } = getActiveMember(state.team);
-    const nextMember = whosNextAfter(index, state.team);
+async function updateTray(
+    driverName,
+    nextMemberName,
+    timeRemaning
+) {
     await Neutralino.os.setTray({
         icon: "/resources/icons/trayIcon.png",
         menuItems: [
@@ -44,10 +46,10 @@ async function updateTray() {
                 text: "-",
             },
             {
-                text: `Now: ${name}`,
+                text: `Now: ${driverName}`,
             },
             {
-                text: `Next: ${nextMember.name} (in ${formatTimeRemaining()})`,
+                text: `Next: ${nextMemberName} (in ${timeRemaning})`,
             },
             {
                 text: "-",
@@ -78,7 +80,10 @@ function prepareForNextMember() {
 
 async function onTick() {
     updateTimeDisplay();
-    await updateTray();
+    const { index, name } = getActiveMember(state.team);
+    const nextMember = whosNextAfter(index, state.team);
+    const timeRemaning = formatTimeRemaining();
+    await updateTray(name, nextMember.name, timeRemaning);
 }
 
 async function onEnd() {
