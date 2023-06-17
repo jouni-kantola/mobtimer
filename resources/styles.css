@@ -58,3 +58,9 @@ div.user {
 #startButton {
     margin-bottom: auto;
 }
+
+.cycle-settings {
+    display: flex;
+    gap: 15px;
+    white-space: nowrap;
+}
