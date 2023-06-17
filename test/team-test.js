@@ -4,6 +4,7 @@ import {
     createTeam,
     generateMemberMarkup,
     whosNextAfter,
+    getLast,
 } from "../resources/js/team.js";
 
 test("map team to users", t => {
@@ -76,4 +77,13 @@ test("next member when alone is themselves", t => {
 
     const after1 = whosNextAfter(1, team);
     t.is(after1.index, team[1].index);
+});
+
+test("last member is here", t => {
+    const members = ["User 1", "User 2", "User 3"];
+    const team = createTeam(members);
+    team[0].isHere = false;
+    team[2].isHere = false;
+
+    t.is(getLast(team).index, team[1].index);
 });

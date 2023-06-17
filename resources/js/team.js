@@ -53,6 +53,10 @@ export function getActiveMember(team) {
     return team.find(m => m.isActive);
 }
 
+export function getLast(team) {
+    return team.filter(m => m.isHere).at(-1);
+}
+
 function getNextMemberIndex(recentActiveIndex, nextIndex, teamSize) {
     return (recentActiveIndex + nextIndex) % teamSize;
 }
