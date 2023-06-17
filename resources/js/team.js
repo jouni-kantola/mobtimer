@@ -54,7 +54,7 @@ export function getActiveMember(team) {
 }
 
 export function getLast(team) {
-    return team.filter(m => m.isHere).at(-1);
+    return team.filter(m => m.isHere).slice(-1)[0];
 }
 
 function getNextMemberIndex(recentActiveIndex, nextIndex, teamSize) {
