@@ -12,7 +12,7 @@ test("map team to users", t => {
     t.is(team[0].index, 0);
     t.is(team[0].name, "User 1");
     t.is(team.at(-1).index, 5);
-    t.is(team.at(-1).name, "Break");
+    t.is(team.at(-1).name, "User 6");
 });
 
 test("generate team members html", t => {

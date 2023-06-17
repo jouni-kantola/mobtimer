@@ -4,7 +4,7 @@ export const defaultUsers = [
     "User 3",
     "User 4",
     "User 5",
-    "Break",
+    "User 6",
 ];
 
 export const trayOptions = {
