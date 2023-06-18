@@ -1,3 +1,6 @@
+# OS generated directories/files
+.DS_Store
+
 # Developer tools' files
 .lite_workspace.lua
 .husky
