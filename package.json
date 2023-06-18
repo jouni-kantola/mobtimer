@@ -5,7 +5,7 @@
     "main": "index.js",
     "type": "module",
     "scripts": {
-        "test": "ava",
+        "test": "node --test",
         "update": "npx @neutralinojs/neu update",
         "start": "npx @neutralinojs/neu run -- --window-enable-inspector",
         "build": "npx @neutralinojs/neu build --release",
