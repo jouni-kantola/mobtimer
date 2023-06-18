@@ -1,21 +1,22 @@
-import test from "ava";
+import test from "node:test";
+import { strict as assert } from "node:assert";
 import { startTimer } from "../resources/js/clock.js";
 
 test("determine if running", t => {
     const seconds = 1;
     const timer = startTimer(seconds);
-    t.true(timer.isRunning);
+    assert.ok(timer.isRunning);
 });
 
 test("stopped when interval ends", async t => {
     const seconds = 1;
     const timer = startTimer(seconds);
 
-    t.true(timer.isRunning);
+    assert.ok(timer.isRunning);
     await new Promise((resolve, _) => {
         setTimeout(resolve, 1500);
     });
-    t.false(timer.isRunning);
+    assert.strictEqual(timer.isRunning, false);
 });
 
 test("callbacks every tick", async t => {
@@ -26,7 +27,6 @@ test("callbacks every tick", async t => {
         startTimer(seconds, () => {
             timesCalled++;
             if (timesCalled === 2) {
-                t.pass();
                 resolve();
             }
         });
@@ -35,11 +35,10 @@ test("callbacks every tick", async t => {
 
 test("notify when countdown done", async t => {
     await new Promise((resolve, _) => {
-        startTimer(1, undefined, resolve);
+        return startTimer(1, undefined, resolve);
     });
-
-    t.pass();
 });
+
 test("provide formatted time left", async t => {
     const seconds = 600;
     const timer = startTimer(seconds);
@@ -48,21 +47,24 @@ test("provide formatted time left", async t => {
         setTimeout(resolve, 1500);
     });
 
-    t.is("09:59", timer.timeLeft);
+    assert.strictEqual(timer.timeLeft, "09:59");
+
+    // without reseting test run never ends
+    timer.reset();
 });
 
 test("can change timer", async t => {
     const timer = startTimer(600);
     timer.change(300);
-    t.is("05:00", timer.timeLeft);
+    assert.strictEqual(timer.timeLeft, "05:00");
     timer.change(1);
-    t.is("00:01", timer.timeLeft);
+    assert.strictEqual(timer.timeLeft, "00:01");
 });
 
 test("can reset started timer", async t => {
     const timer = startTimer(600);
 
-    t.true(timer.isRunning);
+    assert.ok(timer.isRunning);
 
     await new Promise((resolve, _) => {
         setTimeout(resolve, 1500);
@@ -70,6 +72,6 @@ test("can reset started timer", async t => {
 
     timer.reset();
 
-    t.false(timer.isRunning);
-    t.is("10:00", timer.timeLeft);
+    assert.strictEqual(timer.isRunning, false);
+    assert.strictEqual(timer.timeLeft, "10:00");
 });
