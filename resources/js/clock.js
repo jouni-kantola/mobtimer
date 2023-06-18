@@ -43,6 +43,11 @@ class Timer {
         this.#clockIntervalId = null;
         this.change(this.#intervalSeconds);
     }
+
+    pause() {
+        clearInterval(this.#clockIntervalId);
+        this.#clockIntervalId = null;
+    }
 }
 
 export function startTimer(seconds, onTick, onEnd) {
