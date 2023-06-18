@@ -14,6 +14,7 @@ Neutralino.init();
 const timerValueElement = document.getElementById("timerValue");
 const timerDisplayElement = document.getElementById("timerDisplay");
 const startButtonElement = document.getElementById("startButton");
+const pauseButtonElement = document.getElementById("pauseButton");
 const takeBreaksElement = document.getElementById("takeBreaks");
 
 const state = {
@@ -21,6 +22,7 @@ const state = {
     iterationLengthInSeconds: timerValueElement.value,
     team: null,
     onBreak: false,
+    isPaused: false,
 };
 
 function formatTimeRemaining() {
@@ -145,9 +147,24 @@ async function startSession() {
     startButtonElement.innerText = `Session running 🚀. Double click any user to switch/restart.`;
 
     state.timer = startTimer(state.iterationLengthInSeconds, onTick, onEnd);
+
+    state.isPaused = false;
+    pauseButtonElement.innerText = "Pause";
 }
 
 startButtonElement.addEventListener("click", startSession);
+
+pauseButtonElement.addEventListener("click", () => {
+    if(state.timer?.isRunning) {
+        state.timer.pause();
+        pauseButtonElement.innerText = "Resume";
+        state.isPaused = true;
+    } else if(state.isPaused) {
+        state.timer.start();
+        pauseButtonElement.innerText = "Pause";
+        state.isPaused = false;
+    }
+});
 
 async function onTrayMenuItemClicked(event) {
     switch (event.detail.id) {
@@ -208,6 +225,8 @@ async function initApp() {
                 state.team
             );
             prepareForNextMember();
+            state.isPaused = false;
+            pauseButtonElement.innerText = "Pause";
         });
     });
 

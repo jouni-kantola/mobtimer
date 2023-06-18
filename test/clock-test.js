@@ -75,3 +75,18 @@ test("can reset started timer", async t => {
     assert.strictEqual(timer.isRunning, false);
     assert.strictEqual(timer.timeLeft, "10:00");
 });
+
+test("can pause timer", async t => {
+    const timer = startTimer(600);
+
+    assert.ok(timer.isRunning);
+
+    await new Promise((resolve, _) => {
+        setTimeout(resolve, 1500);
+    });
+
+    timer.pause();
+    assert.strictEqual(timer.isRunning, false);
+
+    assert.strictEqual(timer.timeLeft, "09:59");
+});
