@@ -1,4 +1,11 @@
+<template>
+    <Timer :value="formattedTimeRemaining" />
+</template>
 <script setup>
+import { ref } from "vue";
+
+import Timer from "./components/Timer.vue";
+
 import { defaultUsers, trayOptions } from "./config.js";
 import {
     createTeam,
@@ -11,7 +18,6 @@ import {
 import { secondsToMinutesAndSeconds, startTimer } from "./clock.js";
 
 const timerValueElement = document.getElementById("timerValue");
-const timerDisplayElement = document.getElementById("timerDisplay");
 const startButtonElement = document.getElementById("startButton");
 const pauseButtonElement = document.getElementById("pauseButton");
 const takeBreaksElement = document.getElementById("takeBreaks");
@@ -24,6 +30,8 @@ const state = {
     isPaused: false,
 };
 
+const formattedTimeRemaining = ref(formatTimeRemaining());
+
 function formatTimeRemaining() {
     return state.timer?.isRunning
         ? state.timer.timeLeft
@@ -31,7 +39,7 @@ function formatTimeRemaining() {
 }
 
 function updateTimeDisplay() {
-    timerDisplayElement.innerText = formatTimeRemaining();
+    formattedTimeRemaining.value = formatTimeRemaining();
 }
 
 async function updateTray(
