@@ -8,6 +8,15 @@
         <button @click="startSession">{{ startButtonText }}</button>
         <button @click="pauseButtonElementClick">{{ pauseButtonText }}</button>
     </div>
+    <form id="mobUsers">
+        <div v-for="({ name, index, isHere, isActive }) in team" :data-index="index" class="grid user"
+            :class="{ current: isActive }">
+            <input type="checkbox" :checked="isHere" :data-index="index" role="switch" @click="ensureMinimumMembers"
+                @change="toggleMemberHere" />
+            <input type="text" :value="name" :data-index="index" :data-mob-user="name" placeholder="Name"
+                @dblclick="onMemberDoubleClick" @input="onMemberInput" />
+        </div>
+    </form>
 </template>
 <script setup>
 import { reactive, ref } from "vue";
@@ -18,7 +27,6 @@ import { updateTray, saveTeam, getTeamData, showWindow, hideWindow, registerEven
 import { defaultUsers } from "./config.js";
 import {
     createTeam,
-    generateMemberMarkup,
     whosNextAfter,
     switchActiveMember,
     getActiveMember,
@@ -52,15 +60,8 @@ function updateTimeDisplay() {
 }
 
 function prepareForNextMember() {
-    const previous = document.querySelector(".user.current");
-    const { index, name } = getActiveMember(team);
-    const next = document.querySelector(`.user[data-index="${index}"]`);
-
-    requestAnimationFrame(() => {
-        previous.classList.remove("current");
-        next.classList.add("current");
-        startButtonText.value = `Start session for ${name}`;
-    });
+    const { name } = getActiveMember(team);
+    startButtonText.value = `Start session for ${name}`;
 }
 
 async function onTick() {
@@ -144,6 +145,63 @@ function pauseButtonElementClick() {
     }
 }
 
+function onMemberDoubleClick(event) {
+    if (!event.target.previousElementSibling.checked) {
+        return;
+    }
+
+    state.timer?.reset();
+
+    updateTimeDisplay();
+    switchActiveMember(
+        parseInt(event.target.dataset.index),
+        team
+    );
+    prepareForNextMember();
+    state.isPaused = false;
+    pauseButtonText.value = "Pause";
+}
+
+async function onMemberInput(event) {
+    const name = event.target.value;
+    const memberIndex = parseInt(event.target.dataset.index);
+
+    if (memberIndex === getActiveMember(team).index) {
+        startButtonText.value = `Start session for ${name}`;
+    }
+
+    team[memberIndex].name = name;
+    await saveTeam(team.map(m => m.name));
+}
+
+function ensureMinimumMembers(event) {
+    const checkbox = event.target;
+    const isHere = checkbox.checked;
+
+    if (!isHere && team.filter(m => m.isHere).length === 1) {
+        event.preventDefault();
+        return false;
+    }
+}
+
+function toggleMemberHere(event) {
+    const checkbox = event.target;
+    const selectedMemberIndex = parseInt(checkbox.dataset.index);
+    const isHere = checkbox.checked;
+    const activeMember = getActiveMember(team);
+
+    team[selectedMemberIndex].isHere = isHere;
+
+    if (activeMember.index === selectedMemberIndex && !isHere) {
+        state.timer?.reset();
+        updateTimeDisplay();
+
+        const { index } = whosNextAfter(activeMember.index, team);
+        switchActiveMember(index, team);
+        prepareForNextMember();
+    }
+}
+
 async function initApp() {
     registerEvents();
 
@@ -155,77 +213,6 @@ async function initApp() {
     }
 
     team.push(...createTeam(users));
-    document.getElementById("mobUsers").innerHTML = generateMemberMarkup(
-        team
-    );
-
-    document.querySelectorAll("input[data-mob-user]").forEach(u => {
-        let debounceTimeout;
-        u.addEventListener("input", event => {
-            const memberIndex = parseInt(
-                event.target.parentElement.dataset.index
-            );
-
-            if (memberIndex === getActiveMember(team).index) {
-                requestAnimationFrame(() => {
-                    startButtonText.value = `Start session for ${event.target.value}`;
-                });
-            }
-
-            clearTimeout(debounceTimeout);
-            debounceTimeout = setTimeout(async () => {
-                team[memberIndex].name = event.target.value;
-                await saveTeam(team.map(m => m.name));
-            }, 500);
-        });
-
-        u.addEventListener("dblclick", async udbclick => {
-            if (!udbclick.target.previousElementSibling.checked) {
-                return;
-            }
-
-            state.timer?.reset();
-
-            updateTimeDisplay();
-            switchActiveMember(
-                parseInt(udbclick.target.parentElement.dataset.index),
-                team
-            );
-            prepareForNextMember();
-            state.isPaused = false;
-            pauseButtonText.value = "Pause";
-        });
-    });
-
-    document.querySelectorAll(".user input[type=checkbox]").forEach(i => {
-        i.addEventListener("click", event => {
-            const checkbox = event.target;
-            const isHere = checkbox.checked;
-
-            if (!isHere && team.filter(m => m.isHere).length === 1) {
-                event.preventDefault();
-                return false;
-            }
-        });
-
-        i.addEventListener("change", event => {
-            const checkbox = event.target;
-            const selectedMemberIndex = parseInt(checkbox.dataset.index);
-            const isHere = checkbox.checked;
-            const activeMember = getActiveMember(team);
-
-            team[selectedMemberIndex].isHere = isHere;
-
-            if (activeMember.index === selectedMemberIndex && !isHere) {
-                state.timer?.reset();
-                updateTimeDisplay();
-
-                const { index } = whosNextAfter(activeMember.index, team);
-                switchActiveMember(index, team);
-                prepareForNextMember();
-            }
-        });
-    });
 
     updateTimeDisplay();
     prepareForNextMember();
