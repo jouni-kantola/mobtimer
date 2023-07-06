@@ -14,7 +14,8 @@ import { ref } from "vue";
 
 import Timer from "./components/Timer.vue";
 
-import { defaultUsers, trayOptions } from "./config.js";
+import { updateTray, saveTeam, getTeamData, showWindow, hideWindow, registerEvents } from "./neutralino-api.js";
+import { defaultUsers } from "./config.js";
 import {
     createTeam,
     generateMemberMarkup,
@@ -48,42 +49,6 @@ function formatTimeRemaining() {
 
 function updateTimeDisplay() {
     formattedTimeRemaining.value = formatTimeRemaining();
-}
-
-async function updateTray(
-    driverName,
-    nextMemberName,
-    timeRemaning
-) {
-    await Neutralino.os.setTray({
-        icon: "/resources/icons/trayIcon.png",
-        menuItems: [
-            {
-                id: trayOptions.OPEN,
-                text: "Open",
-            },
-            {
-                text: "-",
-            },
-            {
-                text: `Now: ${driverName}`,
-            },
-            {
-                text: `Next: ${nextMemberName} (in ${timeRemaning})`,
-            },
-            {
-                text: "-",
-            },
-            {
-                id: trayOptions.QUIT,
-                text: "Quit",
-            },
-        ],
-    });
-}
-
-async function saveTeam(users) {
-    await Neutralino.storage.setData("mobUsers", JSON.stringify(users));
 }
 
 function prepareForNextMember() {
@@ -126,7 +91,7 @@ async function onEnd() {
             onEnd);
         startButtonText.value = "Take a break!";
 
-        await Neutralino.window.show();
+        await showWindow();
     } else {
         state.onBreak = false;
         updateTimeDisplay();
@@ -139,7 +104,7 @@ async function onEnd() {
         switchActiveMember(index, state.team);
         prepareForNextMember();
 
-        await Neutralino.window.show();
+        await showWindow();
     }
 }
 
@@ -155,7 +120,7 @@ function timerValueElementKeyDown(event) {
 }
 
 async function startSession() {
-    await Neutralino.window.hide();
+    await hideWindow();
 
     if (state.timer?.isRunning) return false;
 
@@ -179,23 +144,12 @@ function pauseButtonElementClick() {
     }
 }
 
-async function onTrayMenuItemClicked(event) {
-    switch (event.detail.id) {
-        case trayOptions.OPEN:
-            await Neutralino.window.show();
-            break;
-        case trayOptions.QUIT:
-            await Neutralino.app.exit();
-            break;
-    }
-}
-
-Neutralino.events.on("trayMenuItemClicked", onTrayMenuItemClicked);
-
 async function initApp() {
+    registerEvents();
+
     let users = defaultUsers;
     try {
-        users = JSON.parse(await Neutralino.storage.getData("mobUsers"));
+        users = await getTeamData();
     } catch (err) {
         await saveTeam(defaultUsers);
     }
