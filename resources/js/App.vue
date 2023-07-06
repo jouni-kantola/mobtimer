@@ -10,7 +10,7 @@
     </div>
 </template>
 <script setup>
-import { ref } from "vue";
+import { reactive, ref } from "vue";
 
 import Timer from "./components/Timer.vue";
 
@@ -30,11 +30,11 @@ const timerValue = ref(600);
 const takeBreaks = ref(true);
 const startButtonText = ref("Start");
 const pauseButtonText = ref("Pause");
+const team = reactive([]);
 
 const state = {
     timer: null,
     iterationLengthInSeconds: timerValue.value,
-    team: null,
     onBreak: false,
     isPaused: false,
 };
@@ -53,7 +53,7 @@ function updateTimeDisplay() {
 
 function prepareForNextMember() {
     const previous = document.querySelector(".user.current");
-    const { index, name } = getActiveMember(state.team);
+    const { index, name } = getActiveMember(team);
     const next = document.querySelector(`.user[data-index="${index}"]`);
 
     requestAnimationFrame(() => {
@@ -65,16 +65,16 @@ function prepareForNextMember() {
 
 async function onTick() {
     updateTimeDisplay();
-    const { index, name } = getActiveMember(state.team);
-    const nextMember = whosNextAfter(index, state.team);
+    const { index, name } = getActiveMember(team);
+    const nextMember = whosNextAfter(index, team);
     const timeRemaning = formatTimeRemaining();
     await updateTray(name, nextMember.name, timeRemaning);
 }
 
 async function onBreakTick() {
     updateTimeDisplay();
-    const { index, _ } = getActiveMember(state.team);
-    const nextMember = whosNextAfter(index, state.team);
+    const { index, _ } = getActiveMember(team);
+    const nextMember = whosNextAfter(index, team);
     const timeRemaning = formatTimeRemaining();
     await updateTray("Break", nextMember.name, timeRemaning);
 }
@@ -82,7 +82,7 @@ async function onBreakTick() {
 async function onEnd() {
     if (
         takeBreaks.value
-        && getLast(state.team).index == getActiveMember(state.team).index
+        && getLast(team).index == getActiveMember(team).index
         && !state.onBreak) {
         state.onBreak = true;
         state.timer = startTimer(
@@ -97,11 +97,11 @@ async function onEnd() {
         updateTimeDisplay();
 
         const { index } = whosNextAfter(
-            getActiveMember(state.team).index,
-            state.team
+            getActiveMember(team).index,
+            team
         );
 
-        switchActiveMember(index, state.team);
+        switchActiveMember(index, team);
         prepareForNextMember();
 
         await showWindow();
@@ -154,9 +154,9 @@ async function initApp() {
         await saveTeam(defaultUsers);
     }
 
-    state.team = createTeam(users);
+    team.push(...createTeam(users));
     document.getElementById("mobUsers").innerHTML = generateMemberMarkup(
-        state.team
+        team
     );
 
     document.querySelectorAll("input[data-mob-user]").forEach(u => {
@@ -166,7 +166,7 @@ async function initApp() {
                 event.target.parentElement.dataset.index
             );
 
-            if (memberIndex === getActiveMember(state.team).index) {
+            if (memberIndex === getActiveMember(team).index) {
                 requestAnimationFrame(() => {
                     startButtonText.value = `Start session for ${event.target.value}`;
                 });
@@ -174,8 +174,8 @@ async function initApp() {
 
             clearTimeout(debounceTimeout);
             debounceTimeout = setTimeout(async () => {
-                state.team[memberIndex].name = event.target.value;
-                await saveTeam(state.team.map(m => m.name));
+                team[memberIndex].name = event.target.value;
+                await saveTeam(team.map(m => m.name));
             }, 500);
         });
 
@@ -189,7 +189,7 @@ async function initApp() {
             updateTimeDisplay();
             switchActiveMember(
                 parseInt(udbclick.target.parentElement.dataset.index),
-                state.team
+                team
             );
             prepareForNextMember();
             state.isPaused = false;
@@ -202,7 +202,7 @@ async function initApp() {
             const checkbox = event.target;
             const isHere = checkbox.checked;
 
-            if (!isHere && state.team.filter(m => m.isHere).length === 1) {
+            if (!isHere && team.filter(m => m.isHere).length === 1) {
                 event.preventDefault();
                 return false;
             }
@@ -212,16 +212,16 @@ async function initApp() {
             const checkbox = event.target;
             const selectedMemberIndex = parseInt(checkbox.dataset.index);
             const isHere = checkbox.checked;
-            const activeMember = getActiveMember(state.team);
+            const activeMember = getActiveMember(team);
 
-            state.team[selectedMemberIndex].isHere = isHere;
+            team[selectedMemberIndex].isHere = isHere;
 
             if (activeMember.index === selectedMemberIndex && !isHere) {
                 state.timer?.reset();
                 updateTimeDisplay();
 
-                const { index } = whosNextAfter(activeMember.index, state.team);
-                switchActiveMember(index, state.team);
+                const { index } = whosNextAfter(activeMember.index, team);
+                switchActiveMember(index, team);
                 prepareForNextMember();
             }
         });
