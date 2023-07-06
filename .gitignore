@@ -11,7 +11,7 @@
 .tmp/
 
 # 3rd party libs
-vendor/
+neutralino.js
 
 # Neutralinojs related files
 node_modules/
