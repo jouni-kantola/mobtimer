@@ -37,7 +37,6 @@ div.user {
     }
 }
 
-#mobUsers,
 .user:last-of-type {
     margin-bottom: 0;
 }
