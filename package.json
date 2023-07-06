@@ -27,12 +27,12 @@
     "homepage": "https://github.com/jouni-kantola/mobtimer#readme",
     "devDependencies": {
         "@neutralinojs/neu": "^9.6.0",
+        "adm-zip": "^0.5.10",
+        "cpy": "^10.1.0",
         "husky": "^8.0.3",
         "lint-staged": "^13.2.2",
         "prettier": "^2.8.8",
-        "adm-zip": "^0.5.10",
         "rcedit": "^3.0.1",
-        "cpy": "^10.1.0",
         "vite": "^4.4.0"
     },
     "lint-staged": {
