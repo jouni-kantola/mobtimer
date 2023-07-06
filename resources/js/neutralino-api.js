@@ -52,7 +52,6 @@ export function registerEvents() {
 }
 
 export async function getTeamData() {
-    console.log(await Neutralino.storage.getData("mobUsers"));
     return JSON.parse(await Neutralino.storage.getData("mobUsers"));
 }
 
