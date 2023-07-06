@@ -1,4 +1,7 @@
-import { trayOptions } from "./config.js";
+const trayOptions = {
+    OPEN: "OPEN",
+    QUIT: "Quit",
+};
 
 export async function updateTray(
     driverName,
