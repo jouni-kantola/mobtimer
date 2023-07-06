@@ -8,8 +8,9 @@
     "scripts": {
         "test": "node --test",
         "update": "npx @neutralinojs/neu update",
+        "start:vite": "vite build --watch",
         "start": "npx @neutralinojs/neu run -- --window-enable-inspector",
-        "build": "npx @neutralinojs/neu build --release",
+        "build": "vite build && npx @neutralinojs/neu build --release",
         "package": "node package-release.js",
         "release": "npm run build && npm run package",
         "prepare": "husky install"
@@ -31,7 +32,8 @@
         "prettier": "^2.8.8",
         "adm-zip": "^0.5.10",
         "rcedit": "^3.0.1",
-        "cpy": "^10.1.0"
+        "cpy": "^10.1.0",
+        "vite": "^4.4.0"
     },
     "lint-staged": {
         "**/*": "npx prettier --write --ignore-unknown"
