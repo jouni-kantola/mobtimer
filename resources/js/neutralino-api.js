@@ -9,7 +9,7 @@ export async function updateTray(
     timeRemaning
 ) {
     await Neutralino.os.setTray({
-        icon: "/resources/icons/trayIcon.png",
+        icon: "/dist/trayIcon.png",
         menuItems: [
             {
                 id: trayOptions.OPEN,
