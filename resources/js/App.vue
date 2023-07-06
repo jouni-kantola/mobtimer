@@ -8,12 +8,12 @@
         <button @click="startSession">{{ startButtonText }}</button>
         <button @click="pauseButtonElementClick">{{ pauseButtonText }}</button>
     </div>
-    <form id="mobUsers">
-        <div v-for="({ name, index, isHere, isActive }) in team" :data-index="index" class="grid user"
+    <form>
+        <div v-for="({ name, index, isHere, isActive }) in team" class="grid user"
             :class="{ current: isActive }">
             <input type="checkbox" :checked="isHere" :data-index="index" role="switch" @click="ensureMinimumMembers"
                 @change="toggleMemberHere" />
-            <input type="text" :value="name" :data-index="index" :data-mob-user="name" placeholder="Name"
+            <input type="text" :value="name" :data-index="index" placeholder="Name"
                 @dblclick="onMemberDoubleClick" @input="onMemberInput" />
         </div>
     </form>
