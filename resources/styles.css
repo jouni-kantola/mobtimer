@@ -16,6 +16,12 @@ body > main {
     padding: 30px 0;
 }
 
+#app {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
 input:not([type="checkbox"]):not([type="radio"]) {
     margin-bottom: 0;
 }
@@ -44,10 +50,4 @@ div.user {
 
 #startButton {
     margin-bottom: auto;
-}
-
-.cycle-settings {
-    display: flex;
-    gap: 15px;
-    white-space: nowrap;
 }
