@@ -7,22 +7,6 @@ export function createTeam(members) {
     }));
 }
 
-export function generateMemberMarkup(team) {
-    return team
-        .map(
-            ({ name, index, isHere, isActive }) =>
-                `<div class="grid user${
-                    isActive ? " current" : ""
-                }" data-index="${index}">
-<input type="checkbox" role="switch" ${
-                    isHere && "checked"
-                } data-index="${index}" />
-<input type="text" placeholder="Name" value="${name}" data-mob-user="${name}" />
-</div>`
-        )
-        .join("");
-}
-
 export function whosNextAfter(recentActiveIndex, team) {
     const presentMembers = team.filter(m => m.isHere);
     if (presentMembers.length === 1) return presentMembers[0];

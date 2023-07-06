@@ -3,7 +3,6 @@ import { strict as assert } from "node:assert";
 import { defaultUsers } from "../resources/js/config.js";
 import {
     createTeam,
-    generateMemberMarkup,
     whosNextAfter,
     getLast,
 } from "../resources/js/team.js";
@@ -14,26 +13,6 @@ test("map team to users", t => {
     assert.strictEqual(team[0].name, "User 1");
     assert.strictEqual(team.at(-1).index, 5);
     assert.strictEqual(team.at(-1).name, "User 6");
-});
-
-test("generate team members html", t => {
-    const members = ["User 1", "User 2"];
-    const expected = members
-        .map(
-            (m, i) =>
-                `<div class="grid user${
-                    i === 0 ? " current" : ""
-                }" data-index="${i}">
-<input type="checkbox" role="switch" checked data-index="${i}" />
-<input type="text" placeholder="Name" value="${m}" data-mob-user="${m}" />
-</div>`
-        )
-        .join("");
-
-    const team = createTeam(members);
-    const markup = generateMemberMarkup(team);
-
-    assert.strictEqual(markup, expected);
 });
 
 test("whos next when everyone here", t => {
