@@ -1,5 +1,9 @@
 <template>
     <Timer :value="formattedTimeRemaining" />
+    <div class="cycle-settings">
+        <input type="number" v-model="timerValue" @input="timerValueElementInput" @keydown="timerValueElementKeyDown" />
+        <label>Take breaks <input v-model="takeBreaks" type="checkbox" role="switch" checked /></label>
+    </div>
 </template>
 <script setup>
 import { ref } from "vue";
@@ -17,14 +21,15 @@ import {
 } from "./team.js";
 import { secondsToMinutesAndSeconds, startTimer } from "./clock.js";
 
-const timerValueElement = document.getElementById("timerValue");
+const timerValue = ref(600);
+const takeBreaks = ref(true);
+
 const startButtonElement = document.getElementById("startButton");
 const pauseButtonElement = document.getElementById("pauseButton");
-const takeBreaksElement = document.getElementById("takeBreaks");
 
 const state = {
     timer: null,
-    iterationLengthInSeconds: timerValueElement.value,
+    iterationLengthInSeconds: timerValue.value,
     team: null,
     onBreak: false,
     isPaused: false,
@@ -108,7 +113,7 @@ async function onBreakTick() {
 
 async function onEnd() {
     if (
-        takeBreaksElement.checked
+        takeBreaks.value
         && getLast(state.team).index == getActiveMember(state.team).index
         && !state.onBreak) {
         state.onBreak = true;
@@ -135,16 +140,16 @@ async function onEnd() {
     }
 }
 
-timerValueElement.addEventListener("input", e => {
+function timerValueElementInput(e) {
     state.iterationLengthInSeconds = Math.max(1, e.target.value);
-    e.target.value = state.iterationLengthInSeconds;
+    timerValue.value = state.iterationLengthInSeconds;
     state.timer?.change(state.iterationLengthInSeconds);
     updateTimeDisplay();
-});
+}
 
-timerValueElement.addEventListener("keydown", event => {
+function timerValueElementKeyDown(event) {
     if (event.key === "Enter" && !state.timer?.isRunning) startSession();
-});
+}
 
 async function startSession() {
     await Neutralino.window.hide();
@@ -274,3 +279,11 @@ async function initApp() {
 initApp();
 
 </script>
+
+<style scoped>
+.cycle-settings {
+    display: flex;
+    gap: 15px;
+    white-space: nowrap;
+}
+</style>
