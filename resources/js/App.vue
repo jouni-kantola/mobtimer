@@ -4,6 +4,10 @@
         <input type="number" v-model="timerValue" @input="timerValueElementInput" @keydown="timerValueElementKeyDown" />
         <label>Take breaks <input v-model="takeBreaks" type="checkbox" role="switch" checked /></label>
     </div>
+    <div class="grid">
+        <button @click="startSession">{{ startButtonText }}</button>
+        <button @click="pauseButtonElementClick">{{ pauseButtonText }}</button>
+    </div>
 </template>
 <script setup>
 import { ref } from "vue";
@@ -23,9 +27,8 @@ import { secondsToMinutesAndSeconds, startTimer } from "./clock.js";
 
 const timerValue = ref(600);
 const takeBreaks = ref(true);
-
-const startButtonElement = document.getElementById("startButton");
-const pauseButtonElement = document.getElementById("pauseButton");
+const startButtonText = ref("Start");
+const pauseButtonText = ref("Pause");
 
 const state = {
     timer: null,
@@ -91,7 +94,7 @@ function prepareForNextMember() {
     requestAnimationFrame(() => {
         previous.classList.remove("current");
         next.classList.add("current");
-        startButtonElement.innerText = `Start session for ${name}`;
+        startButtonText.value = `Start session for ${name}`;
     });
 }
 
@@ -121,7 +124,7 @@ async function onEnd() {
             state.iterationLengthInSeconds,
             onBreakTick,
             onEnd);
-        startButtonElement.innerText = "Take a break!";
+        startButtonText.value = "Take a break!";
 
         await Neutralino.window.show();
     } else {
@@ -156,27 +159,25 @@ async function startSession() {
 
     if (state.timer?.isRunning) return false;
 
-    startButtonElement.innerText = `Session running 🚀. Double click any user to switch/restart.`;
+    startButtonText.value = `Session running 🚀. Double click any user to switch/restart.`;
 
     state.timer = startTimer(state.iterationLengthInSeconds, onTick, onEnd);
 
     state.isPaused = false;
-    pauseButtonElement.innerText = "Pause";
+    pauseButtonText.value = "Pause";
 }
 
-startButtonElement.addEventListener("click", startSession);
-
-pauseButtonElement.addEventListener("click", () => {
+function pauseButtonElementClick() {
     if (state.timer?.isRunning) {
         state.timer.pause();
-        pauseButtonElement.innerText = "Resume";
+        pauseButtonText.value = "Resume";
         state.isPaused = true;
     } else if (state.isPaused) {
         state.timer.start();
-        pauseButtonElement.innerText = "Pause";
+        pauseButtonText.value = "Pause";
         state.isPaused = false;
     }
-});
+}
 
 async function onTrayMenuItemClicked(event) {
     switch (event.detail.id) {
@@ -213,7 +214,7 @@ async function initApp() {
 
             if (memberIndex === getActiveMember(state.team).index) {
                 requestAnimationFrame(() => {
-                    startButtonElement.innerText = `Start session for ${event.target.value}`;
+                    startButtonText.value = `Start session for ${event.target.value}`;
                 });
             }
 
@@ -238,7 +239,7 @@ async function initApp() {
             );
             prepareForNextMember();
             state.isPaused = false;
-            pauseButtonElement.innerText = "Pause";
+            pauseButtonText.value = "Pause";
         });
     });
 
