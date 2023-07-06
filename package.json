@@ -8,8 +8,7 @@
     "scripts": {
         "test": "node --test",
         "update": "npx @neutralinojs/neu update",
-        "start:vite": "vite build --watch",
-        "start": "npx @neutralinojs/neu run -- --window-enable-inspector",
+        "start": "concurrently 'vite build --watch' 'npx @neutralinojs/neu run -- --window-enable-inspector'",
         "build": "vite build && npx @neutralinojs/neu build --release",
         "package": "node package-release.js",
         "release": "npm run build && npm run package",
@@ -32,6 +31,7 @@
         "@neutralinojs/neu": "^9.6.0",
         "@vitejs/plugin-vue": "^4.2.3",
         "adm-zip": "^0.5.10",
+        "concurrently": "^8.2.0",
         "cpy": "^10.1.0",
         "husky": "^8.0.3",
         "lint-staged": "^13.2.2",
