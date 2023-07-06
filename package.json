@@ -25,6 +25,9 @@
         "url": "https://github.com/jouni-kantola/mobtimer/issues"
     },
     "homepage": "https://github.com/jouni-kantola/mobtimer#readme",
+    "dependencies": {
+        "vue": "^3.3.4"
+    },
     "devDependencies": {
         "@neutralinojs/neu": "^9.6.0",
         "@vitejs/plugin-vue": "^4.2.3",
