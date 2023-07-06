@@ -1,5 +1,6 @@
 {
     "name": "mobtimer",
+    "private": true,
     "version": "2.4.0",
     "description": "Mob timer",
     "main": "index.js",
