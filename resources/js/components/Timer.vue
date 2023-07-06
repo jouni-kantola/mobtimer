@@ -1,5 +1,5 @@
 <template>
-    <div id="timerDisplay">{{ value }}</div>
+    <output>{{ value }}</output>
 </template>
 
 <script setup>
@@ -14,11 +14,13 @@ const props = defineProps({
 </script>
 
 <style scoped>
-#timerDisplay {
+output {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     padding: 15px;
     border: solid 1px #f2bfd7;
     border-radius: 5px;
-    text-align: center;
     font-size: 4rem;
     background: linear-gradient(180deg,
             rgba(255, 255, 255, 0.25) 0%,
