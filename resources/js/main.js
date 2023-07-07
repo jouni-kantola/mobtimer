@@ -4,9 +4,9 @@ import { defaultUsers } from "./config.js";
 import { getTeamData, init, saveTeam } from "./neutralino-api.js";
 import { createTeam } from "./team.js";
 
-init();
-
 async function initApp() {
+    init();
+
     let users = defaultUsers;
 
     try {
