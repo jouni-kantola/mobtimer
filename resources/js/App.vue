@@ -40,7 +40,6 @@ const props = defineProps({
     },
 });
 
-const timerValue = ref(600);
 const takeBreaks = ref(true);
 const startButtonText = ref("Start");
 const pauseButtonText = ref("Pause");
@@ -48,7 +47,7 @@ const team = reactive(props.team);
 
 const state = {
     timer: null,
-    iterationLengthInSeconds: timerValue.value,
+    iterationLengthInSeconds: 600,
     onBreak: false,
     isPaused: false,
 };
