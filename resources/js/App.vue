@@ -1,7 +1,7 @@
 <template>
     <Timer :value="formattedTimeRemaining" />
     <div class="cycle-settings">
-        <input type="number" v-model="timerValue" @input="timerValueElementInput" @keydown="timerValueElementKeyDown" />
+        <IntervalLength @intervalUpdated="onIntervalUpdated" @enterKeyDown="onIntervalLengthEnterKeyDown" />
         <label>Take breaks <input v-model="takeBreaks" type="checkbox" role="switch" checked /></label>
     </div>
     <div class="grid">
@@ -22,6 +22,7 @@
 import { reactive, ref } from "vue";
 
 import Timer from "./components/Timer.vue";
+import IntervalLength from "./components/IntervalLength.vue";
 
 import { updateTray, saveTeam, getTeamData, showWindow, hideWindow, registerEvents } from "./neutralino-api.js";
 import { defaultUsers } from "./config.js";
@@ -109,15 +110,14 @@ async function onEnd() {
     }
 }
 
-function timerValueElementInput(e) {
-    state.iterationLengthInSeconds = Math.max(1, e.target.value);
-    timerValue.value = state.iterationLengthInSeconds;
-    state.timer?.change(state.iterationLengthInSeconds);
+function onIntervalUpdated(intervalLength) {
+    state.iterationLengthInSeconds = intervalLength;
+    state.timer?.change(intervalLength);
     updateTimeDisplay();
 }
 
-function timerValueElementKeyDown(event) {
-    if (event.key === "Enter" && !state.timer?.isRunning) startSession();
+function onIntervalLengthEnterKeyDown() {
+    if (!state.timer?.isRunning) startSession();
 }
 
 async function startSession() {
