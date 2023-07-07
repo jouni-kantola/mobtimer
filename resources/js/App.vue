@@ -6,7 +6,7 @@
     </div>
     <div class="grid">
         <button @click="startSession">{{ startButtonText }}</button>
-        <button @click="pauseButtonElementClick">{{ pauseButtonText }}</button>
+        <button @click="pauseButtonElementClick">{{ isPaused ? "Resume" : "Pause" }}</button>
     </div>
     <form>
         <div v-for="({ name, index, isHere, isActive }) in team" class="grid user"
@@ -42,14 +42,13 @@ const props = defineProps({
 
 const takeBreaks = ref(true);
 const startButtonText = ref("Start");
-const pauseButtonText = ref("Pause");
+const isPaused = ref(false);
 const team = reactive(props.team);
 
 const state = {
     timer: null,
     iterationLengthInSeconds: 600,
     onBreak: false,
-    isPaused: false,
 };
 
 const formattedTimeRemaining = ref(formatTimeRemaining());
@@ -133,19 +132,16 @@ async function startSession() {
 
     state.timer = startTimer(state.iterationLengthInSeconds, onTick, onEnd);
 
-    state.isPaused = false;
-    pauseButtonText.value = "Pause";
+    isPaused.value = false;
 }
 
 function pauseButtonElementClick() {
     if (state.timer?.isRunning) {
         state.timer.pause();
-        pauseButtonText.value = "Resume";
-        state.isPaused = true;
-    } else if (state.isPaused) {
+        isPaused.value = true;
+    } else if (isPaused.value) {
         state.timer.start();
-        pauseButtonText.value = "Pause";
-        state.isPaused = false;
+        isPaused.value = false;
     }
 }
 
@@ -162,8 +158,7 @@ function onMemberDoubleClick(event) {
         team
     );
     prepareForNextMember();
-    state.isPaused = false;
-    pauseButtonText.value = "Pause";
+    isPaused.value = false;
 }
 
 async function onMemberInput(event) {
