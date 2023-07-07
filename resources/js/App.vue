@@ -206,14 +206,6 @@ function toggleMemberHere(event) {
         prepareForNextMember();
     }
 }
-
-async function initApp() {
-    updateTimeDisplay();
-    prepareForNextMember();
-}
-
-initApp();
-
 </script>
 
 <style scoped>
