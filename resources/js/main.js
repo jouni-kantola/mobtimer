@@ -1,6 +1,7 @@
 import { createApp } from "vue";
 import App from './App.vue'
+import { init } from "./neutralino-api.js";
 
-Neutralino.init();
+init();
 
 createApp(App).mount('#app')

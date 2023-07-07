@@ -3,6 +3,10 @@ const trayOptions = {
     QUIT: "Quit",
 };
 
+export function init() {
+    Neutralino.init();
+}
+
 export async function updateTray(
     driverName,
     nextMemberName,
