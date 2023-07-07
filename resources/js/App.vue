@@ -24,7 +24,7 @@ import { defineProps, reactive, ref } from "vue";
 import Timer from "./components/Timer.vue";
 import IntervalLength from "./components/IntervalLength.vue";
 
-import { updateTray, saveTeam, showWindow, hideWindow, registerEvents } from "./neutralino-api.js";
+import { updateTray, saveTeam, showWindow, hideWindow } from "./neutralino-api.js";
 import {
     whosNextAfter,
     switchActiveMember,
@@ -208,7 +208,6 @@ function toggleMemberHere(event) {
 }
 
 async function initApp() {
-    registerEvents();
     updateTimeDisplay();
     prepareForNextMember();
 }
