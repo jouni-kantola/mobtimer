@@ -4,9 +4,6 @@
 
 1. `npm install`
 1. `npm run update`
-
-## Development
-
 1. For development in Windows, copy `./lib/WebView2Loader.dll` to `./bin/`.
 1. Start the application in development mode: `npm start`
 
