@@ -19,15 +19,13 @@
     </form>
 </template>
 <script setup>
-import { reactive, ref } from "vue";
+import { defineProps, reactive, ref } from "vue";
 
 import Timer from "./components/Timer.vue";
 import IntervalLength from "./components/IntervalLength.vue";
 
-import { updateTray, saveTeam, getTeamData, showWindow, hideWindow, registerEvents } from "./neutralino-api.js";
-import { defaultUsers } from "./config.js";
+import { updateTray, saveTeam, showWindow, hideWindow, registerEvents } from "./neutralino-api.js";
 import {
-    createTeam,
     whosNextAfter,
     switchActiveMember,
     getActiveMember,
@@ -35,11 +33,18 @@ import {
 } from "./team.js";
 import { secondsToMinutesAndSeconds, startTimer } from "./clock.js";
 
+const props = defineProps({
+    team: {
+        type: Array,
+        required: true,
+    },
+});
+
 const timerValue = ref(600);
 const takeBreaks = ref(true);
 const startButtonText = ref("Start");
 const pauseButtonText = ref("Pause");
-const team = reactive([]);
+const team = reactive(props.team);
 
 const state = {
     timer: null,
@@ -204,16 +209,6 @@ function toggleMemberHere(event) {
 
 async function initApp() {
     registerEvents();
-
-    let users = defaultUsers;
-    try {
-        users = await getTeamData();
-    } catch (err) {
-        await saveTeam(defaultUsers);
-    }
-
-    team.push(...createTeam(users));
-
     updateTimeDisplay();
     prepareForNextMember();
 }
