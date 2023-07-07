@@ -2,7 +2,7 @@
     <Timer :value="formattedTimeRemaining" />
     <div class="cycle-settings">
         <IntervalLength @intervalUpdated="onIntervalUpdated" @enterKeyDown="onIntervalLengthEnterKeyDown" />
-        <label>Take breaks <input v-model="takeBreaks" type="checkbox" role="switch" checked /></label>
+        <label>Take breaks <input v-model="takeBreaks" type="checkbox" role="switch" /></label>
     </div>
     <div class="grid">
         <button @click="startSession">{{ startButtonText }}</button>
