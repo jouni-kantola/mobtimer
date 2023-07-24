@@ -6,7 +6,7 @@ export default defineConfig({
     root: "resources",
     build: {
         outDir: "../dist",
-        emptyOutDir: true,
+        emptyOutDir: false,
     },
     server: {
         port: 3000,
