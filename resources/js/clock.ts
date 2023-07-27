@@ -1,11 +1,11 @@
 class Timer {
-    #intervalSeconds;
-    #secondsLeft;
-    #onTick;
-    #onEnd;
-    #clockIntervalId;
+    #intervalSeconds: number;
+    #secondsLeft: number;
+    #onTick: () => void;
+    #onEnd: () => void;
+    #clockIntervalId: NodeJS.Timeout | null;
 
-    constructor(seconds, onTick, onEnd) {
+    constructor(seconds: number, onTick: () => void, onEnd: () => void) {
         this.#intervalSeconds = seconds;
         this.#secondsLeft = seconds;
         this.#onTick = onTick;
@@ -24,39 +24,41 @@ class Timer {
     start() {
         this.#clockIntervalId = setInterval(() => {
             if (--this.#secondsLeft === 0) {
-                clearInterval(this.#clockIntervalId);
-                this.#clockIntervalId = null;
-                this.#onEnd && this.#onEnd();
+                this.#clearInterval();
+                !!this.#onEnd && this.#onEnd();
             } else {
-                this.#onTick && this.#onTick();
+                !!this.#onTick && this.#onTick();
             }
         }, 1000);
     }
 
-    change(seconds) {
+    change(seconds: number) {
         this.#intervalSeconds = seconds;
         this.#secondsLeft = seconds;
     }
 
     reset() {
-        clearInterval(this.#clockIntervalId);
-        this.#clockIntervalId = null;
+        this.#clearInterval();
         this.change(this.#intervalSeconds);
     }
 
     pause() {
-        clearInterval(this.#clockIntervalId);
+        this.#clearInterval();
+    }
+
+    #clearInterval() {
+        !!this.#clockIntervalId && clearInterval(this.#clockIntervalId);
         this.#clockIntervalId = null;
     }
 }
 
-export function startTimer(seconds, onTick, onEnd) {
+export function startTimer(seconds: number, onTick: () => void, onEnd: () => void) {
     const timer = new Timer(seconds, onTick, onEnd);
     timer.start();
     return timer;
 }
 
-export function secondsToMinutesAndSeconds(value) {
+export function secondsToMinutesAndSeconds(value: number) {
     const minutes = Math.floor(value / 60);
     const seconds = value % 60;
     const formattedTime = `${String(minutes).padStart(2, "0")}:${String(
