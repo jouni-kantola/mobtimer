@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineEmits, ref } from "vue";
+import { ref } from "vue";
 
 const emit = defineEmits(["intervalUpdated", "enterKeyDown"]);
 
