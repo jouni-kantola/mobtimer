@@ -41,7 +41,7 @@ export function switchActiveMember(nextIndex: number, team: Array<Member>) {
 }
 
 export function getActiveMember(team: Array<Member>) {
-    return team.find(m => m.isActive);
+    return team.filter(m => m.isActive)[0];
 }
 
 export function getLast(team: Array<Member>) {
