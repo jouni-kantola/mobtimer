@@ -16,22 +16,29 @@ export function createTeam(members: Array<string>): Array<Member> {
 
 export function whosNextAfter(recentActiveIndex: number, team: Array<Member>) {
     const presentMembers = team.filter(m => m.isHere);
-    if (presentMembers.length === 1) return presentMembers[0];
+    let next = presentMembers[0];
 
-    for (let i = 1; i < team.length; i++) {
-        const nextMemberIndex = getNextMemberIndex(
-            recentActiveIndex,
-            i,
-            team.length
-        );
-
-        const upcomingMember = getMemberByIndex(nextMemberIndex, team);
-        if (upcomingMember?.isHere) return upcomingMember;
+    if (presentMembers.length > 1) {
+        for (let i = 1; i < team.length; i++) {
+            const nextMemberIndex = getNextMemberIndex(
+                recentActiveIndex,
+                i,
+                team.length
+            );
+    
+            const upcomingMember = getMemberByIndex(nextMemberIndex, team);
+            if (upcomingMember.isHere) {
+                next = upcomingMember;
+                break;
+            }
+        }
     }
+
+    return next;
 }
 
 function getMemberByIndex(index: number, team: Array<Member>) {
-    return team.find(m => m.index === index);
+    return team.filter(m => m.index === index)[0];
 }
 
 export function switchActiveMember(nextIndex: number, team: Array<Member>) {
