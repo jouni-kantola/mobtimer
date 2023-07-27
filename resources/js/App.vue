@@ -118,7 +118,7 @@ async function onEnd() {
     }
 }
 
-function onIntervalUpdated(intervalLength) {
+function onIntervalUpdated(intervalLength: number) {
     state.iterationLengthInSeconds = intervalLength;
     state.timer?.change(intervalLength);
     updateTimeDisplay();
