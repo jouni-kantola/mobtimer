@@ -16,7 +16,11 @@ export function init() {
     neuInit();
 }
 
-export async function updateTray(driverName, nextMemberName, timeRemaning) {
+export async function updateTray(
+    driverName: string,
+    nextMemberName: string,
+    timeRemaning: string
+) {
     await os.setTray({
         icon: "/dist/trayIcon.png",
         menuItems: [
