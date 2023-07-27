@@ -152,8 +152,10 @@ function pauseButtonElementClick() {
     }
 }
 
-function onMemberDoubleClick(event) {
-    if (!event.target.previousElementSibling.checked) {
+function onMemberDoubleClick(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const isHereToggle = input.previousElementSibling as HTMLInputElement;
+    if (!isHereToggle.checked) {
         return;
     }
 
@@ -161,16 +163,17 @@ function onMemberDoubleClick(event) {
 
     updateTimeDisplay();
     switchActiveMember(
-        parseInt(event.target.dataset.index),
+        parseInt(input.dataset.index as string),
         team
     );
     prepareForNextMember();
     isPaused.value = false;
 }
 
-async function onMemberInput(event) {
-    const name = event.target.value;
-    const memberIndex = parseInt(event.target.dataset.index);
+async function onMemberInput(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const name = input.value;
+    const memberIndex = parseInt(input.dataset.index as string);
 
     if (memberIndex === getActiveMember(team).index) {
         startButtonText.value = `Start session for ${name}`;
@@ -180,8 +183,8 @@ async function onMemberInput(event) {
     await saveTeam(team.map(m => m.name));
 }
 
-function ensureMinimumMembers(event) {
-    const checkbox = event.target;
+function ensureMinimumMembers(event: Event) {
+    const checkbox = event.target as HTMLInputElement;
     const isHere = checkbox.checked;
 
     if (!isHere && team.filter(m => m.isHere).length === 1) {
@@ -190,9 +193,9 @@ function ensureMinimumMembers(event) {
     }
 }
 
-function toggleMemberHere(event) {
-    const checkbox = event.target;
-    const selectedMemberIndex = parseInt(checkbox.dataset.index);
+function toggleMemberHere(event: Event) {
+    const checkbox = event.target as HTMLInputElement;
+    const selectedMemberIndex = parseInt(checkbox.dataset.index as string);
     const isHere = checkbox.checked;
     const activeMember = getActiveMember(team);
 
