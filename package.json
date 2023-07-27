@@ -6,7 +6,8 @@
     "main": "index.js",
     "type": "module",
     "scripts": {
-        "test": "node --test",
+        "test": "vitest",
+        "coverage": "vitest run --coverage",
         "update": "npx @neutralinojs/neu update",
         "start": "concurrently 'vite build --watch' 'npx @neutralinojs/neu run -- --window-enable-inspector'",
         "build": "vite build && npx @neutralinojs/neu build --release",
@@ -37,7 +38,8 @@
         "lint-staged": "^13.2.2",
         "prettier": "^3.0.0",
         "rcedit": "^3.0.1",
-        "vite": "^4.4.2"
+        "vite": "^4.4.2",
+        "vitest": "^0.33.0"
     },
     "lint-staged": {
         "**/*": "npx prettier --write --ignore-unknown"

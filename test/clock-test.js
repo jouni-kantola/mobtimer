@@ -1,5 +1,4 @@
-import test from "node:test";
-import { strict as assert } from "node:assert";
+import { assert, test } from "vitest";
 import { startTimer } from "../resources/js/clock.js";
 
 test("determine if running", t => {

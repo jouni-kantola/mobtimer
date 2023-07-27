@@ -1,5 +1,4 @@
-import test from "node:test";
-import { strict as assert } from "node:assert";
+import { assert, test } from "vitest";
 import { defaultUsers } from "../resources/js/config.js";
 import {
     createTeam,
