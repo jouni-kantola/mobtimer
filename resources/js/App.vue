@@ -19,7 +19,7 @@
     </form>
 </template>
 <script setup lang="ts">
-import { reactive, ref } from "vue";
+import { PropType, reactive, ref } from "vue";
 
 import Timer from "./components/Timer.vue";
 import IntervalLength from "./components/IntervalLength.vue";
@@ -30,12 +30,13 @@ import {
     switchActiveMember,
     getActiveMember,
     getLast,
+    type Member,
 } from "./team";
 import { secondsToMinutesAndSeconds, startTimer } from "./clock";
 
 const props = defineProps({
     team: {
-        type: Array,
+        type: Array as PropType<Array<Member>>,
         required: true,
     },
 });
