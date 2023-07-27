@@ -79,7 +79,7 @@ async function onTick() {
 
 async function onBreakTick() {
     updateTimeDisplay();
-    const { index, _ } = getActiveMember(team);
+    const { index } = getActiveMember(team);
     const nextMember = whosNextAfter(index, team);
     const timeRemaning = formatTimeRemaining();
     await updateTray("Break", nextMember.name, timeRemaning);
