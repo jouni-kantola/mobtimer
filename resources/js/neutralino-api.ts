@@ -23,6 +23,7 @@ export async function updateTray(
 ) {
     await os.setTray({
         icon: "/dist/trayIcon.png",
+        // @ts-expect-error
         menuItems: [
             {
                 id: trayOptions.OPEN,
