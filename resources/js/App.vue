@@ -46,7 +46,11 @@ const startButtonText = ref("Start");
 const isPaused = ref(false);
 const team = reactive(props.team);
 
-const state = {
+const state : {
+    timer: ReturnType<typeof startTimer> | null;
+    iterationLengthInSeconds: number;
+    onBreak: boolean;
+} = {
     timer: null,
     iterationLengthInSeconds: 600,
     onBreak: false,
