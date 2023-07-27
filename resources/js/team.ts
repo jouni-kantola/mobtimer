@@ -1,4 +1,4 @@
-type Member = {
+export type Member = {
     index: number;
     name: string;
     isHere: boolean;
