@@ -14,7 +14,7 @@ function onInput(event) {
     emit('intervalUpdated', intervalLength.value)
 }
 
-function onKeydown(event) {
+function onKeydown(event: KeyboardEvent) {
     if (event.key === "Enter") emit('enterKeyDown');
 }
 </script>
