@@ -69,7 +69,7 @@ export async function getTeamData(): Promise<string[]> {
     return JSON.parse(await storage.getData("mobUsers"));
 }
 
-async function onTrayMenuItemClicked(event) {
+async function onTrayMenuItemClicked(event: CustomEvent) {
     switch (event.detail.id) {
         case trayOptions.OPEN:
             await showWindow();
