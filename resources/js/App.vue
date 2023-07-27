@@ -19,7 +19,7 @@
     </form>
 </template>
 <script setup lang="ts">
-import { defineProps, reactive, ref } from "vue";
+import { reactive, ref } from "vue";
 
 import Timer from "./components/Timer.vue";
 import IntervalLength from "./components/IntervalLength.vue";
