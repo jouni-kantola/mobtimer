@@ -141,7 +141,9 @@ async function startSession() {
 }
 
 function pauseButtonElementClick() {
-    if (state.timer?.isRunning) {
+    if (!state.timer) return;
+
+    if (state.timer.isRunning) {
         state.timer.pause();
         isPaused.value = true;
     } else if (isPaused.value) {
