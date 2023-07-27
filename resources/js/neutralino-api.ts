@@ -44,8 +44,8 @@ export async function updateTray(driverName, nextMemberName, timeRemaning) {
     });
 }
 
-export async function saveTeam(users) {
-    await storage.setData("mobUsers", JSON.stringify(users));
+export async function saveTeam(members: string[]) {
+    await storage.setData("mobUsers", JSON.stringify(members));
 }
 
 export async function showWindow() {
@@ -60,7 +60,7 @@ export function registerEvents() {
     events.on("trayMenuItemClicked", onTrayMenuItemClicked);
 }
 
-export async function getTeamData() {
+export async function getTeamData(): Promise<string[]> {
     return JSON.parse(await storage.getData("mobUsers"));
 }
 
