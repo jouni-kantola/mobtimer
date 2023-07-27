@@ -9,8 +9,8 @@ const emit = defineEmits(["intervalUpdated", "enterKeyDown"]);
 
 const intervalLength = ref(600);
 
-function onInput(event) {
-    intervalLength.value = Math.max(1, event.target.value);
+function onInput(event: Event) {
+    intervalLength.value = Math.max(1, parseInt((event.target as HTMLInputElement).value) || 1);
     emit('intervalUpdated', intervalLength.value)
 }
 
