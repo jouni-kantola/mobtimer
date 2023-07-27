@@ -1,18 +1,23 @@
+import {
+    app,
+    events,
+    init as neuInit,
+    os,
+    storage,
+    window,
+} from "@neutralinojs/lib";
+
 const trayOptions = {
     OPEN: "OPEN",
     QUIT: "Quit",
 };
 
 export function init() {
-    Neutralino.init();
+    neuInit();
 }
 
-export async function updateTray(
-    driverName,
-    nextMemberName,
-    timeRemaning
-) {
-    await Neutralino.os.setTray({
+export async function updateTray(driverName, nextMemberName, timeRemaning) {
+    await os.setTray({
         icon: "/dist/trayIcon.png",
         menuItems: [
             {
@@ -40,23 +45,23 @@ export async function updateTray(
 }
 
 export async function saveTeam(users) {
-    await Neutralino.storage.setData("mobUsers", JSON.stringify(users));
+    await storage.setData("mobUsers", JSON.stringify(users));
 }
 
 export async function showWindow() {
-    await Neutralino.window.show();
+    await window.show();
 }
 
 export async function hideWindow() {
-    await Neutralino.window.hide();
+    await window.hide();
 }
 
 export function registerEvents() {
-    Neutralino.events.on("trayMenuItemClicked", onTrayMenuItemClicked);
+    events.on("trayMenuItemClicked", onTrayMenuItemClicked);
 }
 
 export async function getTeamData() {
-    return JSON.parse(await Neutralino.storage.getData("mobUsers"));
+    return JSON.parse(await storage.getData("mobUsers"));
 }
 
 async function onTrayMenuItemClicked(event) {
@@ -65,7 +70,7 @@ async function onTrayMenuItemClicked(event) {
             await showWindow();
             break;
         case trayOptions.QUIT:
-            await Neutralino.app.exit();
+            await app.exit();
             break;
     }
 }
