@@ -184,8 +184,8 @@ async function onMemberInput(event: Event) {
 }
 
 function ensureMinimumMembers(event: Event) {
-    const checkbox = event.target as HTMLInputElement;
-    const isHere = checkbox.checked;
+    const isHereToggle = event.target as HTMLInputElement;
+    const isHere = isHereToggle.checked;
 
     if (!isHere && team.filter(m => m.isHere).length === 1) {
         event.preventDefault();
@@ -194,9 +194,9 @@ function ensureMinimumMembers(event: Event) {
 }
 
 function toggleMemberHere(event: Event) {
-    const checkbox = event.target as HTMLInputElement;
-    const selectedMemberIndex = parseInt(checkbox.dataset.index as string);
-    const isHere = checkbox.checked;
+    const isHereToggle = event.target as HTMLInputElement;
+    const selectedMemberIndex = parseInt(isHereToggle.dataset.index as string);
+    const isHere = isHereToggle.checked;
     const activeMember = getActiveMember(team);
 
     team[selectedMemberIndex].isHere = isHere;
