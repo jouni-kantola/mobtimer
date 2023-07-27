@@ -2,7 +2,7 @@
     <output>{{ value }}</output>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { defineProps } from 'vue'
 
 const props = defineProps({

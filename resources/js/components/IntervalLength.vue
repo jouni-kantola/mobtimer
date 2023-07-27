@@ -2,7 +2,7 @@
     <input type="number" v-model="intervalLength" @input="onInput" @keydown="onKeydown" />
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { defineEmits, ref } from "vue";
 
 const emit = defineEmits(["intervalUpdated", "enterKeyDown"]);

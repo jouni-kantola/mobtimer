@@ -1,13 +1,13 @@
 import { createApp } from "vue";
 import App from "./App.vue";
-import { defaultUsers } from "./config.js";
+import { defaultUsers } from "./config";
 import {
     getTeamData,
     init,
     registerEvents,
     saveTeam,
-} from "./neutralino-api.js";
-import { createTeam } from "./team.js";
+} from "./neutralino-api";
+import { createTeam } from "./team";
 
 async function initApp() {
     init();

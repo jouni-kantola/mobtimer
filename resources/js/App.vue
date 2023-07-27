@@ -18,20 +18,20 @@
         </div>
     </form>
 </template>
-<script setup>
+<script setup lang="ts">
 import { defineProps, reactive, ref } from "vue";
 
 import Timer from "./components/Timer.vue";
 import IntervalLength from "./components/IntervalLength.vue";
 
-import { updateTray, saveTeam, showWindow, hideWindow } from "./neutralino-api.js";
+import { updateTray, saveTeam, showWindow, hideWindow } from "./neutralino-api";
 import {
     whosNextAfter,
     switchActiveMember,
     getActiveMember,
     getLast,
-} from "./team.js";
-import { secondsToMinutesAndSeconds, startTimer } from "./clock.js";
+} from "./team";
+import { secondsToMinutesAndSeconds, startTimer } from "./clock";
 
 const props = defineProps({
     team: {
