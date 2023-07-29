@@ -32,9 +32,11 @@
     "devDependencies": {
         "@neutralinojs/neu": "^9.6.0",
         "@vitejs/plugin-vue": "^4.2.3",
+        "@vue/test-utils": "^2.4.1",
         "adm-zip": "^0.5.10",
         "concurrently": "^8.2.0",
         "cpy": "^10.1.0",
+        "happy-dom": "^10.5.2",
         "husky": "^8.0.3",
         "lint-staged": "^13.2.2",
         "prettier": "^3.0.0",
