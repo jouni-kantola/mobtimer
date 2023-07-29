@@ -11,7 +11,7 @@ const props = defineProps({
         type: Number,
         required: true,
     },
-    isLastHere: {
+    onlyOneActiveMember: {
         type: Boolean,
         required: false,
     },
@@ -26,7 +26,7 @@ const isHere = ref(true);
 function ensureMinimumMembers(event: Event) {
     const isHereToggle = event.target as HTMLInputElement;
 
-    if (!isHereToggle.checked && props.isLastHere) {
+    if (!isHereToggle.checked && props.onlyOneActiveMember) {
         event.preventDefault();
         return;
     }
