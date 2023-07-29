@@ -1,9 +1,9 @@
 import { assert, test } from "vitest";
 import { mount } from "@vue/test-utils";
-import Member from "../resources/js/components/Member.vue";
+import TeamMember from "../resources/js/components/TeamMember.vue";
 
 test("here status can be toggled", async () => {
-    const wrapper = mount(Member, {
+    const wrapper = mount(TeamMember, {
         props: {
             index: 0,
         },
@@ -17,7 +17,7 @@ test("here status can be toggled", async () => {
 });
 
 test("cannot toggle last member as away", async () => {
-    const wrapper = mount(Member, {
+    const wrapper = mount(TeamMember, {
         props: {
             index: 0,
             isLastHere: true,
@@ -32,7 +32,7 @@ test("cannot toggle last member as away", async () => {
 });
 
 test("notify when member status toggled", async () => {
-    const wrapper = mount(Member, {
+    const wrapper = mount(TeamMember, {
         props: {
             index: 999,
         },
