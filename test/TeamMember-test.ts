@@ -1,6 +1,6 @@
 import { assert, test } from "vitest";
 import { mount } from "@vue/test-utils";
-import TeamMember from "../resources/js/components/TeamMember.vue";
+import TeamMember from "../resources/scripts/components/TeamMember.vue";
 
 test("here status can be toggled", async () => {
     const wrapper = mount(TeamMember, {

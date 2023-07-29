@@ -1,5 +1,5 @@
 import { assert, test } from "vitest";
-import { startTimer } from "../resources/js/clock";
+import { startTimer } from "../resources/scripts/clock";
 
 test("determine if running", t => {
     const seconds = 1;
