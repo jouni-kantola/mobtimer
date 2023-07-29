@@ -1,9 +1,7 @@
 <template>
     <div class="team-member" :class="{ current: isActive }">
-        <input type="checkbox" v-model="isHere" :data-index="index" role="switch" @click="ensureMinimumMembers"
-            @change="toggleMemberHere">
-        <input type="text" :value="name" :data-index="index" placeholder="Name" @dblclick="switchDriver"
-            @input="updateMemberName" />
+        <input type="checkbox" v-model="isHere" role="switch" @click="ensureMinimumMembers" @change="toggleMemberHere">
+        <input type="text" :value="name" placeholder="Name" @dblclick="switchDriver" @input="updateMemberName" />
     </div>
 </template>
 
