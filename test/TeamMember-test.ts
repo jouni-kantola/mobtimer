@@ -31,6 +31,22 @@ test("cannot toggle last member as away", async () => {
     assert.equal((isHereToggle.element as HTMLInputElement).checked, true);
 });
 
+test("toggling user to active isn't affected by number of members", async () => {
+    const wrapper = mount(TeamMember, {
+        props: {
+            index: 0,
+            isLastHere: true,
+        },
+    });
+
+    const isHereToggle = wrapper.find("input[type='checkbox']:checked");
+    (isHereToggle.element as HTMLInputElement).checked = false;
+
+    await isHereToggle.trigger("click");
+
+    assert.equal((isHereToggle.element as HTMLInputElement).checked, true);
+});
+
 test("notify when member status toggled", async () => {
     const wrapper = mount(TeamMember, {
         props: {

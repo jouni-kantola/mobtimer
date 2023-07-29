@@ -24,7 +24,9 @@ const emit = defineEmits<{
 const isHere = ref(true);
 
 function ensureMinimumMembers(event: Event) {
-    if (props.isLastHere) {
+    const isHereToggle = event.target as HTMLInputElement;
+
+    if (!isHereToggle.checked && props.isLastHere) {
         event.preventDefault();
         return;
     }
