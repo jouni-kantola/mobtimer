@@ -10,7 +10,7 @@
     </div>
     <form>
         <div v-for="({ name, index, isActive }) in team" class="grid user" :class="{ current: isActive }">
-            <TeamMember :index="index" :onlyOneActiveMember="team.filter(m => m.isHere).length === 1"
+            <TeamMember :index="index" :name="name" :onlyOneActiveMember="team.filter(m => m.isHere).length === 1"
                 @notifyMemberStatus="toggleMemberHere" />
             <input type="text" :value="name" :data-index="index" placeholder="Name" @dblclick="onMemberDoubleClick"
                 @input="onMemberInput" />

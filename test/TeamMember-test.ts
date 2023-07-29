@@ -4,8 +4,9 @@ import TeamMember from "../resources/js/components/TeamMember.vue";
 
 test("here status can be toggled", async () => {
     const wrapper = mount(TeamMember, {
-        props: {
+        props: {            
             index: 0,
+            name: "Team Member",
         },
     });
 
@@ -20,6 +21,7 @@ test("cannot toggle last member as away", async () => {
     const wrapper = mount(TeamMember, {
         props: {
             index: 0,
+            name: "Team Member",
             onlyOneActiveMember: true,
         },
     });
@@ -35,6 +37,7 @@ test("toggling user to active isn't affected by number of members", async () => 
     const wrapper = mount(TeamMember, {
         props: {
             index: 0,
+            name: "Team Member",
             onlyOneActiveMember: true,
         },
     });
@@ -51,6 +54,7 @@ test("notify when member status toggled", async () => {
     const wrapper = mount(TeamMember, {
         props: {
             index: 999,
+            name: "Team Member",
         },
     });
 

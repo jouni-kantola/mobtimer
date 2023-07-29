@@ -11,6 +11,10 @@ const props = defineProps({
         type: Number,
         required: true,
     },
+    name: {
+        type: String,
+        required: true,
+    },
     onlyOneActiveMember: {
         type: Boolean,
         required: false,
