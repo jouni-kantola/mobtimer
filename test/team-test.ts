@@ -10,8 +10,8 @@ test("map team to users", t => {
     const team = createTeam(defaultUsers);
     assert.strictEqual(team[0].index, 0);
     assert.strictEqual(team[0].name, "User 1");
-    assert.strictEqual(team.at(-1).index, 5);
-    assert.strictEqual(team.at(-1).name, "User 6");
+    assert.strictEqual(team.at(-1)!.index, 5);
+    assert.strictEqual(team.at(-1)!.name, "User 6");
 });
 
 test("whos next when everyone here", t => {
@@ -35,7 +35,7 @@ test("skip member who's away", t => {
     assert.strictEqual(after1.index, 2);
 
     team[1].isHere = true;
-    team.at(-1).isHere = false;
+    team.at(-1)!.isHere = false;
 
     const after2 = whosNextAfter(1, team);
     assert.strictEqual(after2.index, 0);
