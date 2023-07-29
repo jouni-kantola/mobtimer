@@ -9,10 +9,9 @@
         <button @click="pauseButtonElementClick">{{ isPaused ? "Resume" : "Pause" }}</button>
     </div>
     <form>
-        <div v-for="({ name, index, isActive }) in team" class="grid user" :class="{ current: isActive }">
-            <TeamMember :index="index" :name="name" :onlyOneActiveMember="team.filter(m => m.isHere).length === 1"
-                @notifyMemberStatus="toggleMemberHere" @switchDriver="switchDriver" @updateMemberName="updateMemberName" />
-        </div>
+        <TeamMember v-for="({ name, index, isActive }) in team" :index="index" :name="name" :isActive="isActive"
+            :onlyOneActiveMember="team.filter(m => m.isHere).length === 1" @notifyMemberStatus="toggleMemberHere"
+            @switchDriver="switchDriver" @updateMemberName="updateMemberName" class="grid" />
     </form>
 </template>
 <script setup lang="ts">

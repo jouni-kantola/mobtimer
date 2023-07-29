@@ -1,8 +1,10 @@
 <template>
-    <input type="checkbox" v-model="isHere" :data-index="index" role="switch" @click="ensureMinimumMembers"
-        @change="toggleMemberHere">
-    <input type="text" :value="name" :data-index="index" placeholder="Name" @dblclick="switchDriver"
-        @input="updateMemberName" />
+    <div class="user" :class="{ current: isActive }">
+        <input type="checkbox" v-model="isHere" :data-index="index" role="switch" @click="ensureMinimumMembers"
+            @change="toggleMemberHere">
+        <input type="text" :value="name" :data-index="index" placeholder="Name" @dblclick="switchDriver"
+            @input="updateMemberName" />
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -16,6 +18,10 @@ const props = defineProps({
     name: {
         type: String,
         required: true,
+    },
+    isActive: {
+        type: Boolean,
+        required: false,
     },
     onlyOneActiveMember: {
         type: Boolean,
