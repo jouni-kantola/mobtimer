@@ -20,7 +20,7 @@ test("cannot toggle last member as away", async () => {
     const wrapper = mount(TeamMember, {
         props: {
             index: 0,
-            isLastHere: true,
+            onlyOneActiveMember: true,
         },
     });
 
@@ -35,7 +35,7 @@ test("toggling user to active isn't affected by number of members", async () => 
     const wrapper = mount(TeamMember, {
         props: {
             index: 0,
-            isLastHere: true,
+            onlyOneActiveMember: true,
         },
     });
 
