@@ -9,12 +9,11 @@
         <button @click="pauseButtonElementClick">{{ isPaused ? "Resume" : "Pause" }}</button>
     </div>
     <form>
-        <div v-for="({ name, index, isActive }) in team" class="grid user"
-            :class="{ current: isActive }">
+        <div v-for="({ name, index, isActive }) in team" class="grid user" :class="{ current: isActive }">
             <TeamMember :index="index" :onlyOneActiveMember="team.filter(m => m.isHere).length === 1"
                 @notifyMemberStatus="toggleMemberHere" />
-            <input type="text" :value="name" :data-index="index" placeholder="Name"
-                @dblclick="onMemberDoubleClick" @input="onMemberInput" />
+            <input type="text" :value="name" :data-index="index" placeholder="Name" @dblclick="onMemberDoubleClick"
+                @input="onMemberInput" />
         </div>
     </form>
 </template>
@@ -47,7 +46,7 @@ const startButtonText = ref("Start");
 const isPaused = ref(false);
 const team = reactive(props.team);
 
-const state : {
+const state: {
     timer: ReturnType<typeof startTimer> | null;
     iterationLengthInSeconds: number;
     onBreak: boolean;
