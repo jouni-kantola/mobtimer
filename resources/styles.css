@@ -20,27 +20,6 @@ input:not([type="checkbox"]):not([type="radio"]) {
     margin-bottom: 0;
 }
 
-div.user {
-    grid-template-columns: 1fr minmax(auto, 95%);
-    align-items: center;
-    margin-bottom: var(--spacing);
-}
-
-.current input[type="text"] {
-    background: linear-gradient(135deg, #bafdf7, #fcf4ac, #fbb7f3);
-    animation: animate 2.5s linear infinite;
-}
-
-@keyframes animate {
-    100% {
-        filter: hue-rotate(360deg);
-    }
-}
-
-.user:last-of-type {
-    margin-bottom: 0;
-}
-
 #startButton {
     margin-bottom: auto;
 }

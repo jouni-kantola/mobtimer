@@ -1,5 +1,5 @@
 <template>
-    <div class="user" :class="{ current: isActive }">
+    <div class="team-member" :class="{ current: isActive }">
         <input type="checkbox" v-model="isHere" :data-index="index" role="switch" @click="ensureMinimumMembers"
             @change="toggleMemberHere">
         <input type="text" :value="name" :data-index="index" placeholder="Name" @dblclick="switchDriver"
@@ -64,3 +64,22 @@ function updateMemberName(event: Event) {
     emit("updateMemberName", props.index, name);
 }
 </script>
+
+<style scoped>
+.team-member {
+    grid-template-columns: 1fr minmax(auto, 95%);
+    align-items: center;
+    margin-bottom: var(--spacing);
+}
+
+.current input[type="text"] {
+    background: linear-gradient(135deg, #bafdf7, #fcf4ac, #fbb7f3);
+    animation: animate 2.5s linear infinite;
+}
+
+@keyframes animate {
+    100% {
+        filter: hue-rotate(360deg);
+    }
+}
+</style>
