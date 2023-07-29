@@ -11,3 +11,17 @@ test("here status can be toggled", async () => {
     
     assert.equal((isHereToggle.element as HTMLInputElement).checked, false);
 });
+
+test("cannot toggle last member as away", async () => {
+    const wrapper = mount(Member, {
+        props: {
+            isLastHere: true,
+        },
+    });
+
+    const isHereToggle = wrapper.find("input[type='checkbox']:checked");
+
+    await isHereToggle.trigger("click");
+    
+    assert.equal((isHereToggle.element as HTMLInputElement).checked, true);
+});
