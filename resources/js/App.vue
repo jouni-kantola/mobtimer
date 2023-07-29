@@ -9,10 +9,10 @@
         <button @click="pauseButtonElementClick">{{ isPaused ? "Resume" : "Pause" }}</button>
     </div>
     <form>
-        <div v-for="({ name, index, isHere, isActive }) in team" class="grid user"
+        <div v-for="({ name, index, isActive }) in team" class="grid user"
             :class="{ current: isActive }">
-            <input type="checkbox" :checked="isHere" :data-index="index" role="switch" @click="ensureMinimumMembers"
-                @change="toggleMemberHere" />
+            <TeamMember :index="index" :isLastHere="team.filter(m => m.isHere).length === 1"
+                @notifyMemberStatus="toggleMemberHere" />
             <input type="text" :value="name" :data-index="index" placeholder="Name"
                 @dblclick="onMemberDoubleClick" @input="onMemberInput" />
         </div>
@@ -23,6 +23,7 @@ import { PropType, reactive, ref } from "vue";
 
 import Timer from "./components/Timer.vue";
 import IntervalLength from "./components/IntervalLength.vue";
+import TeamMember from "./components/TeamMember.vue";
 
 import { updateTray, saveTeam, showWindow, hideWindow } from "./neutralino-api";
 import {
@@ -183,20 +184,7 @@ async function onMemberInput(event: Event) {
     await saveTeam(team.map(m => m.name));
 }
 
-function ensureMinimumMembers(event: Event) {
-    const isHereToggle = event.target as HTMLInputElement;
-    const isHere = isHereToggle.checked;
-
-    if (!isHere && team.filter(m => m.isHere).length === 1) {
-        event.preventDefault();
-        return false;
-    }
-}
-
-function toggleMemberHere(event: Event) {
-    const isHereToggle = event.target as HTMLInputElement;
-    const selectedMemberIndex = parseInt(isHereToggle.dataset.index as string);
-    const isHere = isHereToggle.checked;
+function toggleMemberHere(selectedMemberIndex: number, isHere: boolean) {
     const activeMember = getActiveMember(team);
 
     team[selectedMemberIndex].isHere = isHere;
