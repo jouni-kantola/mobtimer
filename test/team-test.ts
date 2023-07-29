@@ -1,33 +1,33 @@
 import { assert, test } from "vitest";
-import { defaultUsers } from "../resources/js/config";
+import { defaultMembers } from "../resources/js/config";
 import {
     createTeam,
     whosNextAfter,
     getLast,
 } from "../resources/js/team";
 
-test("map team to users", t => {
-    const team = createTeam(defaultUsers);
+test("map names to team", t => {
+    const team = createTeam(defaultMembers);
     assert.strictEqual(team[0].index, 0);
-    assert.strictEqual(team[0].name, "User 1");
+    assert.strictEqual(team[0].name, "Member 1");
     assert.strictEqual(team.at(-1)!.index, 5);
-    assert.strictEqual(team.at(-1)!.name, "User 6");
+    assert.strictEqual(team.at(-1)!.name, "Member 6");
 });
 
 test("whos next when everyone here", t => {
-    const members = ["User 1", "User 2"];
+    const members = ["Member 1", "Member 2"];
     const team = createTeam(members);
 
     const after1 = whosNextAfter(0, team);
     const after2 = whosNextAfter(1, team);
     assert.strictEqual(after1.index, 1);
-    assert.strictEqual(after1.name, "User 2");
+    assert.strictEqual(after1.name, "Member 2");
     assert.strictEqual(after2.index, 0);
-    assert.strictEqual(after2.name, "User 1");
+    assert.strictEqual(after2.name, "Member 1");
 });
 
 test("skip member who's away", t => {
-    const members = ["User 1", "User 2", "User 3"];
+    const members = ["Member 1", "Member 2", "Member 3"];
     const team = createTeam(members);
     team[1].isHere = false;
 
@@ -41,15 +41,15 @@ test("skip member who's away", t => {
     assert.strictEqual(after2.index, 0);
 });
 
-test("single user always next", t => {
-    const members = ["User 1"];
+test("single member always next", t => {
+    const members = ["Member 1"];
     const team = createTeam(members);
     const after1 = whosNextAfter(0, team);
     assert.strictEqual(after1.index, 0);
 });
 
 test("next member when alone is themselves", t => {
-    const members = ["User 1", "User 2", "User 3"];
+    const members = ["Member 1", "Member 2", "Member 3"];
     const team = createTeam(members);
     team[0].isHere = false;
     team[2].isHere = false;
@@ -59,7 +59,7 @@ test("next member when alone is themselves", t => {
 });
 
 test("last member is here", t => {
-    const members = ["User 1", "User 2", "User 3"];
+    const members = ["Member 1", "Member 2", "Member 3"];
     const team = createTeam(members);
     team[0].isHere = false;
     team[2].isHere = false;

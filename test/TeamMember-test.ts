@@ -33,7 +33,7 @@ test("cannot toggle last member as away", async () => {
     assert.equal((isHereToggle.element as HTMLInputElement).checked, true);
 });
 
-test("toggling user to active isn't affected by number of members", async () => {
+test("toggling member to active isn't affected by number of members", async () => {
     const wrapper = mount(TeamMember, {
         props: {
             index: 0,

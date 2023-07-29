@@ -1,6 +1,6 @@
 import { createApp } from "vue";
 import App from "./App.vue";
-import { defaultUsers } from "./config";
+import { defaultMembers } from "./config";
 import {
     getTeamData,
     init,
@@ -13,16 +13,16 @@ async function initApp() {
     init();
     registerEvents();
 
-    let users = defaultUsers;
+    let members = defaultMembers;
 
     try {
-        users = await getTeamData();
+        members = await getTeamData();
     } catch (err) {
-        await saveTeam(defaultUsers);
+        await saveTeam(defaultMembers);
     }
 
     createApp(App, {
-        team: [...createTeam(users)],
+        team: [...createTeam(members)],
     }).mount("#app");
 }
 

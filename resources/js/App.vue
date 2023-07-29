@@ -130,7 +130,7 @@ async function startSession() {
 
     if (state.timer?.isRunning) return false;
 
-    startButtonText.value = `Session running 🚀. Double click any user to switch/restart.`;
+    startButtonText.value = "Session running 🚀. Double click any team member to switch/restart.";
 
     state.timer = startTimer(state.iterationLengthInSeconds, onTick, onEnd);
 
