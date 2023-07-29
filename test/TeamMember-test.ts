@@ -110,3 +110,15 @@ test("notify when member name changed", async () => {
 
     assert.deepEqual(wrapper.emitted().updateMemberName[0], [999, "New Name"]);
 });
+
+test("highlight active member", () => {
+    const wrapper = mount(TeamMember, {
+        props: {
+            index: 999,
+            name: "Team Member",
+            isActive: true,
+        },
+    });
+
+    assert.isTrue(wrapper.find(".current").exists());
+});
