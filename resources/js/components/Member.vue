@@ -1,5 +1,6 @@
 <template>
-    <input type="checkbox" v-model="isHere" @click="ensureMinimumMembers" @change="toggleMemberHere">
+    <input type="checkbox" v-model="isHere" :data-index="index" role="switch" @click="ensureMinimumMembers"
+        @change="toggleMemberHere">
 </template>
 
 <script setup lang="ts">
