@@ -11,9 +11,7 @@
     <form>
         <div v-for="({ name, index, isActive }) in team" class="grid user" :class="{ current: isActive }">
             <TeamMember :index="index" :name="name" :onlyOneActiveMember="team.filter(m => m.isHere).length === 1"
-                @notifyMemberStatus="toggleMemberHere" />
-            <input type="text" :value="name" :data-index="index" placeholder="Name" @dblclick="onMemberDoubleClick"
-                @input="onMemberInput" />
+                @notifyMemberStatus="toggleMemberHere" @switchDriver="switchDriver" @updateMemberName="updateMemberName" />
         </div>
     </form>
 </template>
@@ -152,29 +150,15 @@ function pauseButtonElementClick() {
     }
 }
 
-function onMemberDoubleClick(event: Event) {
-    const input = event.target as HTMLInputElement;
-    const isHereToggle = input.previousElementSibling as HTMLInputElement;
-    if (!isHereToggle.checked) {
-        return;
-    }
-
+function switchDriver(selectedMemberIndex: number) {
     state.timer?.reset();
-
     updateTimeDisplay();
-    switchActiveMember(
-        parseInt(input.dataset.index as string),
-        team
-    );
+    switchActiveMember(selectedMemberIndex, team);
     prepareForNextMember();
     isPaused.value = false;
 }
 
-async function onMemberInput(event: Event) {
-    const input = event.target as HTMLInputElement;
-    const name = input.value;
-    const memberIndex = parseInt(input.dataset.index as string);
-
+async function updateMemberName(memberIndex: number, name: string) {
     if (memberIndex === getActiveMember(team).index) {
         startButtonText.value = `Start session for ${name}`;
     }

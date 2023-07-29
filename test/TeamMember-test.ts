@@ -4,7 +4,7 @@ import TeamMember from "../resources/js/components/TeamMember.vue";
 
 test("here status can be toggled", async () => {
     const wrapper = mount(TeamMember, {
-        props: {            
+        props: {
             index: 0,
             name: "Team Member",
         },
@@ -63,4 +63,50 @@ test("notify when member status toggled", async () => {
     await isHereToggle.trigger("change");
 
     assert.deepEqual(wrapper.emitted().notifyMemberStatus[0], [999, true]);
+});
+
+test("announce when selecting driver", async () => {
+    const wrapper = mount(TeamMember, {
+        props: {
+            index: 999,
+            name: "Team Member",
+        },
+    });
+
+    const nameInput = wrapper.find("input[type='text']");
+    await nameInput.trigger("dblclick");
+
+    assert.deepEqual(wrapper.emitted().switchDriver[0], [999]);
+});
+
+test("driver cannot be a member who's away", async () => {
+    const wrapper = mount(TeamMember, {
+        props: {
+            index: 999,
+            name: "Team Member",
+        },
+    });
+
+    const isHereToggle = wrapper.find("input[type='checkbox']:checked");
+    await isHereToggle.trigger("click");
+    await isHereToggle.trigger("change");
+
+    const nameInput = wrapper.find("input[type='text']");
+    await nameInput.trigger("dblclick");
+
+    assert.notProperty(wrapper.emitted(), "switchDriver");
+});
+
+test("notify when member name changed", async () => {
+    const wrapper = mount(TeamMember, {
+        props: {
+            index: 999,
+            name: "Team Member",
+        },
+    });
+
+    const nameInput = wrapper.find("input[type='text']");
+    await nameInput.setValue("New Name");
+
+    assert.deepEqual(wrapper.emitted().updateMemberName[0], [999, "New Name"]);
 });
