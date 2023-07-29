@@ -1,12 +1,7 @@
 import { createApp } from "vue";
 import App from "./App.vue";
 import { defaultMembers } from "./config";
-import {
-    getTeamData,
-    init,
-    registerEvents,
-    saveTeam,
-} from "./neutralino-api";
+import { getTeamData, init, registerEvents, saveTeam } from "./neutralino-api";
 import { createTeam } from "./team";
 
 async function initApp() {

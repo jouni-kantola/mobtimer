@@ -1,10 +1,6 @@
 import { assert, test } from "vitest";
 import { defaultMembers } from "../resources/js/config";
-import {
-    createTeam,
-    whosNextAfter,
-    getLast,
-} from "../resources/js/team";
+import { createTeam, whosNextAfter, getLast } from "../resources/js/team";
 
 test("map names to team", t => {
     const team = createTeam(defaultMembers);
