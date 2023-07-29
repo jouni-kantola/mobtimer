@@ -30,7 +30,7 @@
         "vue": "^3.3.4"
     },
     "devDependencies": {
-        "@neutralinojs/neu": "^9.6.0",
+        "@neutralinojs/neu": "^9.6.1",
         "@vitejs/plugin-vue": "^4.2.3",
         "@vue/test-utils": "^2.4.1",
         "adm-zip": "^0.5.10",
