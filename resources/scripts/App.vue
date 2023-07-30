@@ -1,24 +1,38 @@
 <template>
-    <Timer :value="formattedTimeRemaining" />
     <div class="cycle-settings">
-        <IntervalLength @intervalUpdated="onIntervalUpdated" @enterKeyDown="onIntervalLengthEnterKeyDown" />
-        <label>Take breaks <input v-model="takeBreaks" type="checkbox" role="switch" /></label>
+        <Timer
+            :value="formattedTimeRemaining"
+            @intervalUpdated="onIntervalUpdated"
+        />
+        <label
+            >Take breaks
+            <input v-model="takeBreaks" type="checkbox" role="switch"
+        /></label>
     </div>
     <div class="grid">
         <button @click="startSession">{{ startButtonText }}</button>
-        <button @click="pauseButtonElementClick">{{ isPaused ? "Resume" : "Pause" }}</button>
+        <button @click="pauseButtonElementClick">
+            {{ isPaused ? "Resume" : "Pause" }}
+        </button>
     </div>
     <form>
-        <TeamMember v-for="({ name, index, isActive }) in team" :index="index" :name="name" :isActive="isActive"
-            :onlyOneActiveMember="team.filter(m => m.isHere).length === 1" @notifyMemberStatus="toggleMemberHere"
-            @switchDriver="switchDriver" @updateMemberName="updateMemberName" class="grid" />
+        <TeamMember
+            v-for="{ name, index, isActive } in team"
+            :index="index"
+            :name="name"
+            :isActive="isActive"
+            :onlyOneActiveMember="team.filter(m => m.isHere).length === 1"
+            @notifyMemberStatus="toggleMemberHere"
+            @switchDriver="switchDriver"
+            @updateMemberName="updateMemberName"
+            class="grid"
+        />
     </form>
 </template>
 <script setup lang="ts">
 import { PropType, reactive, ref } from "vue";
 
 import Timer from "./components/Timer.vue";
-import IntervalLength from "./components/IntervalLength.vue";
 import TeamMember from "./components/TeamMember.vue";
 
 import { updateTray, saveTeam, showWindow, hideWindow } from "./neutralino-api";
@@ -88,14 +102,16 @@ async function onBreakTick() {
 
 async function onEnd() {
     if (
-        takeBreaks.value
-        && getLast(team).index == getActiveMember(team).index
-        && !state.onBreak) {
+        takeBreaks.value &&
+        getLast(team).index == getActiveMember(team).index &&
+        !state.onBreak
+    ) {
         state.onBreak = true;
         state.timer = startTimer(
             state.iterationLengthInSeconds,
             onBreakTick,
-            onEnd);
+            onEnd
+        );
         startButtonText.value = "Take a break!";
 
         await showWindow();
@@ -103,10 +119,7 @@ async function onEnd() {
         state.onBreak = false;
         updateTimeDisplay();
 
-        const { index } = whosNextAfter(
-            getActiveMember(team).index,
-            team
-        );
+        const { index } = whosNextAfter(getActiveMember(team).index, team);
 
         switchActiveMember(index, team);
         prepareForNextMember();
@@ -121,16 +134,13 @@ function onIntervalUpdated(intervalLength: number) {
     updateTimeDisplay();
 }
 
-function onIntervalLengthEnterKeyDown() {
-    if (!state.timer?.isRunning) startSession();
-}
-
 async function startSession() {
     await hideWindow();
 
     if (state.timer?.isRunning) return false;
 
-    startButtonText.value = "Session running 🚀. Double click any team member to switch/restart.";
+    startButtonText.value =
+        "Session running 🚀. Double click any team member to switch/restart.";
 
     state.timer = startTimer(state.iterationLengthInSeconds, onTick, onEnd);
 
@@ -184,8 +194,8 @@ function toggleMemberHere(selectedMemberIndex: number, isHere: boolean) {
 
 <style scoped>
 .cycle-settings {
-    display: flex;
+    display: grid;
+    grid-template-columns: 0.8fr 0.2fr;
     gap: 15px;
-    white-space: nowrap;
 }
 </style>
