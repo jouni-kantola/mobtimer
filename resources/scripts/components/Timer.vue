@@ -105,23 +105,31 @@ function toggleSecondsSetting() {
 
 .timer input,
 .timer button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: block;
     font-size: 4rem;
     border: transparent;
     background-color: transparent;
     color: inherit;
-    padding: 0;
-    margin: 0;
+    padding: 0 !important;
+    margin: 0 !important;
     width: 3ch;
-    text-align: center;
     height: 4.1rem !important;
+    line-height: 4.1rem !important;
 }
 
+.timer button,
 .timer input {
-    text-align: center;
-    padding: 20px;
+    text-align: right;
+}
+
+.timer button {
+    outline: 3px solid transparent;
+}
+
+.timer button ~ button,
+.timer input ~ button,
+.timer button ~ input {
+    text-align: left;
 }
 
 .timer span {
