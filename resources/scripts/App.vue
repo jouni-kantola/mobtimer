@@ -198,6 +198,7 @@ function toggleBreaks(value: boolean) {
 .cycle-settings {
     display: grid;
     grid-template-columns: 0.8fr 0.2fr;
+    align-items: start;
     gap: 15px;
 }
 </style>
