@@ -113,7 +113,7 @@ async function onEnd() {
             onBreakTick,
             onEnd
         );
-        information.value = "Break time. Grab a tea! 🍵";
+        information.value = "🍵 Break time. Grab a tea!";
 
         await showWindow();
     } else {
@@ -141,7 +141,6 @@ async function startSession() {
     if (state.timer?.isRunning) return false;
 
     startButtonText.value = "Hide window";
-    information.value = "Session running 🚀. Double click any team member to switch or restart.";
 
     state.timer = startTimer(state.iterationLengthInSeconds, onTick, onEnd);
 
