@@ -23,3 +23,9 @@ function onChange(event: Event) {
     emit("breaksToggled", takeBreaks.value);
 }
 </script>
+
+<style scoped>
+label {
+    cursor: pointer;
+}
+</style>
