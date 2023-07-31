@@ -19,7 +19,3 @@ body > main {
 input:not([type="checkbox"]):not([type="radio"]) {
     margin-bottom: 0;
 }
-
-#startButton {
-    margin-bottom: auto;
-}
