@@ -50,16 +50,16 @@ function onInput(event: Event) {
 function onKeyDown(event: KeyboardEvent) {
     if (event.key === "Enter") emit("enterKeyDown");
     else if (event.key === "ArrowUp") {
-        const intervalLength = Math.min(
-            props.max,
-            Math.max(props.min, props.value + 1)
-        );
+        let intervalLength = props.value + 1;
+        if (intervalLength > props.max) {
+            intervalLength = props.min;
+        }
         emit("intervalUpdated", intervalLength);
     } else if (event.key === "ArrowDown") {
-        const intervalLength = Math.min(
-            props.max,
-            Math.max(props.min, props.value - 1)
-        );
+        let intervalLength = props.value - 1;
+        if (intervalLength < props.min) {
+            intervalLength = props.max !== Infinity ? props.max : props.min;
+        }
         emit("intervalUpdated", intervalLength);
     }
 }

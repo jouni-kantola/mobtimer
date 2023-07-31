@@ -95,3 +95,47 @@ test("value cant be blank", () => {
 
     assert.equal(el.value, "00");
 });
+
+test("supports wrap around from min to max", () => {
+    const wrapper = mount(IntervalLength, {
+        props: {
+            value: 0,
+            min: 0,
+            max: 59,
+        },
+    });
+
+    const input = wrapper.find("input");
+    input.trigger("keydown", { key: "ArrowDown" });
+
+    assert.deepEqual(wrapper.emitted().intervalUpdated[0], [59]);
+});
+
+test("supports wrap around from max to min", () => {
+    const wrapper = mount(IntervalLength, {
+        props: {
+            value: 59,
+            min: 0,
+            max: 59,
+        },
+    });
+
+    const input = wrapper.find("input");
+    input.trigger("keydown", { key: "ArrowUp" });
+
+    assert.deepEqual(wrapper.emitted().intervalUpdated[0], [0]);
+});
+
+test("doesnt wrap around when max not set", () => {
+    const wrapper = mount(IntervalLength, {
+        props: {
+            value: 0,
+            min: 0,
+        },
+    });
+
+    const input = wrapper.find("input");
+    input.trigger("keydown", { key: "ArrowDown" });
+
+    assert.deepEqual(wrapper.emitted().intervalUpdated[0], [0]);
+});
