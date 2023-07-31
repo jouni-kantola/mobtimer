@@ -1,6 +1,7 @@
 <template>
     <input
         type="text"
+        ref="input"
         :value="paddedValue"
         @input="onInput"
         @keydown="onKeyDown"
@@ -8,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, onMounted, ref } from "vue";
 
 const props = defineProps({
     value: {
@@ -49,4 +50,10 @@ function onInput(event: Event) {
 function onKeyDown(event: KeyboardEvent) {
     if (event.key === "Enter") emit("enterKeyDown");
 }
+
+const input = ref<HTMLInputElement | null>(null);
+
+onMounted(() => {
+    input.value?.focus();
+});
 </script>
