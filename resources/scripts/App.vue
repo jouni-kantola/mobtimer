@@ -1,4 +1,5 @@
 <template>
+    <Alert v-if="information" :message="information" @alertClosed="information = ''" />
     <div class="cycle-settings">
         <Timer
             :value="formattedTimeRemaining"
@@ -32,6 +33,7 @@ import { PropType, reactive, ref } from "vue";
 import Timer from "./components/Timer.vue";
 import TeamMember from "./components/TeamMember.vue";
 import BreaksToggle from "./components/BreaksToggle.vue";
+import Alert from "./components/Alert.vue";
 
 import { updateTray, saveTeam, showWindow, hideWindow } from "./neutralino-api";
 import {
@@ -54,6 +56,7 @@ const takeBreaks = ref(true);
 const startButtonText = ref("Start");
 const isPaused = ref(false);
 const team = reactive(props.team);
+const information = ref("");
 
 const state: {
     timer: ReturnType<typeof startTimer> | null;
@@ -110,7 +113,7 @@ async function onEnd() {
             onBreakTick,
             onEnd
         );
-        startButtonText.value = "Take a break!";
+        information.value = "Break time. Grab a tea! 🍵";
 
         await showWindow();
     } else {
@@ -137,8 +140,8 @@ async function startSession() {
 
     if (state.timer?.isRunning) return false;
 
-    startButtonText.value =
-        "Session running 🚀. Double click any team member to switch/restart.";
+    startButtonText.value = "Hide window";
+    information.value = "Session running 🚀. Double click any team member to switch or restart.";
 
     state.timer = startTimer(state.iterationLengthInSeconds, onTick, onEnd);
 
