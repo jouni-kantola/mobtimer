@@ -23,6 +23,7 @@
             @notifyMemberStatus="toggleMemberHere"
             @switchDriver="switchDriver"
             @updateMemberName="updateMemberName"
+            tooltip="Double-click to set as driver"
             class="grid"
         />
     </form>

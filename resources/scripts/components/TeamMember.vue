@@ -2,6 +2,7 @@
     <div class="team-member" :class="{ current: isActive }">
         <input type="checkbox" v-model="isHere" role="switch" @click="ensureMinimumMembers" @change="toggleMemberHere">
         <input type="text" :value="name" placeholder="Name" @dblclick="switchDriver" @input="updateMemberName" />
+        <p v-if="tooltip" class="tooltip">{{ tooltip }}</p>
     </div>
 </template>
 
@@ -24,6 +25,9 @@ const props = defineProps({
     onlyOneActiveMember: {
         type: Boolean,
         required: false,
+    },
+    tooltip: {
+        type: String,
     },
 });
 
@@ -68,6 +72,7 @@ function updateMemberName(event: Event) {
     grid-template-columns: 1fr minmax(auto, 95%);
     align-items: center;
     margin-bottom: var(--spacing);
+    position: relative;
 }
 
 .current input[type="text"] {
@@ -79,5 +84,38 @@ function updateMemberName(event: Event) {
     100% {
         filter: hue-rotate(360deg);
     }
+}
+
+.tooltip {
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    margin: 0;
+    padding: 10px;
+    font-size: 0.6em;
+    white-space: nowrap;
+    pointer-events: none;
+    color: var(--color);
+    transform: translateY(-50%);
+    background-color: var(--primary);
+    color: var(--primary-inverse);
+    border-radius: 5px;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.team-member:hover .tooltip {
+    opacity: 0.9;
+}
+
+.tooltip:before {
+    content: "";
+    position: absolute;
+    top: 7px;
+    left: -20px;
+    height: 0;
+    width: 0;
+    border: 10px solid transparent;
+    border-right-color: var(--primary);
 }
 </style>
