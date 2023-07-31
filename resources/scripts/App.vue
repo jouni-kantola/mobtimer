@@ -4,10 +4,7 @@
             :value="formattedTimeRemaining"
             @intervalUpdated="onIntervalUpdated"
         />
-        <label
-            >Take breaks
-            <input v-model="takeBreaks" type="checkbox" role="switch"
-        /></label>
+        <BreaksToggle @breaksToggled="toggleBreaks" />
     </div>
     <div class="grid">
         <button @click="startSession">{{ startButtonText }}</button>
@@ -34,6 +31,7 @@ import { PropType, reactive, ref } from "vue";
 
 import Timer from "./components/Timer.vue";
 import TeamMember from "./components/TeamMember.vue";
+import BreaksToggle from "./components/BreaksToggle.vue";
 
 import { updateTray, saveTeam, showWindow, hideWindow } from "./neutralino-api";
 import {
@@ -189,6 +187,10 @@ function toggleMemberHere(selectedMemberIndex: number, isHere: boolean) {
         switchActiveMember(index, team);
         prepareForNextMember();
     }
+}
+
+function toggleBreaks(value: boolean) {
+    takeBreaks.value = value;
 }
 </script>
 
