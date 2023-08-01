@@ -1,44 +1,26 @@
 <template>
     <div class="timer">
-        <button
-            class="minutes"
-            @click="toggleMinutesSetting"
-            v-if="!displayMinutesSetting"
-        >
-            {{ minutes.toString().padStart(2, "0") }}
-        </button>
         <IntervalLength
-            v-else
             :value="minutes"
             :min="0"
             class="minutes"
             @intervalUpdated="updateIntervalByMinutes"
-            @enterKeyDown="toggleMinutesSetting"
-            @blur="toggleMinutesSetting"
+            @enterKeyDown="console.log('minutes')"
         />
         <span>:</span>
-        <button
-            class="seconds"
-            @click="toggleSecondsSetting"
-            v-if="!displaySecondsSetting"
-        >
-            {{ seconds.toString().padStart(2, "0") }}
-        </button>
         <IntervalLength
-            v-else
             :value="seconds"
             :min="0"
             :max="59"
             class="seconds"
             @intervalUpdated="updateIntervalBySeconds"
-            @enterKeyDown="toggleSecondsSetting"
-            @blur="toggleSecondsSetting"
+            @enterKeyDown="console.log('seconds')"
         />
     </div>
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed } from "vue";
 import IntervalLength from "./IntervalLength.vue";
 
 const emit = defineEmits<{
@@ -54,8 +36,6 @@ const props = defineProps({
 
 const minutes = computed(() => +props.value.split(":")[0]);
 const seconds = computed(() => +props.value.split(":")[1]);
-const displayMinutesSetting = ref(false);
-const displaySecondsSetting = ref(false);
 
 function updateIntervalByMinutes(value: number) {
     const interval = value * 60 + seconds.value || 1;
@@ -65,14 +45,6 @@ function updateIntervalByMinutes(value: number) {
 function updateIntervalBySeconds(value: number) {
     const interval = minutes.value * 60 + value || 1;
     emit("intervalUpdated", interval);
-}
-
-function toggleMinutesSetting() {
-    displayMinutesSetting.value = !displayMinutesSetting.value;
-}
-
-function toggleSecondsSetting() {
-    displaySecondsSetting.value = !displaySecondsSetting.value;
 }
 </script>
 
@@ -92,19 +64,12 @@ function toggleSecondsSetting() {
     );
 }
 
-.timer button {
-    cursor: text;
-}
-
-.timer button:hover,
 .timer input:hover,
-.timer button:focus,
 .timer input:focus {
     font-weight: 600;
 }
 
-.timer input,
-.timer button {
+.timer input {
     display: block;
     font-size: 4rem;
     border: transparent;
@@ -115,20 +80,10 @@ function toggleSecondsSetting() {
     width: 3ch;
     height: 4.1rem !important;
     line-height: 4.1rem !important;
-}
-
-.timer button,
-.timer input {
     text-align: right;
 }
 
-.timer button {
-    outline: 3px solid transparent;
-}
-
-.timer button ~ button,
-.timer input ~ button,
-.timer button ~ input {
+.timer input ~ input {
     text-align: left;
 }
 
