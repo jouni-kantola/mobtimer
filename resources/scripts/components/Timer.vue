@@ -78,8 +78,8 @@ function updateIntervalBySeconds(value: number) {
     padding: 0 !important;
     margin: 0 !important;
     width: 3ch;
-    height: 4.1rem !important;
-    line-height: 4.1rem !important;
+    height: 5rem !important;
+    line-height: 5rem !important;
     text-align: right;
 }
 
