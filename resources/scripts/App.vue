@@ -1,10 +1,7 @@
 <template>
     <Alert v-if="information" :message="information" @alertClosed="information = ''" />
     <div class="cycle-settings">
-        <Timer
-            :value="formattedTimeRemaining"
-            @intervalUpdated="onIntervalUpdated"
-        />
+        <Timer :value="formattedTimeRemaining" @intervalUpdated="onIntervalUpdated" />
         <BreaksToggle @breaksToggled="toggleBreaks" />
     </div>
     <div class="grid">
@@ -14,18 +11,10 @@
         </button>
     </div>
     <form>
-        <TeamMember
-            v-for="{ name, index, isActive } in team"
-            :index="index"
-            :name="name"
-            :isActive="isActive"
-            :onlyOneActiveMember="team.filter(m => m.isHere).length === 1"
-            @notifyMemberStatus="toggleMemberHere"
-            @switchDriver="switchDriver"
-            @updateMemberName="updateMemberName"
-            tooltip="Double-click to set as driver"
-            class="grid"
-        />
+        <TeamMember v-for="{ name, index, isActive } in team" :index="index" :name="name" :isActive="isActive"
+            :onlyOneActiveMember="team.filter(m => m.isHere).length === 1" @notifyMemberStatus="toggleMemberHere"
+            @switchDriver="switchDriver" @updateMemberName="updateMemberName" tooltip="Double-click to set as driver"
+            class="grid" />
     </form>
 </template>
 <script setup lang="ts">
@@ -36,7 +25,13 @@ import TeamMember from "./components/TeamMember.vue";
 import BreaksToggle from "./components/BreaksToggle.vue";
 import Alert from "./components/Alert.vue";
 
-import { updateTray, saveTeam, showWindow, hideWindow, saveIntervalLength } from "./neutralino-api";
+import {
+    updateTray,
+    saveTeam,
+    showWindow,
+    hideWindow,
+    saveIntervalLength,
+} from "./neutralino-api";
 import {
     whosNextAfter,
     switchActiveMember,
