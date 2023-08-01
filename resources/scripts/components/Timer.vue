@@ -75,7 +75,7 @@ function updateIntervalBySeconds(value: number) {
     border: transparent;
     background-color: transparent;
     color: inherit;
-    padding: 0 !important;
+    padding: 3px !important;
     margin: 0 !important;
     width: 3ch;
     height: 5rem !important;
