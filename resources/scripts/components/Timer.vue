@@ -88,6 +88,6 @@ function updateIntervalBySeconds(value: number) {
 }
 
 .timer span {
-    margin-top: -0.15em;
+    margin-top: -0.2em;
 }
 </style>
