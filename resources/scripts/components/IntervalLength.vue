@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
+import { computed } from "vue";
 
 const props = defineProps({
     value: {
@@ -63,10 +63,4 @@ function onKeyDown(event: KeyboardEvent) {
         emit("intervalUpdated", intervalLength);
     }
 }
-
-const input = ref<HTMLInputElement | null>(null);
-
-onMounted(() => {
-    input.value?.focus();
-});
 </script>
