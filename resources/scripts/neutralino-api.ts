@@ -53,6 +53,10 @@ export async function saveTeam(members: string[]) {
     await storage.setData("mobUsers", JSON.stringify(members));
 }
 
+export async function saveIntervalLength(seconds: number) {
+    await storage.setData("intervalLength", JSON.stringify(seconds));
+}
+
 export async function showWindow() {
     await window.show();
 }
@@ -67,6 +71,10 @@ export function registerEvents() {
 
 export async function getTeamData(): Promise<string[]> {
     return JSON.parse(await storage.getData("mobUsers"));
+}
+
+export async function getIntervalLength(): Promise<number> {
+    return JSON.parse(await storage.getData("intervalLength"));
 }
 
 async function onTrayMenuItemClicked(event: CustomEvent) {

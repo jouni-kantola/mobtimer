@@ -36,7 +36,7 @@ import TeamMember from "./components/TeamMember.vue";
 import BreaksToggle from "./components/BreaksToggle.vue";
 import Alert from "./components/Alert.vue";
 
-import { updateTray, saveTeam, showWindow, hideWindow } from "./neutralino-api";
+import { updateTray, saveTeam, showWindow, hideWindow, saveIntervalLength } from "./neutralino-api";
 import {
     whosNextAfter,
     switchActiveMember,
@@ -51,6 +51,10 @@ const props = defineProps({
         type: Array as PropType<Array<Member>>,
         required: true,
     },
+    intervalLengthInSeconds: {
+        type: Number,
+        required: true,
+    },
 });
 
 const takeBreaks = ref(true);
@@ -58,14 +62,13 @@ const startButtonText = ref("Start");
 const isPaused = ref(false);
 const team = reactive(props.team);
 const information = ref("");
+const intervalLength = ref(props.intervalLengthInSeconds);
 
 const state: {
     timer: ReturnType<typeof startTimer> | null;
-    iterationLengthInSeconds: number;
     onBreak: boolean;
 } = {
     timer: null,
-    iterationLengthInSeconds: 600,
     onBreak: false,
 };
 
@@ -74,7 +77,7 @@ const formattedTimeRemaining = ref(formatTimeRemaining());
 function formatTimeRemaining() {
     return state.timer?.isRunning
         ? state.timer.timeLeft
-        : secondsToMinutesAndSeconds(state.iterationLengthInSeconds);
+        : secondsToMinutesAndSeconds(intervalLength.value);
 }
 
 function updateTimeDisplay() {
@@ -110,7 +113,7 @@ async function onEnd() {
     ) {
         state.onBreak = true;
         state.timer = startTimer(
-            state.iterationLengthInSeconds,
+            intervalLength.value,
             onBreakTick,
             onEnd
         );
@@ -130,10 +133,11 @@ async function onEnd() {
     }
 }
 
-function onIntervalUpdated(intervalLength: number) {
-    state.iterationLengthInSeconds = intervalLength;
-    state.timer?.change(intervalLength);
+function onIntervalUpdated(seconds: number) {
+    intervalLength.value = seconds;
+    state.timer?.change(intervalLength.value);
     updateTimeDisplay();
+    saveIntervalLength(intervalLength.value);
 }
 
 async function startSession() {
@@ -143,7 +147,7 @@ async function startSession() {
 
     startButtonText.value = "Hide window";
 
-    state.timer = startTimer(state.iterationLengthInSeconds, onTick, onEnd);
+    state.timer = startTimer(intervalLength.value, onTick, onEnd);
 
     isPaused.value = false;
 }
