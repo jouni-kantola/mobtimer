@@ -95,7 +95,6 @@ function updateMemberName(event: Event) {
     font-size: 0.6em;
     white-space: nowrap;
     pointer-events: none;
-    color: var(--color);
     transform: translateY(-50%);
     background-color: var(--primary);
     color: var(--primary-inverse);
