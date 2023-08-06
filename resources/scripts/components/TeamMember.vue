@@ -1,13 +1,26 @@
 <template>
     <div class="team-member" :class="{ current: isActive }">
-        <input type="checkbox" v-model="isHere" role="switch" @click="ensureMinimumMembers" @change="toggleMemberHere">
-        <input type="text" :value="name" placeholder="Name" @dblclick="switchDriver" @keyup.enter="switchDriver" @input="updateMemberName" />
+        <input
+            type="checkbox"
+            v-model="isHere"
+            role="switch"
+            @click="ensureMinimumMembers"
+            @change="toggleMemberHere"
+        />
+        <input
+            type="text"
+            :value="name"
+            placeholder="Name"
+            @dblclick="switchDriver"
+            @keyup.enter="switchDriver"
+            @input="updateMemberName"
+        />
         <p v-if="tooltip" class="tooltip">{{ tooltip }}</p>
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref } from "vue";
 
 const props = defineProps({
     index: {
@@ -32,10 +45,10 @@ const props = defineProps({
 });
 
 const emit = defineEmits<{
-    notifyMemberStatus: [number, boolean]
-    switchDriver: [number]
-    updateMemberName: [number, string]
-}>()
+    notifyMemberStatus: [number, boolean];
+    switchDriver: [number];
+    updateMemberName: [number, string];
+}>();
 
 const isHere = ref(true);
 
@@ -104,7 +117,7 @@ function updateMemberName(event: Event) {
     transition: opacity 0.2s ease-in-out;
 }
 
-.team-member:focus-within .tooltip {
+input[type="text"]:focus + .tooltip {
     opacity: 0.9;
 }
 
