@@ -5,7 +5,7 @@
             :min="0"
             class="minutes"
             @intervalUpdated="updateIntervalByMinutes"
-            @enterKeyDown="console.log('minutes')"
+            @enterKeyDown="$emit('enterKeyDown')"
         />
         <span>:</span>
         <IntervalLength
@@ -14,7 +14,7 @@
             :max="59"
             class="seconds"
             @intervalUpdated="updateIntervalBySeconds"
-            @enterKeyDown="console.log('seconds')"
+            @enterKeyDown="$emit('enterKeyDown')"
         />
     </div>
 </template>
@@ -25,6 +25,7 @@ import IntervalLength from "./IntervalLength.vue";
 
 const emit = defineEmits<{
     intervalUpdated: [number];
+    enterKeyDown: [];
 }>();
 
 const props = defineProps({

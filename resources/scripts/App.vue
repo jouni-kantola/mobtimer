@@ -1,7 +1,7 @@
 <template>
     <Alert v-if="information" :message="information" @alertClosed="information = ''" />
     <div class="cycle-settings">
-        <Timer :value="formattedTimeRemaining" @intervalUpdated="onIntervalUpdated" />
+        <Timer :value="formattedTimeRemaining" @intervalUpdated="onIntervalUpdated" @enterKeyDown="startSession" />
         <BreaksToggle @breaksToggled="toggleBreaks" />
     </div>
     <div class="grid">
