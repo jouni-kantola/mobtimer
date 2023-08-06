@@ -16,6 +16,10 @@
     --background-color: rgb(17, 25, 31);
     --color: #fff;
   }
+
+  .current input[type="text"] {
+    color: rgb(17, 25, 31);
+  }
 }
 
 :root {
