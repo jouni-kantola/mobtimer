@@ -34,7 +34,7 @@ function close() {
     padding: 15px 20px;
     margin: 10px;
     background-color: var(--secondary);
-    opacity: 0.8;
+    opacity: 0.9;
     border-radius: 3px;
 }
 
