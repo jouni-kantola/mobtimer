@@ -12,8 +12,10 @@ const trayOptions = {
     QUIT: "Quit",
 };
 
-export function init() {
+export async function init() {
     neuInit();
+    // @ts-expect-error
+    await window.setTitle(`Mob timer v${NL_APPVERSION}`);
 }
 
 export async function updateTray(
