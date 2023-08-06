@@ -78,6 +78,7 @@ function updateMemberName(event: Event) {
 .current input[type="text"] {
     background: linear-gradient(135deg, #bafdf7, #fcf4ac, #fbb7f3);
     animation: animate 2.5s linear infinite;
+    font-weight: 600;
 }
 
 @keyframes animate {
