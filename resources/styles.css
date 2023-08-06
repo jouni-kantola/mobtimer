@@ -1,12 +1,27 @@
 [data-theme="light"],
 :root:not([data-theme="dark"]) {
+  --primary: #eb378a;
+  --primary-hover: #ffb9d9;
+  --primary-focus: #ffb9d9;
+  --primary-inverse: #FFF;
+  --background-color: #f6edee;
+}
+
+@media only screen and (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
     --primary: #eb378a;
     --primary-hover: #ffb9d9;
     --primary-focus: #ffb9d9;
-    --primary-inverse: #fff;
+    --primary-inverse: #FFF;
+    --background-color: rgb(17, 25, 31);
+  }
 }
-html {
-    background: #f6edee;
+
+:root {
+  --form-element-active-border-color: var(--primary);
+  --form-element-focus-color: var(--primary-focus);
+  --switch-color: var(--primary-inverse);
+  --switch-checked-background-color: var(--primary);
 }
 
 body > main {
