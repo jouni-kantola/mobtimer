@@ -20,7 +20,6 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
 import IntervalLength from "./IntervalLength.vue";
 
 const emit = defineEmits<{
@@ -29,22 +28,23 @@ const emit = defineEmits<{
 }>();
 
 const props = defineProps({
-    value: {
-        type: String,
+    minutes: {
+        type: Number,
+        required: true,
+    },
+    seconds: {
+        type: Number,
         required: true,
     },
 });
 
-const minutes = computed(() => +props.value.split(":")[0]);
-const seconds = computed(() => +props.value.split(":")[1]);
-
 function updateIntervalByMinutes(value: number) {
-    const interval = value * 60 + seconds.value || 1;
+    const interval = value * 60 + props.seconds || 1;
     emit("intervalUpdated", interval);
 }
 
 function updateIntervalBySeconds(value: number) {
-    const interval = minutes.value * 60 + value || 1;
+    const interval = props.minutes * 60 + value || 1;
     emit("intervalUpdated", interval);
 }
 </script>
