@@ -26,7 +26,7 @@
         "window": {
             "title": "Mob timer",
             "width": 800,
-            "height": 500,
+            "height": 800,
             "minWidth": 400,
             "minHeight": 200,
             "fullScreen": false,
@@ -34,7 +34,7 @@
             "icon": "/resources/icons/appIcon.png",
             "enableInspector": false,
             "borderless": false,
-            "maximize": true,
+            "maximize": false,
             "hidden": false,
             "resizable": true,
             "exitProcessOnClose": true
