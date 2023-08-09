@@ -1,11 +1,11 @@
 class Timer {
     #intervalSeconds: number;
     #secondsLeft: number;
-    #onTick: () => void;
+    #onTick: (timeLeft: [number, number]) => void;
     #onEnd: () => void;
     #clockIntervalId: NodeJS.Timeout | null;
 
-    constructor(seconds: number, onTick: () => void, onEnd: () => void) {
+    constructor(seconds: number, onTick: (timeLeft: [number, number]) => void, onEnd: () => void) {
         this.#intervalSeconds = seconds;
         this.#secondsLeft = seconds;
         this.#onTick = onTick;
@@ -27,7 +27,7 @@ class Timer {
                 this.#clearInterval();
                 !!this.#onEnd && this.#onEnd();
             } else {
-                !!this.#onTick && this.#onTick();
+                !!this.#onTick && this.#onTick(this.timeLeft);
             }
         }, 1000);
     }
@@ -52,7 +52,7 @@ class Timer {
     }
 }
 
-export function startTimer(seconds: number, onTick: () => void, onEnd: () => void) {
+export function startTimer(seconds: number, onTick: (timeLeft: [number, number]) => void, onEnd: () => void) {
     const timer = new Timer(seconds, onTick, onEnd);
     timer.start();
     return timer;
