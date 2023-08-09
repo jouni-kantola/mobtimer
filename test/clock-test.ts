@@ -89,3 +89,13 @@ test("can pause timer", async t => {
 
     assert.deepEqual(timer.timeLeft, [9, 59]);
 });
+
+test("time remaining given on tick", async t => {
+    const timeRemaining = await new Promise<[number, number]>((resolve, _) => {
+        startTimer(600, (timeLeft) => {
+            resolve(timeLeft);
+        }, () => {});
+    });
+
+    assert.deepEqual(timeRemaining, [9, 59]);
+});
