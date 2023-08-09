@@ -58,11 +58,8 @@ export function startTimer(seconds: number, onTick: () => void, onEnd: () => voi
     return timer;
 }
 
-export function secondsToMinutesAndSeconds(value: number) {
+export function secondsToMinutesAndSeconds(value: number): [number, number] {
     const minutes = Math.floor(value / 60);
     const seconds = value % 60;
-    const formattedTime = `${String(minutes).padStart(2, "0")}:${String(
-        seconds
-    ).padStart(2, "0")}`;
-    return formattedTime;
+    return [minutes, seconds];
 }

@@ -46,7 +46,7 @@ test("provide formatted time left", async t => {
         setTimeout(resolve, 1500);
     });
 
-    assert.strictEqual(timer.timeLeft, "09:59");
+    assert.deepEqual(timer.timeLeft, [9, 59]);
 
     // without reseting test run never ends
     timer.reset();
@@ -55,9 +55,9 @@ test("provide formatted time left", async t => {
 test("can change timer", async t => {
     const timer = startTimer(600, () => {}, () => {});
     timer.change(300);
-    assert.strictEqual(timer.timeLeft, "05:00");
+    assert.deepEqual(timer.timeLeft, [5, 0]);
     timer.change(1);
-    assert.strictEqual(timer.timeLeft, "00:01");
+    assert.deepEqual(timer.timeLeft, [0, 1]);
 });
 
 test("can reset started timer", async t => {
@@ -72,7 +72,7 @@ test("can reset started timer", async t => {
     timer.reset();
 
     assert.strictEqual(timer.isRunning, false);
-    assert.strictEqual(timer.timeLeft, "10:00");
+    assert.deepEqual(timer.timeLeft, [10, 0]);
 });
 
 test("can pause timer", async t => {
@@ -87,5 +87,5 @@ test("can pause timer", async t => {
     timer.pause();
     assert.strictEqual(timer.isRunning, false);
 
-    assert.strictEqual(timer.timeLeft, "09:59");
+    assert.deepEqual(timer.timeLeft, [9, 59]);
 });

@@ -1,7 +1,8 @@
 <template>
     <Alert v-if="information" :message="information" @alertClosed="information = ''" />
     <div class="cycle-settings">
-        <Timer :value="formattedTimeRemaining" @intervalUpdated="onIntervalUpdated" @enterKeyDown="startSession" />
+        <Timer :minutes="timeRemaining[0]" :seconds="timeRemaining[1]" @intervalUpdated="onIntervalUpdated"
+            @enterKeyDown="startSession" />
         <BreaksToggle @breaksToggled="toggleBreaks" />
     </div>
     <div class="grid">
@@ -67,16 +68,16 @@ const state: {
     onBreak: false,
 };
 
-const formattedTimeRemaining = ref(formatTimeRemaining());
+const timeRemaining = ref(getTimeRemaining());
 
-function formatTimeRemaining() {
+function getTimeRemaining() {
     return state.timer?.isRunning
         ? state.timer.timeLeft
         : secondsToMinutesAndSeconds(intervalLength.value);
 }
 
 function updateTimeDisplay() {
-    formattedTimeRemaining.value = formatTimeRemaining();
+    timeRemaining.value = getTimeRemaining();
 }
 
 function prepareForNextMember() {
@@ -88,16 +89,20 @@ async function onTick() {
     updateTimeDisplay();
     const { index, name } = getActiveMember(team);
     const nextMember = whosNextAfter(index, team);
-    const timeRemaning = formatTimeRemaining();
-    await updateTray(name, nextMember.name, timeRemaning);
+    const formattedTime = `${String(timeRemaining.value[0]).padStart(2, "0")}:${String(
+        timeRemaining.value[1]
+    ).padStart(2, "0")}`;
+    await updateTray(name, nextMember.name, formattedTime);
 }
 
 async function onBreakTick() {
     updateTimeDisplay();
     const { index } = getActiveMember(team);
     const nextMember = whosNextAfter(index, team);
-    const timeRemaning = formatTimeRemaining();
-    await updateTray("Break", nextMember.name, timeRemaning);
+    const formattedTime = `${String(timeRemaining.value[0]).padStart(2, "0")}:${String(
+        timeRemaining.value[1]
+    ).padStart(2, "0")}`;
+    await updateTray("Break", nextMember.name, formattedTime)
 }
 
 async function onEnd() {
