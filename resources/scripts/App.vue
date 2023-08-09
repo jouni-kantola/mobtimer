@@ -5,7 +5,7 @@
             @enterKeyDown="startSession" />
         <BreaksToggle @breaksToggled="toggleBreaks" />
     </div>
-    <div class="grid">
+    <div class="start-stop">
         <button @click="startSession">{{ startButtonText }}</button>
         <button @click="pauseButtonElementClick">
             {{ isPaused ? "Resume" : "Pause" }}
@@ -205,6 +205,12 @@ function toggleBreaks(value: boolean) {
     display: grid;
     grid-template-columns: 0.8fr 0.2fr;
     align-items: start;
+    gap: 15px;
+}
+
+.start-stop {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 15px;
 }
 </style>
