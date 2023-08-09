@@ -74,6 +74,10 @@ function updateTimeDisplay(timeLeft: [number, number]) {
     timeRemaining.value = timeLeft;
 }
 
+function resetTimeDisplay() {
+    updateTimeDisplay(secondsToMinutesAndSeconds(intervalLength.value));
+}
+
 function prepareForNextMember() {
     const { name } = getActiveMember(team);
     startButtonText.value = `Start session for ${name}`;
@@ -116,7 +120,7 @@ async function onEnd() {
         await showWindow();
     } else {
         state.onBreak = false;
-        updateTimeDisplay(secondsToMinutesAndSeconds(intervalLength.value));
+        resetTimeDisplay();
 
         const { index } = whosNextAfter(getActiveMember(team).index, team);
 
@@ -130,7 +134,7 @@ async function onEnd() {
 function onIntervalUpdated(seconds: number) {
     intervalLength.value = seconds;
     state.timer?.change(intervalLength.value);
-    updateTimeDisplay(secondsToMinutesAndSeconds(intervalLength.value));
+    resetTimeDisplay();
     saveIntervalLength(intervalLength.value);
 }
 
@@ -160,7 +164,7 @@ function pauseButtonElementClick() {
 
 function switchDriver(selectedMemberIndex: number) {
     state.timer?.reset();
-    updateTimeDisplay(secondsToMinutesAndSeconds(intervalLength.value));
+    resetTimeDisplay();
     switchActiveMember(selectedMemberIndex, team);
     prepareForNextMember();
     isPaused.value = false;
@@ -182,7 +186,7 @@ function toggleMemberHere(selectedMemberIndex: number, isHere: boolean) {
 
     if (activeMember.index === selectedMemberIndex && !isHere) {
         state.timer?.reset();
-        updateTimeDisplay(secondsToMinutesAndSeconds(intervalLength.value));
+        resetTimeDisplay();
 
         const { index } = whosNextAfter(activeMember.index, team);
         switchActiveMember(index, team);
