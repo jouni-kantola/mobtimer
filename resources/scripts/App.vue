@@ -78,6 +78,12 @@ function resetTimeDisplay() {
     updateTimeDisplay(secondsToMinutesAndSeconds(intervalLength.value));
 }
 
+function formatTime([minutes, seconds]: [number, number]) {
+    return `${String(minutes).padStart(2, "0")}:${String(
+        seconds
+    ).padStart(2, "0")}`;
+}
+
 function prepareForNextMember() {
     const { name } = getActiveMember(team);
     startButtonText.value = `Start session for ${name}`;
@@ -87,20 +93,14 @@ async function onTick(timeLeft: [number, number]) {
     updateTimeDisplay(timeLeft);
     const { index, name } = getActiveMember(team);
     const nextMember = whosNextAfter(index, team);
-    const formattedTime = `${String(timeLeft[0]).padStart(2, "0")}:${String(
-        timeLeft[1]
-    ).padStart(2, "0")}`;
-    await updateTray(name, nextMember.name, formattedTime);
+    await updateTray(name, nextMember.name, formatTime(timeLeft));
 }
 
 async function onBreakTick(timeLeft: [number, number]) {
     updateTimeDisplay(timeLeft);
     const { index } = getActiveMember(team);
     const nextMember = whosNextAfter(index, team);
-    const formattedTime = `${String(timeRemaining.value[0]).padStart(2, "0")}:${String(
-        timeRemaining.value[1]
-    ).padStart(2, "0")}`;
-    await updateTray("Break", nextMember.name, formattedTime)
+    await updateTray("Break", nextMember.name, formatTime(timeLeft));
 }
 
 async function onEnd() {
