@@ -110,6 +110,7 @@ async function onEnd() {
         !state.onBreak
     ) {
         state.onBreak = true;
+        resetTimeDisplay();
         state.timer = startTimer(
             intervalLength.value,
             onBreakTick,
