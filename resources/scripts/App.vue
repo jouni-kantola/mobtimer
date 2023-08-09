@@ -68,16 +68,10 @@ const state: {
     onBreak: false,
 };
 
-const timeRemaining = ref(getTimeRemaining());
+const timeRemaining = ref(secondsToMinutesAndSeconds(intervalLength.value));
 
-function getTimeRemaining() {
-    return state.timer?.isRunning
-        ? state.timer.timeLeft
-        : secondsToMinutesAndSeconds(intervalLength.value);
-}
-
-function updateTimeDisplay() {
-    timeRemaining.value = getTimeRemaining();
+function updateTimeDisplay(timeLeft: [number, number]) {
+    timeRemaining.value = timeLeft;
 }
 
 function prepareForNextMember() {
@@ -85,18 +79,18 @@ function prepareForNextMember() {
     startButtonText.value = `Start session for ${name}`;
 }
 
-async function onTick() {
-    updateTimeDisplay();
+async function onTick(timeLeft: [number, number]) {
+    updateTimeDisplay(timeLeft);
     const { index, name } = getActiveMember(team);
     const nextMember = whosNextAfter(index, team);
-    const formattedTime = `${String(timeRemaining.value[0]).padStart(2, "0")}:${String(
-        timeRemaining.value[1]
+    const formattedTime = `${String(timeLeft[0]).padStart(2, "0")}:${String(
+        timeLeft[1]
     ).padStart(2, "0")}`;
     await updateTray(name, nextMember.name, formattedTime);
 }
 
-async function onBreakTick() {
-    updateTimeDisplay();
+async function onBreakTick(timeLeft: [number, number]) {
+    updateTimeDisplay(timeLeft);
     const { index } = getActiveMember(team);
     const nextMember = whosNextAfter(index, team);
     const formattedTime = `${String(timeRemaining.value[0]).padStart(2, "0")}:${String(
@@ -122,7 +116,7 @@ async function onEnd() {
         await showWindow();
     } else {
         state.onBreak = false;
-        updateTimeDisplay();
+        updateTimeDisplay(secondsToMinutesAndSeconds(intervalLength.value));
 
         const { index } = whosNextAfter(getActiveMember(team).index, team);
 
@@ -136,7 +130,7 @@ async function onEnd() {
 function onIntervalUpdated(seconds: number) {
     intervalLength.value = seconds;
     state.timer?.change(intervalLength.value);
-    updateTimeDisplay();
+    updateTimeDisplay(secondsToMinutesAndSeconds(intervalLength.value));
     saveIntervalLength(intervalLength.value);
 }
 
@@ -166,7 +160,7 @@ function pauseButtonElementClick() {
 
 function switchDriver(selectedMemberIndex: number) {
     state.timer?.reset();
-    updateTimeDisplay();
+    updateTimeDisplay(secondsToMinutesAndSeconds(intervalLength.value));
     switchActiveMember(selectedMemberIndex, team);
     prepareForNextMember();
     isPaused.value = false;
@@ -188,7 +182,7 @@ function toggleMemberHere(selectedMemberIndex: number, isHere: boolean) {
 
     if (activeMember.index === selectedMemberIndex && !isHere) {
         state.timer?.reset();
-        updateTimeDisplay();
+        updateTimeDisplay(secondsToMinutesAndSeconds(intervalLength.value));
 
         const { index } = whosNextAfter(activeMember.index, team);
         switchActiveMember(index, team);
