@@ -1,5 +1,5 @@
 import { assert, test } from "vitest";
-import { startTimer } from "../resources/scripts/clock";
+import { type TimeRemaining, startTimer } from "../resources/scripts/clock";
 
 test("determine if running", t => {
     const seconds = 1;
@@ -91,7 +91,7 @@ test("can pause timer", async t => {
 });
 
 test("time remaining given on tick", async t => {
-    const timeRemaining = await new Promise<[number, number]>((resolve, _) => {
+    const timeRemaining = await new Promise<TimeRemaining>((resolve, _) => {
         startTimer(600, (timeLeft) => {
             resolve(timeLeft);
         }, () => {});

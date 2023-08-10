@@ -1,11 +1,13 @@
+export type TimeRemaining = [number, number];
+
 class Timer {
     #intervalSeconds: number;
     #secondsLeft: number;
-    #onTick: (timeLeft: [number, number]) => void;
+    #onTick: (timeLeft: TimeRemaining) => void;
     #onEnd: () => void;
     #clockIntervalId: NodeJS.Timeout | null;
 
-    constructor(seconds: number, onTick: (timeLeft: [number, number]) => void, onEnd: () => void) {
+    constructor(seconds: number, onTick: (timeLeft: TimeRemaining) => void, onEnd: () => void) {
         this.#intervalSeconds = seconds;
         this.#secondsLeft = seconds;
         this.#onTick = onTick;
@@ -58,7 +60,7 @@ export function startTimer(seconds: number, onTick: (timeLeft: [number, number])
     return timer;
 }
 
-export function secondsToMinutesAndSeconds(value: number): [number, number] {
+export function secondsToMinutesAndSeconds(value: number): TimeRemaining {
     const minutes = Math.floor(value / 60);
     const seconds = value % 60;
     return [minutes, seconds];

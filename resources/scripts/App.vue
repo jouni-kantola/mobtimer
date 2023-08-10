@@ -40,7 +40,7 @@ import {
     getLast,
     type Member,
 } from "./team";
-import { secondsToMinutesAndSeconds, startTimer } from "./clock";
+import { type TimeRemaining, secondsToMinutesAndSeconds, startTimer } from "./clock";
 
 const props = defineProps({
     team: {
@@ -70,7 +70,7 @@ const state: {
 
 const timeRemaining = ref(secondsToMinutesAndSeconds(intervalLength.value));
 
-function updateTimeDisplay(timeLeft: [number, number]) {
+function updateTimeDisplay(timeLeft: TimeRemaining) {
     timeRemaining.value = timeLeft;
 }
 
@@ -78,7 +78,7 @@ function resetTimeDisplay() {
     updateTimeDisplay(secondsToMinutesAndSeconds(intervalLength.value));
 }
 
-function formatTime([minutes, seconds]: [number, number]) {
+function formatTime([minutes, seconds]: TimeRemaining) {
     return `${String(minutes).padStart(2, "0")}:${String(
         seconds
     ).padStart(2, "0")}`;
@@ -89,14 +89,14 @@ function prepareForNextMember() {
     startButtonText.value = `Start session for ${name}`;
 }
 
-async function onTick(timeLeft: [number, number]) {
+async function onTick(timeLeft: TimeRemaining) {
     updateTimeDisplay(timeLeft);
     const { index, name } = getActiveMember(team);
     const nextMember = whosNextAfter(index, team);
     await updateTray(name, nextMember.name, formatTime(timeLeft));
 }
 
-async function onBreakTick(timeLeft: [number, number]) {
+async function onBreakTick(timeLeft: TimeRemaining) {
     updateTimeDisplay(timeLeft);
     const { index } = getActiveMember(team);
     const nextMember = whosNextAfter(index, team);
