@@ -20,6 +20,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["resources/**/*.ts", "resources/**/*.d.ts", "resources/**/*.vue"],
+  "include": ["resources/**/*.ts", "resources/**/*.d.ts", "resources/**/*.vue", "test/**/*.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
