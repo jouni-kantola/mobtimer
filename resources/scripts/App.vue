@@ -14,8 +14,8 @@
     <form>
         <TeamMember v-for="{ name, index, isActive } in team" :index="index" :name="name" :isActive="isActive"
             :onlyOneActiveMember="team.filter(m => m.isHere).length === 1" @notifyMemberStatus="toggleMemberHere"
-            @switchDriver="switchDriver" @updateMemberName="updateMemberName" tooltip="Set to driver with Enter key or double-click"
-            class="grid" />
+            @switchDriver="switchDriver" @updateMemberName="updateMemberName"
+            tooltip="Set to driver with Enter key or double-click" class="grid" />
     </form>
 </template>
 <script setup lang="ts">
