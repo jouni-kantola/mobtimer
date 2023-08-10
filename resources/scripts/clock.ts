@@ -54,7 +54,7 @@ class Timer {
     }
 }
 
-export function startTimer(seconds: number, onTick: (timeLeft: [number, number]) => void, onEnd: () => void) {
+export function startTimer(seconds: number, onTick: (timeLeft: TimeRemaining) => void, onEnd: () => void) {
     const timer = new Timer(seconds, onTick, onEnd);
     timer.start();
     return timer;
