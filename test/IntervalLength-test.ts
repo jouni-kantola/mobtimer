@@ -77,7 +77,6 @@ test("max caps value", async () => {
 
     const input = wrapper.find("input");
     await input.setValue("999");
-    const el = input.element as HTMLInputElement;
 
     assert.deepEqual(wrapper.emitted().intervalUpdated[0], [59]);
     // TODO: Ensure value is capped
