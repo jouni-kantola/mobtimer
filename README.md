@@ -4,7 +4,6 @@
 
 1. `npm install`
 1. `npm run update`
-    - For development in macOS in a version older than 12, update `binaryVersion` to `4.8.0` in [neutralino.config.json](./neutralino.config.json) and re-run `npm run update`. Don't commit this change.
 1. Start the application in development mode: `npm start`
 
 ## Binaries
