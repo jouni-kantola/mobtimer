@@ -66,8 +66,13 @@ export async function hideWindow() {
     await window.hide();
 }
 
+async function quitApp() {
+    await app.exit();
+}
+
 export function registerEvents() {
     events.on("trayMenuItemClicked", onTrayMenuItemClicked);
+    events.on("windowClose", quitApp);
 }
 
 export async function getTeamData(): Promise<string[]> {
@@ -84,7 +89,7 @@ async function onTrayMenuItemClicked(event: CustomEvent) {
             await showWindow();
             break;
         case trayOptions.QUIT:
-            await app.exit();
+            await quitApp();
             break;
     }
 }
