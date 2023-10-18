@@ -9,16 +9,13 @@
             :minutes="timeRemaining[0]"
             :seconds="timeRemaining[1]"
             @intervalUpdated="onIntervalUpdated"
-            @enterKeyDown="startSession"
+            @enterKeyDown="start"
         />
         <BreaksToggle @breaksToggled="toggleBreaks" />
     </div>
-    <div class="start-stop">
-        <button @click="startSession">{{ startButtonText }}</button>
-        <button @click="pauseButtonElementClick">
-            {{ isPaused ? "Resume" : "Pause" }}
-        </button>
-    </div>
+    <button @click="() => (!timer ? start() : pause())">
+        {{ startButtonText }}
+    </button>
     <form>
         <TeamMember
             v-for="{ name, index, isActive } in team"
@@ -137,6 +134,7 @@ async function onEnd() {
         await showWindow();
     } else {
         state.onBreak = false;
+        timer.value = null;
         resetTimeDisplay();
 
         const { index } = whosNextAfter(getActiveMember(team).index, team);
@@ -155,32 +153,35 @@ function onIntervalUpdated(seconds: number) {
     saveIntervalLength(intervalLength.value);
 }
 
-async function startSession() {
+async function start() {
     await hideWindow();
 
     if (isPaused.value || timer.value?.isRunning) return false;
 
-    startButtonText.value = "Hide window";
+    startButtonText.value = "Pause";
 
     timer.value = startTimer(intervalLength.value, onTick, onEnd);
 
     isPaused.value = false;
 }
 
-function pauseButtonElementClick() {
+function pause() {
     if (!timer.value) return;
 
     if (timer.value.isRunning) {
         timer.value.pause();
         isPaused.value = true;
+        startButtonText.value = "Resume";
     } else if (isPaused.value) {
         timer.value.start();
         isPaused.value = false;
+        startButtonText.value = "Pause";
     }
 }
 
 function switchDriver(selectedMemberIndex: number) {
     timer.value?.reset();
+    timer.value = null;
     resetTimeDisplay();
     switchActiveMember(selectedMemberIndex, team);
     prepareForNextMember();
@@ -221,12 +222,6 @@ function toggleBreaks(value: boolean) {
     display: grid;
     grid-template-columns: 0.8fr 0.2fr;
     align-items: start;
-    gap: 15px;
-}
-
-.start-stop {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
     gap: 15px;
 }
 </style>
