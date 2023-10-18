@@ -1,8 +1,16 @@
 <template>
-    <Alert v-if="information" :message="information" @alertClosed="information = ''" />
+    <Alert
+        v-if="information"
+        :message="information"
+        @alertClosed="information = ''"
+    />
     <div class="cycle-settings">
-        <Timer :minutes="timeRemaining[0]" :seconds="timeRemaining[1]" @intervalUpdated="onIntervalUpdated"
-            @enterKeyDown="startSession" />
+        <Timer
+            :minutes="timeRemaining[0]"
+            :seconds="timeRemaining[1]"
+            @intervalUpdated="onIntervalUpdated"
+            @enterKeyDown="startSession"
+        />
         <BreaksToggle @breaksToggled="toggleBreaks" />
     </div>
     <div class="start-stop">
@@ -12,10 +20,18 @@
         </button>
     </div>
     <form>
-        <TeamMember v-for="{ name, index, isActive } in team" :index="index" :name="name" :isActive="isActive"
-            :onlyOneActiveMember="team.filter(m => m.isHere).length === 1" @notifyMemberStatus="toggleMemberHere"
-            @switchDriver="switchDriver" @updateMemberName="updateMemberName"
-            tooltip="Set to driver with Enter key or double-click" class="grid" />
+        <TeamMember
+            v-for="{ name, index, isActive } in team"
+            :index="index"
+            :name="name"
+            :isActive="isActive"
+            :onlyOneActiveMember="team.filter(m => m.isHere).length === 1"
+            @notifyMemberStatus="toggleMemberHere"
+            @switchDriver="switchDriver"
+            @updateMemberName="updateMemberName"
+            tooltip="Set to driver with Enter key or double-click"
+            class="grid"
+        />
     </form>
 </template>
 <script setup lang="ts">
@@ -40,7 +56,11 @@ import {
     getLast,
     type Member,
 } from "./team";
-import { type TimeRemaining, secondsToMinutesAndSeconds, startTimer } from "./clock";
+import {
+    type TimeRemaining,
+    secondsToMinutesAndSeconds,
+    startTimer,
+} from "./clock";
 
 const props = defineProps({
     team: {
@@ -59,12 +79,11 @@ const isPaused = ref(false);
 const team = reactive(props.team);
 const information = ref("");
 const intervalLength = ref(props.intervalLengthInSeconds);
+const timer = ref<ReturnType<typeof startTimer> | null>(null);
 
 const state: {
-    timer: ReturnType<typeof startTimer> | null;
     onBreak: boolean;
 } = {
-    timer: null,
     onBreak: false,
 };
 
@@ -79,9 +98,10 @@ function resetTimeDisplay() {
 }
 
 function formatTime([minutes, seconds]: TimeRemaining) {
-    return `${String(minutes).padStart(2, "0")}:${String(
-        seconds
-    ).padStart(2, "0")}`;
+    return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(
+        2,
+        "0"
+    )}`;
 }
 
 function prepareForNextMember() {
@@ -111,11 +131,7 @@ async function onEnd() {
     ) {
         state.onBreak = true;
         resetTimeDisplay();
-        state.timer = startTimer(
-            intervalLength.value,
-            onBreakTick,
-            onEnd
-        );
+        timer.value = startTimer(intervalLength.value, onBreakTick, onEnd);
         information.value = "🍵 Break time. Grab a tea!";
 
         await showWindow();
@@ -134,7 +150,7 @@ async function onEnd() {
 
 function onIntervalUpdated(seconds: number) {
     intervalLength.value = seconds;
-    state.timer?.change(intervalLength.value);
+    timer.value?.change(intervalLength.value);
     resetTimeDisplay();
     saveIntervalLength(intervalLength.value);
 }
@@ -142,29 +158,29 @@ function onIntervalUpdated(seconds: number) {
 async function startSession() {
     await hideWindow();
 
-    if (state.timer?.isRunning) return false;
+    if (isPaused.value || timer.value?.isRunning) return false;
 
     startButtonText.value = "Hide window";
 
-    state.timer = startTimer(intervalLength.value, onTick, onEnd);
+    timer.value = startTimer(intervalLength.value, onTick, onEnd);
 
     isPaused.value = false;
 }
 
 function pauseButtonElementClick() {
-    if (!state.timer) return;
+    if (!timer.value) return;
 
-    if (state.timer.isRunning) {
-        state.timer.pause();
+    if (timer.value.isRunning) {
+        timer.value.pause();
         isPaused.value = true;
     } else if (isPaused.value) {
-        state.timer.start();
+        timer.value.start();
         isPaused.value = false;
     }
 }
 
 function switchDriver(selectedMemberIndex: number) {
-    state.timer?.reset();
+    timer.value?.reset();
     resetTimeDisplay();
     switchActiveMember(selectedMemberIndex, team);
     prepareForNextMember();
@@ -186,7 +202,7 @@ function toggleMemberHere(selectedMemberIndex: number, isHere: boolean) {
     team[selectedMemberIndex].isHere = isHere;
 
     if (activeMember.index === selectedMemberIndex && !isHere) {
-        state.timer?.reset();
+        timer.value?.reset();
         resetTimeDisplay();
 
         const { index } = whosNextAfter(activeMember.index, team);
