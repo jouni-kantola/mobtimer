@@ -72,11 +72,12 @@ const props = defineProps({
 
 const takeBreaks = ref(true);
 const startButtonText = ref("Start");
-const isPaused = ref(false);
 const team = reactive(props.team);
 const information = ref("");
 const intervalLength = ref(props.intervalLengthInSeconds);
 const timer = ref<ReturnType<typeof startTimer> | null>(null);
+
+let isPaused = false;
 
 const state: {
     onBreak: boolean;
@@ -156,13 +157,13 @@ function onIntervalUpdated(seconds: number) {
 async function start() {
     await hideWindow();
 
-    if (isPaused.value || timer.value?.isRunning) return false;
+    if (isPaused || timer.value?.isRunning) return false;
 
     startButtonText.value = "Pause";
 
     timer.value = startTimer(intervalLength.value, onTick, onEnd);
 
-    isPaused.value = false;
+    isPaused = false;
 }
 
 function pause() {
@@ -170,11 +171,11 @@ function pause() {
 
     if (timer.value.isRunning) {
         timer.value.pause();
-        isPaused.value = true;
+        isPaused = true;
         startButtonText.value = "Resume";
-    } else if (isPaused.value) {
+    } else if (isPaused) {
         timer.value.start();
-        isPaused.value = false;
+        isPaused = false;
         startButtonText.value = "Pause";
     }
 }
@@ -185,7 +186,7 @@ function switchDriver(selectedMemberIndex: number) {
     resetTimeDisplay();
     switchActiveMember(selectedMemberIndex, team);
     prepareForNextMember();
-    isPaused.value = false;
+    isPaused = false;
 }
 
 async function updateMemberName(memberIndex: number, name: string) {
