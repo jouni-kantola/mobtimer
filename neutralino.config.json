@@ -67,7 +67,8 @@
             "patchFile": "/resources/index.html",
             "devUrl": "http://localhost:3000",
             "projectPath": "/",
-            "devCommand": "vite"
+            "devCommand": "vite",
+            "buildCommand": "vue-tsc --noEmit && vite build"
         }
     }
 }
