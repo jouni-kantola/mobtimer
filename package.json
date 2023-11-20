@@ -34,7 +34,6 @@
         "@vitejs/plugin-vue": "^4.4.0",
         "@vue/test-utils": "^2.4.1",
         "adm-zip": "^0.5.10",
-        "concurrently": "^8.2.1",
         "husky": "^8.0.3",
         "jsdom": "^22.1.0",
         "lint-staged": "^15.0.1",
