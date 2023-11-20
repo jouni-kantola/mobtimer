@@ -9,7 +9,7 @@
         "test": "vitest",
         "coverage": "vitest run --coverage",
         "update": "npx @neutralinojs/neu update",
-        "start": "concurrently \"vite build --watch\" \"npx @neutralinojs/neu run -- --window-enable-inspector\"",
+        "start": "npx @neutralinojs/neu run -- --window-enable-inspector",
         "build": "vue-tsc --noEmit && vite build && npx @neutralinojs/neu build --release",
         "package": "node package-release.js",
         "release": "npm run build && npm run package",
