@@ -4,6 +4,7 @@
 
 1. `npm install`
 1. `npm run update`
+1. `npm run build`
 1. Start the application in development mode: `npm start`
 
 ## Binaries
