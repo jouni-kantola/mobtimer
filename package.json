@@ -27,20 +27,20 @@
     "homepage": "https://github.com/jouni-kantola/mobtimer#readme",
     "dependencies": {
         "@neutralinojs/lib": "^3.13.0",
-        "vue": "^3.3.8"
+        "vue": "^3.3.9"
     },
     "devDependencies": {
         "@neutralinojs/neu": "^10.1.0",
         "@vitejs/plugin-vue": "^4.5.0",
-        "@vue/test-utils": "^2.4.2",
+        "@vue/test-utils": "^2.4.3",
         "adm-zip": "^0.5.10",
         "husky": "^8.0.3",
-        "jsdom": "^22.1.0",
+        "jsdom": "^23.0.0",
         "lint-staged": "^15.1.0",
         "prettier": "^3.1.0",
         "rcedit": "^4.0.1",
         "typescript": "^5.3.2",
-        "vite": "^5.0.2",
+        "vite": "^5.0.3",
         "vitest": "^0.34.6",
         "vue-tsc": "^1.8.22"
     },
