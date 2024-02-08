@@ -60,7 +60,7 @@
         "binaryName": "mobtimer",
         "resourcesPath": "/dist/",
         "extensionsPath": "/extensions/",
-        "binaryVersion": "4.15.0",
+        "binaryVersion": "5.0.0",
         "frontendLibrary": {
             "patchFile": "/resources/index.html",
             "devUrl": "http://localhost:3000",
