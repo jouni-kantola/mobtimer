@@ -13,7 +13,7 @@
         "build": "npx @neutralinojs/neu build --release",
         "package": "node package-release.js",
         "release": "npm run build && npm run package",
-        "prepare": "husky install"
+        "prepare": "husky"
     },
     "repository": {
         "type": "git",

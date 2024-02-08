@@ -3,7 +3,7 @@
 
 # Developer tools' files
 .lite_workspace.lua
-.husky
+.husky/_/
 
 # Neutralinojs binaries and builds
 /bin
