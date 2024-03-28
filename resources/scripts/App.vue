@@ -4,18 +4,18 @@
         :message="information"
         @alertClosed="information = ''"
     />
-    <div class="cycle-settings">
-        <Timer
-            :minutes="timeRemaining[0]"
-            :seconds="timeRemaining[1]"
-            @intervalUpdated="onIntervalUpdated"
-            @enterKeyDown="start"
-        />
-        <BreaksToggle @breaksToggled="toggleBreaks" />
-    </div>
+    <Timer
+        :minutes="timeRemaining[0]"
+        :seconds="timeRemaining[1]"
+        @intervalUpdated="onIntervalUpdated"
+        @enterKeyDown="start"
+    />
     <button @click="() => (!timer ? start() : pause())">
         {{ startButtonText }}
     </button>
+    <div class="team-options">
+        <BreaksToggle @breaksToggled="toggleBreaks" />
+    </div>
     <form>
         <TeamMember
             v-for="{ name, index, isActive } in team"
@@ -219,10 +219,8 @@ function toggleBreaks(value: boolean) {
 </script>
 
 <style scoped>
-.cycle-settings {
-    display: grid;
-    grid-template-columns: 0.8fr 0.2fr;
-    align-items: start;
-    gap: 15px;
+.team-options {
+    display: flex;
+    justify-content: flex-end;
 }
 </style>
