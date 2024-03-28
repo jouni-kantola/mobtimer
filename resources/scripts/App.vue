@@ -14,6 +14,11 @@
         {{ startButtonText }}
     </button>
     <div class="team-options">
+        <TeamSize
+            :teamSize="team.length"
+            @increase="increaseTeamSize"
+            @decrease="decreaseTeamSize"
+        />
         <BreaksToggle @breaksToggled="toggleBreaks" />
     </div>
     <form>
@@ -52,12 +57,15 @@ import {
     getActiveMember,
     getLast,
     type Member,
+    addMember,
+    shrinkTeam,
 } from "./team";
 import {
     type TimeRemaining,
     secondsToMinutesAndSeconds,
     startTimer,
 } from "./clock";
+import TeamSize from "./components/TeamSize.vue";
 
 const props = defineProps({
     team: {
@@ -216,12 +224,24 @@ function toggleMemberHere(selectedMemberIndex: number, isHere: boolean) {
 function toggleBreaks(value: boolean) {
     takeBreaks.value = value;
 }
+
+async function increaseTeamSize() {
+    addMember(`Member ${team.length + 1}`, team);
+    await saveTeam(team.map(m => m.name));
+}
+
+async function decreaseTeamSize() {
+    if (team.length === 1) return;
+    shrinkTeam(team);
+    await saveTeam(team.map(m => m.name));
+}
 </script>
 
 <style scoped>
 .team-options {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .team-options label {
