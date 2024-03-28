@@ -223,4 +223,8 @@ function toggleBreaks(value: boolean) {
     display: flex;
     justify-content: flex-end;
 }
+
+.team-options label {
+    margin-bottom: 0;
+}
 </style>

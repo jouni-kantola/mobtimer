@@ -1,32 +1,32 @@
 [data-theme="light"],
 :root:not([data-theme="dark"]) {
-  --primary: #eb378a;
-  --primary-hover: #ffb9d9;
-  --primary-focus: #ffb9d9;
-  --primary-inverse: #FFF;
-  --background-color: #f6edee;
-}
-
-@media only screen and (prefers-color-scheme: dark) {
-  :root:not([data-theme]) {
     --primary: #eb378a;
     --primary-hover: #ffb9d9;
     --primary-focus: #ffb9d9;
-    --primary-inverse: #FFF;
-    --background-color: rgb(17, 25, 31);
-    --color: #fff;
-  }
+    --primary-inverse: #fff;
+    --background-color: #f6edee;
+}
 
-  .current input[type="text"] {
-    color: rgb(17, 25, 31);
-  }
+@media only screen and (prefers-color-scheme: dark) {
+    :root:not([data-theme]) {
+        --primary: #eb378a;
+        --primary-hover: #ffb9d9;
+        --primary-focus: #ffb9d9;
+        --primary-inverse: #fff;
+        --background-color: rgb(17, 25, 31);
+        --color: #fff;
+    }
+
+    .current input[type="text"] {
+        color: rgb(17, 25, 31);
+    }
 }
 
 :root {
-  --form-element-active-border-color: var(--primary);
-  --form-element-focus-color: var(--primary-focus);
-  --switch-color: var(--primary-inverse);
-  --switch-checked-background-color: var(--primary);
+    --form-element-active-border-color: var(--primary);
+    --form-element-focus-color: var(--primary-focus);
+    --switch-color: var(--primary-inverse);
+    --switch-checked-background-color: var(--primary);
 }
 
 body > main {
@@ -36,6 +36,7 @@ body > main {
     padding: 30px 0;
 }
 
+main > button,
 input:not([type="checkbox"]):not([type="radio"]) {
     margin-bottom: 0;
 }
