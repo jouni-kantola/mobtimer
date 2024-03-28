@@ -1,6 +1,12 @@
 import { assert, test } from "vitest";
 import { defaultMembers } from "../resources/scripts/config";
-import { createTeam, whosNextAfter, getLast } from "../resources/scripts/team";
+import {
+    createTeam,
+    whosNextAfter,
+    getLast,
+    addMember,
+    shrinkTeam,
+} from "../resources/scripts/team";
 
 test("map names to team", () => {
     const team = createTeam(defaultMembers);
@@ -61,4 +67,28 @@ test("last member is here", () => {
     team[2].isHere = false;
 
     assert.strictEqual(getLast(team).index, team[1].index);
+});
+
+test("increase team size", () => {
+    const members = ["Member 1", "Member 2", "Member 3"];
+    const team = createTeam(members);
+
+    const newMember = "New member's name";
+    addMember(newMember, team);
+
+    assert.strictEqual(team.at(-1)!.name, newMember);
+    assert.strictEqual(team.at(-1)!.index, 3);
+    assert.strictEqual(team.at(-1)!.isHere, true);
+    assert.strictEqual(team.at(-1)!.isActive, false);
+});
+
+test("decrease team size", () => {
+    const members = ["Member 1", "Member 2", "Member 3"];
+    const team = createTeam(members);
+
+    shrinkTeam(team);
+
+    assert.strictEqual(team.length, 2);
+    assert.strictEqual(team.at(-1)!.name, "Member 2");
+    assert.strictEqual(team.at(-1)!.index, 1);
 });

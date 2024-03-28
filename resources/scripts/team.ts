@@ -25,7 +25,7 @@ export function whosNextAfter(recentActiveIndex: number, team: Array<Member>) {
                 i,
                 team.length
             );
-    
+
             const upcomingMember = getMemberByIndex(nextMemberIndex, team);
             if (upcomingMember.isHere) {
                 next = upcomingMember;
@@ -53,6 +53,19 @@ export function getActiveMember(team: Array<Member>) {
 
 export function getLast(team: Array<Member>) {
     return team.filter(m => m.isHere).slice(-1)[0];
+}
+
+export function addMember(name: string, team: Array<Member>) {
+    team.push({
+        index: team.length,
+        name,
+        isHere: true,
+        isActive: false,
+    });
+}
+
+export function shrinkTeam(team: Array<Member>) {
+    team.pop();
 }
 
 function getNextMemberIndex(
