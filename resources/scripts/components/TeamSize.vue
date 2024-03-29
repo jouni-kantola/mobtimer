@@ -1,15 +1,17 @@
 <template>
     <div class="team-size">
         <label for="team-size">Team size</label>
-        <button @click="emit('increase')">+</button>
-        <input
-            type="number"
-            id="team-size"
-            :value="teamSize"
-            min="1"
-            @change="onChange"
-        />
-        <button @click="emit('decrease')">-</button>
+        <div class="size-control">
+            <button @click="emit('increase')">+</button>
+            <input
+                type="number"
+                id="team-size"
+                :value="teamSize"
+                min="1"
+                @change="onChange"
+            />
+            <button @click="emit('decrease')">-</button>
+        </div>
     </div>
 </template>
 
@@ -34,11 +36,16 @@ function onChange(event: Event) {
 </script>
 
 <style scoped>
-.team-size {
+.team-size,
+.size-control {
     display: flex;
     align-items: center;
     justify-content: center;
-    border: none;
+}
+
+.size-control {
+    border: transparent;
+    border-radius: 5px;
 }
 
 label {
@@ -47,6 +54,26 @@ label {
 }
 
 button {
+    border: 1px solid transparent;
+    width: 30px;
     margin-bottom: 0;
+    padding: 0;
+}
+
+input[type="number"] {
+    border: transparent;
+    -moz-appearance: textfield;
+    text-align: center;
+    width: 50px;
+    padding: 0;
+}
+
+input[type="number"]:focus {
+    font-weight: 600;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
 }
 </style>
