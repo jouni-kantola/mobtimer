@@ -101,3 +101,14 @@ test("shrink team", () => {
     assert.strictEqual(team.at(-1)!.name, "Member 2");
     assert.strictEqual(team.at(-1)!.index, 1);
 });
+
+test("prevent shrinking team to zero", () => {
+    const members = ["Member 1"];
+    const team = createTeam(members);
+
+    adjustTeamSize(team, 0);
+
+    assert.strictEqual(team.length, 1);
+    assert.strictEqual(team.at(-1)!.name, "Member 1");
+    assert.strictEqual(team.at(-1)!.index, 0);
+});
