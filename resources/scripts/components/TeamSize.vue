@@ -2,7 +2,7 @@
     <div class="team-size">
         <label for="team-size">Team size</label>
         <div class="size-control">
-            <button @click="emit('updateTeamSize', teamSize + 1)">+</button>
+            <button @click="emit('updateTeamSize', teamSize - 1)">-</button>
             <input
                 type="number"
                 id="team-size"
@@ -10,7 +10,7 @@
                 min="1"
                 @change="onChange"
             />
-            <button @click="emit('updateTeamSize', teamSize - 1)">-</button>
+            <button @click="emit('updateTeamSize', teamSize + 1)">+</button>
         </div>
     </div>
 </template>
