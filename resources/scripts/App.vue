@@ -57,8 +57,7 @@ import {
     getActiveMember,
     getLast,
     type Member,
-    addMember,
-    shrinkTeam,
+    adjustTeamSize,
 } from "./team";
 import {
     type TimeRemaining,
@@ -226,13 +225,13 @@ function toggleBreaks(value: boolean) {
 }
 
 async function increaseTeamSize() {
-    addMember(`Member ${team.length + 1}`, team);
+    adjustTeamSize(team, team.length + 1);
     await saveTeam(team.map(m => m.name));
 }
 
 async function decreaseTeamSize() {
     if (team.length === 1) return;
-    shrinkTeam(team);
+    adjustTeamSize(team, team.length - 1);
     await saveTeam(team.map(m => m.name));
 }
 </script>

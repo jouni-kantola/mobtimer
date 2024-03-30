@@ -55,7 +55,7 @@ export function getLast(team: Array<Member>) {
     return team.filter(m => m.isHere).slice(-1)[0];
 }
 
-export function addMember(name: string, team: Array<Member>) {
+function addMember(name: string, team: Array<Member>) {
     team.push({
         index: team.length,
         name,
@@ -64,8 +64,14 @@ export function addMember(name: string, team: Array<Member>) {
     });
 }
 
-export function shrinkTeam(team: Array<Member>) {
-    team.pop();
+export function adjustTeamSize(team: Array<Member>, newSize: number) {
+    if (newSize === team.length - 1) team.pop();
+    else if (newSize < team.length) team.length = newSize;
+    else {
+        for (let i = team.length; i < newSize; i++) {
+            addMember(`Member ${i + 1}`, team);
+        }
+    }
 }
 
 function getNextMemberIndex(
