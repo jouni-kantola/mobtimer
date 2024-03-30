@@ -15,6 +15,7 @@
     </button>
     <div class="team-options">
         <TeamSize :teamSize="team.length" @updateTeamSize="updateTeamSize" />
+        <button class="shuffle" @click="randomizeTeamOrder">Shuffle</button>
         <BreaksToggle @breaksToggled="toggleBreaks" />
     </div>
     <form>
@@ -54,6 +55,7 @@ import {
     getLast,
     type Member,
     adjustTeamSize,
+    shuffleTeam,
 } from "./team";
 import {
     type TimeRemaining,
@@ -224,6 +226,11 @@ async function updateTeamSize(newSize: number) {
     adjustTeamSize(team, newSize);
     await saveTeam(team.map(m => m.name));
 }
+
+async function randomizeTeamOrder() {
+    shuffleTeam(team);
+    await saveTeam(team.map(m => m.name));
+}
 </script>
 
 <style scoped>
@@ -236,5 +243,11 @@ async function updateTeamSize(newSize: number) {
 
 .team-options label {
     margin-bottom: 0;
+}
+
+.shuffle {
+    width: auto;
+    padding: 0 0.5rem;
+    margin: 0;
 }
 </style>

@@ -88,6 +88,21 @@ export function adjustTeamSize(team: Array<Member>, newSize: number) {
     }
 }
 
+export function shuffleTeam(team: Array<Member>) {
+    const originalTeamOrder = team.slice();
+
+    for (let i = team.length - 1; i > 0; i--) {
+        const randomIndex = Math.floor(Math.random() * (i + 1));
+        [team[i], team[randomIndex]] = [team[randomIndex], team[i]];
+    }
+    team.forEach((m, i) => {
+        m.index = i;
+    });
+
+    if (JSON.stringify(team) === JSON.stringify(originalTeamOrder))
+        shuffleTeam(team);
+}
+
 function getNextMemberIndex(
     recentActiveIndex: number,
     nextIndex: number,
