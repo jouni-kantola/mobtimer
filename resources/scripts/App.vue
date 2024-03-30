@@ -231,6 +231,7 @@ async function updateTeamSize(newSize: number) {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
 }
 
 .team-options label {
