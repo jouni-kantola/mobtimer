@@ -5,6 +5,7 @@ import {
     whosNextAfter,
     getLast,
     adjustTeamSize,
+    shuffleTeam,
 } from "../resources/scripts/team";
 
 test("map names to team", () => {
@@ -125,4 +126,20 @@ test("only shrink by removing inactive members", () => {
     assert.strictEqual(team.length, 1);
     assert.strictEqual(team.at(-1)!.name, "Member 2");
     assert.strictEqual(team.at(-1)!.index, 0);
+});
+
+test("shuffle team", () => {
+    const members = ["Member 1", "Member 2", "Member 3"];
+    const team = createTeam(members);
+
+    shuffleTeam(team);
+
+    assert.strictEqual(team.length, 3);
+    assert.notDeepEqual(
+        members,
+        team.map(m => m.name)
+    );
+    assert.strictEqual(team[0].index, 0);
+    assert.strictEqual(team[1].index, 1);
+    assert.strictEqual(team[2].index, 2);
 });
