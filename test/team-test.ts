@@ -4,8 +4,7 @@ import {
     createTeam,
     whosNextAfter,
     getLast,
-    addMember,
-    shrinkTeam,
+    adjustTeamSize,
 } from "../resources/scripts/team";
 
 test("map names to team", () => {
@@ -73,11 +72,10 @@ test("increase team size", () => {
     const members = ["Member 1", "Member 2", "Member 3"];
     const team = createTeam(members);
 
-    const newMember = "New member's name";
-    addMember(newMember, team);
+    adjustTeamSize(team, 5);
 
-    assert.strictEqual(team.at(-1)!.name, newMember);
-    assert.strictEqual(team.at(-1)!.index, 3);
+    assert.strictEqual(team.at(-1)!.name, "Member 5");
+    assert.strictEqual(team.at(-1)!.index, 4);
     assert.strictEqual(team.at(-1)!.isHere, true);
     assert.strictEqual(team.at(-1)!.isActive, false);
 });
@@ -86,7 +84,18 @@ test("decrease team size", () => {
     const members = ["Member 1", "Member 2", "Member 3"];
     const team = createTeam(members);
 
-    shrinkTeam(team);
+    adjustTeamSize(team, 1);
+
+    assert.strictEqual(team.length, 1);
+    assert.strictEqual(team.at(-1)!.name, "Member 1");
+    assert.strictEqual(team.at(-1)!.index, 0);
+});
+
+test("shrink team", () => {
+    const members = ["Member 1", "Member 2", "Member 3"];
+    const team = createTeam(members);
+
+    adjustTeamSize(team, 2);
 
     assert.strictEqual(team.length, 2);
     assert.strictEqual(team.at(-1)!.name, "Member 2");
