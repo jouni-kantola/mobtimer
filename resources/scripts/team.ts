@@ -65,7 +65,8 @@ function addMember(name: string, team: Array<Member>) {
 }
 
 export function adjustTeamSize(team: Array<Member>, newSize: number) {
-    if (newSize === team.length - 1) team.pop();
+    if (newSize < 1) return;
+    else if (newSize === team.length - 1) team.pop();
     else if (newSize < team.length) team.length = newSize;
     else {
         for (let i = team.length; i < newSize; i++) {
