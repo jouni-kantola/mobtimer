@@ -1,12 +1,13 @@
 <template>
-    <label
-        >Take breaks
+    <label>
+        <span>Take breaks</span>
         <input
             v-model="takeBreaks"
             type="checkbox"
             role="switch"
             @change="onChange"
-    /></label>
+        />
+    </label>
 </template>
 
 <script setup lang="ts">
@@ -27,5 +28,9 @@ function onChange(event: Event) {
 <style scoped>
 label {
     cursor: pointer;
+}
+
+label > span {
+    margin-right: 0.5rem;
 }
 </style>

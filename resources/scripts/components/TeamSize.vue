@@ -48,7 +48,7 @@ function onChange(event: Event) {
 
 label {
     white-space: nowrap;
-    margin-right: 5px;
+    margin-right: 0.5rem;
 }
 
 button {
