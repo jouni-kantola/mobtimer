@@ -112,3 +112,17 @@ test("prevent shrinking team to zero", () => {
     assert.strictEqual(team.at(-1)!.name, "Member 1");
     assert.strictEqual(team.at(-1)!.index, 0);
 });
+
+test("only shrink by removing inactive members", () => {
+    const members = ["Member 1", "Member 2", "Member 3"];
+    const team = createTeam(members);
+
+    team[0].isActive = false;
+    team[1].isActive = true;
+
+    adjustTeamSize(team, 1);
+
+    assert.strictEqual(team.length, 1);
+    assert.strictEqual(team.at(-1)!.name, "Member 2");
+    assert.strictEqual(team.at(-1)!.index, 0);
+});

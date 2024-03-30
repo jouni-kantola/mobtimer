@@ -66,9 +66,22 @@ function addMember(name: string, team: Array<Member>) {
 
 export function adjustTeamSize(team: Array<Member>, newSize: number) {
     if (newSize < 1) return;
-    else if (newSize === team.length - 1) team.pop();
-    else if (newSize < team.length) team.length = newSize;
-    else {
+
+    if (newSize < team.length) {
+        let i = team.length - 1;
+
+        while (team.length > newSize) {
+            if (!team[i].isActive) {
+                team.splice(i, 1);
+            }
+
+            i--;
+        }
+
+        for (let i = 0; i < team.length; i++) {
+            team[i].index = i;
+        }
+    } else {
         for (let i = team.length; i < newSize; i++) {
             addMember(`Member ${i + 1}`, team);
         }
