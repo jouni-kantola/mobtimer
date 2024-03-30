@@ -143,3 +143,16 @@ test("shuffle team", () => {
     assert.strictEqual(team[1].index, 1);
     assert.strictEqual(team[2].index, 2);
 });
+
+test("shuffle team of one stays same", () => {
+    const members = ["Member 1"];
+    const team = createTeam(members);
+
+    shuffleTeam(team);
+
+    assert.deepEqual(
+        members,
+        team.map(m => m.name)
+    );
+    assert.strictEqual(team[0].index, 0);
+});

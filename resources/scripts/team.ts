@@ -89,6 +89,8 @@ export function adjustTeamSize(team: Array<Member>, newSize: number) {
 }
 
 export function shuffleTeam(team: Array<Member>) {
+    if (team.length <= 1) return;
+
     const originalTeamOrder = team.slice();
 
     for (let i = team.length - 1; i > 0; i--) {
