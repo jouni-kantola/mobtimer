@@ -4,7 +4,7 @@ import {
     init as neuInit,
     os,
     storage,
-    window,
+    window as neuWindow,
 } from "@neutralinojs/lib";
 
 const trayOptions = {
@@ -14,8 +14,7 @@ const trayOptions = {
 
 export async function init() {
     neuInit();
-    // @ts-expect-error
-    await window.setTitle(`Mob timer v${NL_APPVERSION}`);
+    await neuWindow.setTitle(`Mob timer v${window.NL_APPVERSION}`);
 }
 
 export async function updateTray(
@@ -59,11 +58,11 @@ export async function saveIntervalLength(seconds: number) {
 }
 
 export async function showWindow() {
-    await window.show();
+    await neuWindow.show();
 }
 
 export async function hideWindow() {
-    await window.hide();
+    await neuWindow.hide();
 }
 
 async function quitApp() {
