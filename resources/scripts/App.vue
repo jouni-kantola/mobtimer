@@ -14,11 +14,7 @@
         {{ startButtonText }}
     </button>
     <div class="team-options">
-        <TeamSize
-            :teamSize="team.length"
-            @increase="increaseTeamSize"
-            @decrease="decreaseTeamSize"
-        />
+        <TeamSize :teamSize="team.length" @updateTeamSize="updateTeamSize" />
         <BreaksToggle @breaksToggled="toggleBreaks" />
     </div>
     <form>
@@ -224,14 +220,8 @@ function toggleBreaks(value: boolean) {
     takeBreaks.value = value;
 }
 
-async function increaseTeamSize() {
-    adjustTeamSize(team, team.length + 1);
-    await saveTeam(team.map(m => m.name));
-}
-
-async function decreaseTeamSize() {
-    if (team.length === 1) return;
-    adjustTeamSize(team, team.length - 1);
+async function updateTeamSize(newSize: number) {
+    adjustTeamSize(team, newSize);
     await saveTeam(team.map(m => m.name));
 }
 </script>

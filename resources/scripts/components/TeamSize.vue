@@ -2,7 +2,7 @@
     <div class="team-size">
         <label for="team-size">Team size</label>
         <div class="size-control">
-            <button @click="emit('increase')">+</button>
+            <button @click="emit('updateTeamSize', teamSize + 1)">+</button>
             <input
                 type="number"
                 id="team-size"
@@ -10,7 +10,7 @@
                 min="1"
                 @change="onChange"
             />
-            <button @click="emit('decrease')">-</button>
+            <button @click="emit('updateTeamSize', teamSize - 1)">-</button>
         </div>
     </div>
 </template>
@@ -24,14 +24,12 @@ const props = defineProps({
 });
 
 const emit = defineEmits<{
-    increase: [];
-    decrease: [];
+    updateTeamSize: [number];
 }>();
 
 function onChange(event: Event) {
-    const value = parseInt((event.target as HTMLInputElement).value);
-    if (value < props.teamSize) emit("decrease");
-    else if (value > props.teamSize) emit("increase");
+    const value = parseInt((event.target as HTMLInputElement).value) || 1;
+    if (value !== props.teamSize) emit("updateTeamSize", value);
 }
 </script>
 
