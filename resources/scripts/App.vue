@@ -1,5 +1,9 @@
 <template>
-    <Alert v-if="information" :message="information" @alertClosed="endBreak" />
+    <Alert
+        v-if="onBreak"
+        :message="'🍵 Break time. Grab a tea!'"
+        @alertClosed="endBreak"
+    />
     <Timer
         :minutes="timeRemaining[0]"
         :seconds="timeRemaining[1]"
@@ -74,7 +78,6 @@ const props = defineProps({
 const takeBreaks = ref(true);
 const startButtonText = ref("Start");
 const team = reactive(props.team);
-const information = ref("");
 const intervalLength = ref(props.intervalLengthInSeconds);
 const timer = ref<ReturnType<typeof startTimer> | null>(null);
 const onBreak = ref(false);
@@ -126,7 +129,6 @@ async function onEnd() {
         onBreak.value = true;
         resetTimeDisplay();
         timer.value = startTimer(intervalLength.value, onBreakTick, onEnd);
-        information.value = "🍵 Break time. Grab a tea!";
 
         await showWindow();
     } else {
@@ -137,7 +139,6 @@ async function onEnd() {
 }
 
 function endBreak() {
-    information.value = "";
     onBreak.value = false;
 
     timer?.value?.reset();
@@ -164,7 +165,6 @@ async function start() {
     if (isPaused || timer.value?.isRunning) return false;
 
     startButtonText.value = "Pause";
-    information.value = "";
 
     timer.value = startTimer(intervalLength.value, onTick, onEnd);
 
