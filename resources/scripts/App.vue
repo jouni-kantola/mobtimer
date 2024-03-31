@@ -1,9 +1,5 @@
 <template>
-    <Alert
-        v-if="information"
-        :message="information"
-        @alertClosed="information = ''"
-    />
+    <Alert v-if="information" :message="information" @alertClosed="endBreak" />
     <Timer
         :minutes="timeRemaining[0]"
         :seconds="timeRemaining[1]"
@@ -134,17 +130,25 @@ async function onEnd() {
 
         await showWindow();
     } else {
-        onBreak.value = false;
-        timer.value = null;
-        resetTimeDisplay();
-
-        const { index } = whosNextAfter(getActiveMember(team).index, team);
-
-        switchActiveMember(index, team);
-        prepareForNextMember();
+        endBreak();
 
         await showWindow();
     }
+}
+
+function endBreak() {
+    information.value = "";
+    onBreak.value = false;
+
+    timer?.value?.reset();
+    timer.value = null;
+
+    resetTimeDisplay();
+
+    const { index } = whosNextAfter(getActiveMember(team).index, team);
+
+    switchActiveMember(index, team);
+    prepareForNextMember();
 }
 
 function onIntervalUpdated(seconds: number) {
