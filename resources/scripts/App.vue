@@ -160,6 +160,7 @@ async function start() {
     if (isPaused || timer.value?.isRunning) return false;
 
     startButtonText.value = "Pause";
+    information.value = "";
 
     timer.value = startTimer(intervalLength.value, onTick, onEnd);
 
