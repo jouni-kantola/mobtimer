@@ -81,14 +81,9 @@ const team = reactive(props.team);
 const information = ref("");
 const intervalLength = ref(props.intervalLengthInSeconds);
 const timer = ref<ReturnType<typeof startTimer> | null>(null);
+const onBreak = ref(false);
 
 let isPaused = false;
-
-const state: {
-    onBreak: boolean;
-} = {
-    onBreak: false,
-};
 
 const timeRemaining = ref(secondsToMinutesAndSeconds(intervalLength.value));
 
@@ -130,16 +125,16 @@ async function onEnd() {
     if (
         takeBreaks.value &&
         getLast(team).index == getActiveMember(team).index &&
-        !state.onBreak
+        !onBreak.value
     ) {
-        state.onBreak = true;
+        onBreak.value = true;
         resetTimeDisplay();
         timer.value = startTimer(intervalLength.value, onBreakTick, onEnd);
         information.value = "🍵 Break time. Grab a tea!";
 
         await showWindow();
     } else {
-        state.onBreak = false;
+        onBreak.value = false;
         timer.value = null;
         resetTimeDisplay();
 
