@@ -1,6 +1,8 @@
 <template>
     <div class="alert">
-        <p>{{ message }}</p>
+        <output>{{ timeLeft }}</output>
+        <p>Break time</p>
+        <p>🍵 Grab a tea!</p>
         <button aria-label="Close" @click="close">
             <span aria-hidden="true">&times;</span>
         </button>
@@ -9,9 +11,9 @@
 
 <script setup lang="ts">
 defineProps({
-    message: {
+    timeLeft: {
         type: String,
-        required: true
+        required: true,
     },
 });
 
@@ -28,27 +30,37 @@ function close() {
     top: 0;
     left: 0;
     right: 0;
+    bottom: 0;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
+    justify-content: center;
     padding: 15px 20px;
     margin: 10px;
     background-color: var(--secondary);
-    opacity: 0.9;
     border-radius: 3px;
+    z-index: 1;
+    text-align: center;
+    gap: 1rem;
 }
 
 p,
-button {
+button,
+output {
     width: auto;
     margin: 0;
     color: var(--primary-inverse);
+    font-weight: 600;
+    font-size: 3rem;
 }
 
 button {
+    position: absolute;
+    top: 0;
+    right: 10px;
     background-color: transparent;
     border: none;
-    padding: 10px 0 10px 10px;
+    padding: 0 10px 10px 10px;
     font-weight: 600;
 }
 

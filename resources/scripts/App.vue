@@ -1,7 +1,7 @@
 <template>
-    <Alert
+    <BreakAlert
         v-if="onBreak"
-        :message="'🍵 Break time. Grab a tea!'"
+        :timeLeft="`${formatTime(timeRemaining)}`"
         @alertClosed="endBreak"
     />
     <Timer
@@ -39,7 +39,7 @@ import { PropType, reactive, ref } from "vue";
 import Timer from "./components/Timer.vue";
 import TeamMember from "./components/TeamMember.vue";
 import BreaksToggle from "./components/BreaksToggle.vue";
-import Alert from "./components/Alert.vue";
+import BreakAlert from "./components/BreakAlert.vue";
 
 import {
     updateTray,
