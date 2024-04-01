@@ -1,9 +1,11 @@
 <template>
-    <BreakAlert
-        v-if="onBreak"
-        :timeLeft="`${formatTime(timeRemaining)}`"
-        @alertClosed="endBreak"
-    />
+    <Transition name="fade">
+        <BreakAlert
+            v-if="onBreak"
+            :timeLeft="`${formatTime(timeRemaining)}`"
+            @alertClosed="endBreak"
+        />
+    </Transition>
     <Timer
         :minutes="timeRemaining[0]"
         :seconds="timeRemaining[1]"
@@ -249,5 +251,15 @@ async function randomizeTeamOrder() {
     width: auto;
     padding: 0 0.5rem;
     margin: 0;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.5s ease-in;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
 }
 </style>
