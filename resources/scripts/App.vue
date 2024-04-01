@@ -1,11 +1,4 @@
 <template>
-    <Transition name="fade">
-        <BreakAlert
-            v-if="onBreak"
-            :timeLeft="`${formatTime(timeRemaining)}`"
-            @alertClosed="endBreak"
-        />
-    </Transition>
     <Timer
         :minutes="timeRemaining[0]"
         :seconds="timeRemaining[1]"
@@ -34,6 +27,14 @@
             class="grid"
         />
     </form>
+
+    <Transition name="fade">
+        <BreakAlert
+            v-if="onBreak"
+            :timeLeft="`${formatTime(timeRemaining)}`"
+            @alertClosed="endBreak"
+        />
+    </Transition>
 </template>
 <script setup lang="ts">
 import { PropType, reactive, ref } from "vue";
