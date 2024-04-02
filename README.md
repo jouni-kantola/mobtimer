@@ -1,5 +1,7 @@
 # Mob timer
 
+![318569467-e07369a8-0239-42e2-80bb-7aa376a79c19](https://github.com/jouni-kantola/mobtimer/assets/2670127/e2c242c1-b4af-4c70-8c03-5c0dfa031e2a)
+
 ## Getting started
 
 1. `npm install`
