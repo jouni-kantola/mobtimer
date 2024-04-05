@@ -14,6 +14,11 @@ export function createTeam(members: Array<string>): Array<Member> {
     }));
 }
 
+export function whosNext(team: Array<Member>) {
+    const activeMember = getActiveMember(team);
+    return whosNextAfter(activeMember.index, team);
+}
+
 export function whosNextAfter(recentActiveIndex: number, team: Array<Member>) {
     const presentMembers = team.filter(m => m.isHere);
     let next = presentMembers[0];
