@@ -59,6 +59,7 @@ import {
     type Member,
     adjustTeamSize,
     shuffleTeam,
+    whosNext,
 } from "./team";
 import {
     type TimeRemaining,
@@ -111,15 +112,14 @@ function prepareForNextMember() {
 
 async function onTick(timeLeft: TimeRemaining) {
     updateTimeDisplay(timeLeft);
-    const { index, name } = getActiveMember(team);
-    const nextMember = whosNextAfter(index, team);
+    const { name } = getActiveMember(team);
+    const nextMember = whosNext(team);
     await updateTray(name, nextMember.name, formatTime(timeLeft));
 }
 
 async function onBreakTick(timeLeft: TimeRemaining) {
     updateTimeDisplay(timeLeft);
-    const { index } = getActiveMember(team);
-    const nextMember = whosNextAfter(index, team);
+    const nextMember = whosNext(team);
     await updateTray("Break", nextMember.name, formatTime(timeLeft));
 }
 
@@ -149,7 +149,7 @@ function endBreak() {
 
     resetTimeDisplay();
 
-    const { index } = whosNextAfter(getActiveMember(team).index, team);
+    const { index } = whosNext(team);
 
     switchActiveMember(index, team);
     prepareForNextMember();

@@ -2,6 +2,7 @@ import { assert, test } from "vitest";
 import { defaultMembers } from "../resources/scripts/config";
 import {
     createTeam,
+    whosNext,
     whosNextAfter,
     getLast,
     adjustTeamSize,
@@ -155,4 +156,16 @@ test("shuffle team of one stays same", () => {
         team.map(m => m.name)
     );
     assert.strictEqual(team[0].index, 0);
+});
+
+test("whos next", () => {
+    const members = ["Member 1", "Member 3"];
+    const team = createTeam(members);
+    team[0].isActive = false;
+    team[1].isActive = true;
+
+    const next = whosNext(team);
+
+    assert.strictEqual(next.index, 0);
+    assert.strictEqual(next.name, "Member 1");
 });
