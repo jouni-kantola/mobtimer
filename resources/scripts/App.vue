@@ -105,9 +105,15 @@ function formatTime([minutes, seconds]: TimeRemaining) {
     )}`;
 }
 
-function prepareForNextMember() {
-    const { name } = getActiveMember(team);
-    startButtonText.value = `Start session for ${name}`;
+async function prepareForNextMember() {
+    const activeMember = getActiveMember(team);
+    const nextMember = whosNext(team);
+    startButtonText.value = `Start session for ${activeMember.name}`;
+    await updateTray(
+        activeMember.name,
+        nextMember.name,
+        formatTime(timeRemaining.value)
+    );
 }
 
 async function onTick(timeLeft: TimeRemaining) {
