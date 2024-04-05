@@ -119,8 +119,8 @@ async function prepareForNextMember() {
 async function onTick(timeLeft: TimeRemaining) {
     updateTimeDisplay(timeLeft);
     const { name } = getActiveMember(team);
-    const nextMember = whosNext(team);
-    await updateTray(name, nextMember.name, formatTime(timeLeft));
+    const next = isBreakNext() ? "Break" : whosNext(team).name;
+    await updateTray(name, next, formatTime(timeLeft));
 }
 
 async function onBreakTick(timeLeft: TimeRemaining) {
@@ -130,11 +130,7 @@ async function onBreakTick(timeLeft: TimeRemaining) {
 }
 
 async function onEnd() {
-    if (
-        takeBreaks.value &&
-        getLast(team).index == getActiveMember(team).index &&
-        !onBreak.value
-    ) {
+    if (isBreakNext()) {
         onBreak.value = true;
         resetTimeDisplay();
         timer.value = startTimer(intervalLength.value, onBreakTick, onEnd);
@@ -145,6 +141,14 @@ async function onEnd() {
 
         await showWindow();
     }
+}
+
+function isBreakNext() {
+    return (
+        takeBreaks.value &&
+        getLast(team).index == getActiveMember(team).index &&
+        !onBreak.value
+    );
 }
 
 function endBreak() {
