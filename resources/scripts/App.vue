@@ -107,17 +107,13 @@ function formatTime([minutes, seconds]: TimeRemaining) {
 
 async function prepareForNextMember() {
     const activeMember = getActiveMember(team);
-    const next = isBreakNext() ? "Break" : whosNext(team).name;
-
     startButtonText.value = `Start session for ${activeMember.name}`;
-    await updateTray(activeMember.name, next, formatTime(timeRemaining.value));
+    await updateTrayStatus();
 }
 
 async function onTick(timeLeft: TimeRemaining) {
     updateTimeDisplay(timeLeft);
-    const { name } = getActiveMember(team);
-    const next = isBreakNext() ? "Break" : whosNext(team).name;
-    await updateTray(name, next, formatTime(timeLeft));
+    await updateTrayStatus();
 }
 
 async function onBreakTick(timeLeft: TimeRemaining) {
@@ -240,6 +236,12 @@ async function updateTeamSize(newSize: number) {
 async function randomizeTeamOrder() {
     shuffleTeam(team);
     await saveTeam(team.map(m => m.name));
+}
+
+async function updateTrayStatus() {
+    const activeMember = getActiveMember(team);
+    const next = isBreakNext() ? "Break" : whosNext(team).name;
+    await updateTray(activeMember.name, next, formatTime(timeRemaining.value));
 }
 </script>
 
