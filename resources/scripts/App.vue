@@ -153,11 +153,12 @@ function endBreak() {
     prepareForNextMember();
 }
 
-function onIntervalUpdated(seconds: number) {
+async function onIntervalUpdated(seconds: number) {
     intervalLength.value = seconds;
     timer.value?.change(intervalLength.value);
     resetTimeDisplay();
-    saveIntervalLength(intervalLength.value);
+    await updateTrayStatus();
+    await saveIntervalLength(intervalLength.value);
 }
 
 async function start() {
