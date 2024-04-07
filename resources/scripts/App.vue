@@ -116,17 +116,11 @@ async function onTick(timeLeft: TimeRemaining) {
     await updateTrayStatus();
 }
 
-async function onBreakTick(timeLeft: TimeRemaining) {
-    updateTimeDisplay(timeLeft);
-    const nextMember = whosNext(team);
-    await updateTray("Break", nextMember.name, formatTime(timeLeft));
-}
-
 async function onEnd() {
     if (isBreakNext()) {
         onBreak.value = true;
         resetTimeDisplay();
-        timer.value = startTimer(intervalLength.value, onBreakTick, onEnd);
+        timer.value = startTimer(intervalLength.value, onTick, onEnd);
 
         await showWindow();
     } else {
@@ -239,9 +233,9 @@ async function randomizeTeamOrder() {
 }
 
 async function updateTrayStatus() {
-    const activeMember = getActiveMember(team);
+    const now = onBreak.value ? "Break" : getActiveMember(team).name;
     const next = isBreakNext() ? "Break" : whosNext(team).name;
-    await updateTray(activeMember.name, next, formatTime(timeRemaining.value));
+    await updateTray(now, next, formatTime(timeRemaining.value));
 }
 </script>
 
