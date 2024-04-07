@@ -41,10 +41,10 @@
         "lint-staged": "^15.2.2",
         "prettier": "^3.2.5",
         "rcedit": "^4.0.1",
-        "typescript": "^5.4.3",
-        "vite": "^5.2.6",
+        "typescript": "^5.4.4",
+        "vite": "^5.2.8",
         "vitest": "^1.4.0",
-        "vue-tsc": "^2.0.7"
+        "vue-tsc": "^2.0.11"
     },
     "lint-staged": {
         "**/*": "npx prettier --write --ignore-unknown"
