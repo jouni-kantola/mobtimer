@@ -144,9 +144,12 @@ test("only shrink by removing inactive members", () => {
     assert.strictEqual(team.at(-1)!.index, 0);
 });
 
-test("shuffle team", () => {
+test("shuffle team with status kept intact", () => {
     const members = ["Member 1", "Member 2", "Member 3"];
     const team = createTeam(members);
+    team[0].isActive = false;
+    team[1].isHere = false;
+    team[2].isActive = true;
 
     shuffleTeam(team);
 
@@ -158,6 +161,18 @@ test("shuffle team", () => {
     assert.strictEqual(team[0].index, 0);
     assert.strictEqual(team[1].index, 1);
     assert.strictEqual(team[2].index, 2);
+
+    const member1 = team.find(m => m.name === "Member 1")!;
+    assert.isFalse(member1.isActive);
+    assert.isTrue(member1.isHere);
+
+    const member2 = team.find(m => m.name === "Member 2")!;
+    assert.isFalse(member2.isHere);
+    assert.isFalse(member2.isActive);
+
+    const member3 = team.find(m => m.name === "Member 3")!;
+    assert.isTrue(member3.isActive);
+    assert.isTrue(member3.isHere);
 });
 
 test("shuffle team of one stays same", () => {
