@@ -27,6 +27,7 @@
     "homepage": "https://github.com/jouni-kantola/mobtimer#readme",
     "dependencies": {
         "@neutralinojs/lib": "^5.1.0",
+        "nanoid": "^5.0.7",
         "vue": "^3.4.21"
     },
     "devDependencies": {

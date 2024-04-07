@@ -15,7 +15,8 @@
     </div>
     <form>
         <TeamMember
-            v-for="{ name, index, isActive } in team"
+            v-for="{ id, name, index, isActive } in team"
+            :key="id"
             :index="index"
             :name="name"
             :isActive="isActive"

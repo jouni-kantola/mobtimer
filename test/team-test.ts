@@ -11,10 +11,24 @@ import {
 
 test("map names to team", () => {
     const team = createTeam(defaultMembers);
-    assert.strictEqual(team[0].index, 0);
-    assert.strictEqual(team[0].name, "Member 1");
+
+    assert.isTrue(team.every(member => member.isHere));
+    assert.lengthOf(
+        team.filter(member => member.isActive),
+        1
+    );
+
+    const activeMember = team[0];
+    assert.strictEqual(activeMember.isActive, true);
+    assert.strictEqual(activeMember.index, 0);
+    assert.strictEqual(activeMember.name, "Member 1");
+
     assert.strictEqual(team.at(-1)!.index, 5);
     assert.strictEqual(team.at(-1)!.name, "Member 6");
+
+    const ids = team.map(member => member.id);
+    const uniqueIds = [...new Set(ids)];
+    assert.lengthOf(uniqueIds, ids.length);
 });
 
 test("whos next when everyone here", () => {
@@ -80,6 +94,7 @@ test("increase team size", () => {
     assert.strictEqual(team.at(-1)!.index, 4);
     assert.strictEqual(team.at(-1)!.isHere, true);
     assert.strictEqual(team.at(-1)!.isActive, false);
+    assert.ok(team.at(-1)!.id);
 });
 
 test("decrease team size", () => {

@@ -1,4 +1,7 @@
+import { nanoid } from "nanoid";
+
 export type Member = {
+    id: string;
     index: number;
     name: string;
     isHere: boolean;
@@ -6,12 +9,9 @@ export type Member = {
 };
 
 export function createTeam(members: Array<string>): Array<Member> {
-    return members.map((name, index) => ({
-        index,
-        name,
-        isHere: true,
-        isActive: index === 0,
-    }));
+    const team = new Array<Member>();
+    members.forEach(name => addMember(name, team));
+    return team;
 }
 
 export function whosNext(team: Array<Member>) {
@@ -62,10 +62,11 @@ export function getLast(team: Array<Member>) {
 
 function addMember(name: string, team: Array<Member>) {
     team.push({
+        id: nanoid(),
         index: team.length,
         name,
         isHere: true,
-        isActive: false,
+        isActive: team.length === 0,
     });
 }
 
