@@ -15,7 +15,7 @@
             @keyup.enter="switchDriver"
             @input="updateMemberName"
         />
-        <p v-if="tooltip" class="tooltip">{{ tooltip }}</p>
+        <p v-if="tooltip && isHere" class="tooltip">{{ tooltip }}</p>
     </div>
 </template>
 
