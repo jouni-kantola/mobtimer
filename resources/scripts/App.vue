@@ -107,13 +107,10 @@ function formatTime([minutes, seconds]: TimeRemaining) {
 
 async function prepareForNextMember() {
     const activeMember = getActiveMember(team);
-    const nextMember = whosNext(team);
+    const next = isBreakNext() ? "Break" : whosNext(team).name;
+
     startButtonText.value = `Start session for ${activeMember.name}`;
-    await updateTray(
-        activeMember.name,
-        nextMember.name,
-        formatTime(timeRemaining.value)
-    );
+    await updateTray(activeMember.name, next, formatTime(timeRemaining.value));
 }
 
 async function onTick(timeLeft: TimeRemaining) {
