@@ -14,6 +14,7 @@
             @dblclick="switchDriver"
             @keyup.enter="switchDriver"
             @input="updateMemberName"
+            :disabled="!isHere"
         />
         <p v-if="tooltip && isHere" class="tooltip">{{ tooltip }}</p>
     </div>
