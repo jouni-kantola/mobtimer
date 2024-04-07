@@ -218,8 +218,9 @@ function toggleMemberHere(selectedMemberIndex: number, isHere: boolean) {
     }
 }
 
-function toggleBreaks(value: boolean) {
+async function toggleBreaks(value: boolean) {
     takeBreaks.value = value;
+    await updateTrayStatus();
 }
 
 async function updateTeamSize(newSize: number) {
