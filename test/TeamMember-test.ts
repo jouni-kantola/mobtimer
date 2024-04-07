@@ -122,3 +122,22 @@ test("highlight active member", () => {
 
     assert.isTrue(wrapper.find(".current").exists());
 });
+
+test("no tooltip when away", async () => {
+    const wrapper = mount(TeamMember, {
+        props: {
+            index: 999,
+            name: "Team Member",
+            isActive: true,
+            tooltip: "Is here",
+        },
+    });
+
+    assert.isTrue(wrapper.find(".tooltip").exists());
+
+    const isHereToggle = wrapper.find("input[type='checkbox']:checked");
+    await isHereToggle.trigger("click");
+    await isHereToggle.trigger("change");
+
+    assert.isFalse(wrapper.find(".tooltip").exists());
+});
