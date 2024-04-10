@@ -23,7 +23,9 @@ export async function updateTray(
     timeRemaning: string
 ) {
     await os.setTray({
-        icon: "/dist/trayIcon.png",
+        icon: import.meta.env.DEV
+            ? "/resources/public/trayIcon.png"
+            : "/dist/trayIcon.png",
         menuItems: [
             {
                 id: trayOptions.OPEN,
