@@ -60,7 +60,11 @@ export async function saveIntervalLength(seconds: number) {
 }
 
 export async function showWindow() {
-    await neuWindow.show();
+    if (await neuWindow.isMinimized()) {
+        await neuWindow.unminimize();
+    } else {
+        await neuWindow.show();
+    }
 }
 
 export async function hideWindow() {
