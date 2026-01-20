@@ -10,7 +10,7 @@
         "coverage": "vitest run --coverage",
         "update": "npx @neutralinojs/neu update",
         "start": "npx @neutralinojs/neu run -- --window-enable-inspector",
-        "build": "npx @neutralinojs/neu build --release",
+        "build": "npx @neutralinojs/neu build --release --embed-resources",
         "package": "node package-release.js",
         "release": "npm run build && npm run package",
         "prepare": "husky"
@@ -26,12 +26,12 @@
     },
     "homepage": "https://github.com/jouni-kantola/mobtimer#readme",
     "dependencies": {
-        "@neutralinojs/lib": "^5.4.0",
+        "@neutralinojs/lib": "^6.4.0",
         "nanoid": "^5.0.8",
         "vue": "^3.5.13"
     },
     "devDependencies": {
-        "@neutralinojs/neu": "^11.3.0",
+        "@neutralinojs/neu": "^11.6.0",
         "@vitejs/plugin-vue": "^5.2.0",
         "@vitest/coverage-v8": "^1.6.0",
         "@vue/test-utils": "^2.4.6",
