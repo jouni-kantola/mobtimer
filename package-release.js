@@ -1,5 +1,5 @@
 import AdmZip from "adm-zip";
-import * as rcedit from "rcedit";
+import { rcedit } from "rcedit";
 
 const neuZip = new AdmZip("dist/mobtimer-release.zip");
 neuZip.extractAllTo("dist/release", true);
