@@ -3,6 +3,7 @@ export type TimeRemaining = [number, number];
 class Timer {
     private intervalSeconds: number;
     private secondsLeft: number;
+    private endsAt: number;
     private onTick: (timeLeft: TimeRemaining) => void;
     private onEnd: () => void;
     private clockIntervalId: NodeJS.Timeout | null;
@@ -14,6 +15,7 @@ class Timer {
     ) {
         this.intervalSeconds = seconds;
         this.secondsLeft = seconds;
+        this.endsAt = 0;
         this.onTick = onTick;
         this.onEnd = onEnd;
         this.clockIntervalId = null;
@@ -30,8 +32,15 @@ class Timer {
     start() {
         if (this.isRunning) return;
 
+        this.restartCountdown();
         this.clockIntervalId = setInterval(() => {
-            if (--this.secondsLeft === 0) {
+            // based on wall clock so drift and sleep don't delay the end
+            this.secondsLeft = Math.max(
+                0,
+                Math.round((this.endsAt - Date.now()) / 1000)
+            );
+
+            if (this.secondsLeft === 0) {
                 this.clearInterval();
                 !!this.onEnd && this.onEnd();
             } else {
@@ -43,6 +52,7 @@ class Timer {
     change(seconds: number) {
         this.intervalSeconds = seconds;
         this.secondsLeft = seconds;
+        this.restartCountdown();
     }
 
     reset() {
@@ -57,6 +67,10 @@ class Timer {
     clearInterval() {
         !!this.clockIntervalId && clearInterval(this.clockIntervalId);
         this.clockIntervalId = null;
+    }
+
+    private restartCountdown() {
+        this.endsAt = Date.now() + this.secondsLeft * 1000;
     }
 }
 
