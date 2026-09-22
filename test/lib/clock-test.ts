@@ -98,3 +98,46 @@ test("starting a running timer has no effect", () => {
 
     assert.deepEqual(timer.timeLeft, [9, 59]);
 });
+
+test("time left follows the wall clock", () => {
+    const timer = startTimer(600, noop, noop);
+
+    // e.g. laptop asleep: clock moves without intervals firing
+    vi.setSystemTime(Date.now() + 5 * 60 * 1000);
+    vi.advanceTimersByTime(1000);
+
+    assert.deepEqual(timer.timeLeft, [4, 59]);
+});
+
+test("ends once when clock jumps past the end", () => {
+    const onEnd = vi.fn();
+    const timer = startTimer(600, noop, onEnd);
+
+    vi.setSystemTime(Date.now() + 60 * 60 * 1000);
+    vi.advanceTimersByTime(3000);
+
+    assert.strictEqual(onEnd.mock.calls.length, 1);
+    assert.strictEqual(timer.isRunning, false);
+});
+
+test("changing a running timer restarts countdown from new length", () => {
+    const timer = startTimer(600, noop, noop);
+    vi.advanceTimersByTime(10_000);
+
+    timer.change(300);
+    vi.advanceTimersByTime(1000);
+
+    assert.deepEqual(timer.timeLeft, [4, 59]);
+});
+
+test("resumed timer continues from where it was paused", () => {
+    const timer = startTimer(600, noop, noop);
+    vi.advanceTimersByTime(10_000);
+    timer.pause();
+
+    vi.advanceTimersByTime(60_000);
+    timer.start();
+    vi.advanceTimersByTime(1000);
+
+    assert.deepEqual(timer.timeLeft, [9, 49]);
+});
