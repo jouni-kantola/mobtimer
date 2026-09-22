@@ -6,8 +6,11 @@ export default defineConfig({
         projects: [
             {
                 test: {
-                    name: "lib",
-                    include: ["test/lib/**/*-test.[jt]s"],
+                    name: "node",
+                    include: [
+                        "test/lib/**/*-test.[jt]s",
+                        "test/cli/**/*-test.[jt]s",
+                    ],
                     environment: "node",
                 },
             },
@@ -15,7 +18,7 @@ export default defineConfig({
                 test: {
                     name: "gui",
                     include: ["test/**/*-test.[jt]s"],
-                    exclude: ["test/lib/**"],
+                    exclude: ["test/lib/**", "test/cli/**"],
                     environment: "jsdom",
                 },
                 plugins: [vue()],
