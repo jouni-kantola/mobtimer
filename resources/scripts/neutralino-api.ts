@@ -6,6 +6,7 @@ import {
     storage,
     window as neuWindow,
 } from "@neutralinojs/lib";
+import type { Settings, SettingsStore } from "../../lib/settings.ts";
 
 const trayOptions = {
     OPEN: "OPEN",
@@ -80,13 +81,24 @@ export function registerEvents() {
     events.on("windowClose", quitApp);
 }
 
-export async function getTeamData(): Promise<string[]> {
-    return JSON.parse(await storage.getData("mobUsers"));
+async function getData(key: string) {
+    try {
+        return JSON.parse(await storage.getData(key));
+    } catch {
+        return undefined;
+    }
 }
 
-export async function getIntervalLength(): Promise<number> {
-    return JSON.parse(await storage.getData("intervalLength"));
-}
+export const settingsStore: SettingsStore = {
+    async load(): Promise<Partial<Settings>> {
+        return {
+            members: await getData("mobUsers"),
+            intervalSeconds: await getData("intervalLength"),
+        };
+    },
+    saveMembers: saveTeam,
+    saveInterval: saveIntervalLength,
+};
 
 async function onTrayMenuItemClicked(event: CustomEvent) {
     switch (event.detail.id) {

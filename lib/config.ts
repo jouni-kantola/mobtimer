@@ -6,3 +6,5 @@ export const defaultMembers = [
     "Member 5",
     "Member 6",
 ];
+
+export const defaultIntervalSeconds = 600;
