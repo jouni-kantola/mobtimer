@@ -1,97 +1,68 @@
-import { assert, test, vi } from "vitest";
+import { afterEach, assert, beforeEach, test, vi } from "vitest";
 import { type TimeRemaining, startTimer } from "../../lib/clock.ts";
 
+const noop = () => {};
+
+beforeEach(() => {
+    vi.useFakeTimers();
+});
+
+afterEach(() => {
+    vi.useRealTimers();
+});
+
 test("determine if running", () => {
-    const seconds = 1;
-    const timer = startTimer(
-        seconds,
-        () => {},
-        () => {}
-    );
+    const timer = startTimer(1, noop, noop);
     assert.ok(timer.isRunning);
 });
 
-test("stopped when interval ends", async () => {
-    const seconds = 1;
-    const timer = startTimer(
-        seconds,
-        () => {},
-        () => {}
-    );
+test("stopped when interval ends", () => {
+    const timer = startTimer(1, noop, noop);
 
     assert.ok(timer.isRunning);
-    await new Promise((resolve, _) => {
-        setTimeout(resolve, 1500);
-    });
+    vi.advanceTimersByTime(1500);
     assert.strictEqual(timer.isRunning, false);
 });
 
-test("callbacks every tick", async () => {
-    const seconds = 3;
+test("callbacks every tick", () => {
     let timesCalled = 0;
+    startTimer(3, () => timesCalled++, noop);
 
-    await new Promise<void>((resolve, _) => {
-        startTimer(
-            seconds,
-            () => {
-                timesCalled++;
-                if (timesCalled === 2) {
-                    resolve();
-                }
-            },
-            () => {}
-        );
-    });
+    vi.advanceTimersByTime(2000);
+
+    assert.strictEqual(timesCalled, 2);
 });
 
-test("notify when countdown done", async () => {
-    await new Promise<void>((resolve, _) => {
-        return startTimer(1, () => {}, resolve);
-    });
+test("notify when countdown done", () => {
+    const onEnd = vi.fn();
+    startTimer(1, noop, onEnd);
+
+    vi.advanceTimersByTime(1000);
+
+    assert.strictEqual(onEnd.mock.calls.length, 1);
 });
 
-test("provide formatted time left", async () => {
-    const seconds = 600;
-    const timer = startTimer(
-        seconds,
-        () => {},
-        () => {}
-    );
+test("provide formatted time left", () => {
+    const timer = startTimer(600, noop, noop);
 
-    await new Promise((resolve, _) => {
-        setTimeout(resolve, 1500);
-    });
+    vi.advanceTimersByTime(1500);
 
     assert.deepEqual(timer.timeLeft, [9, 59]);
-
-    // without reseting test run never ends
-    timer.reset();
 });
 
-test("can change timer", async () => {
-    const timer = startTimer(
-        600,
-        () => {},
-        () => {}
-    );
+test("can change timer", () => {
+    const timer = startTimer(600, noop, noop);
     timer.change(300);
     assert.deepEqual(timer.timeLeft, [5, 0]);
     timer.change(1);
     assert.deepEqual(timer.timeLeft, [0, 1]);
 });
 
-test("can reset started timer", async () => {
-    const timer = startTimer(
-        600,
-        () => {},
-        () => {}
-    );
+test("can reset started timer", () => {
+    const timer = startTimer(600, noop, noop);
 
     assert.ok(timer.isRunning);
-
-    await new Promise((resolve, _) => {
-        setTimeout(resolve, 1500);
-    });
+    vi.advanceTimersByTime(1500);
 
     timer.reset();
 
@@ -99,54 +70,31 @@ test("can reset started timer", async () => {
     assert.deepEqual(timer.timeLeft, [10, 0]);
 });
 
-test("can pause timer", async () => {
-    const timer = startTimer(
-        600,
-        () => {},
-        () => {}
-    );
+test("can pause timer", () => {
+    const timer = startTimer(600, noop, noop);
 
     assert.ok(timer.isRunning);
-
-    await new Promise((resolve, _) => {
-        setTimeout(resolve, 1500);
-    });
+    vi.advanceTimersByTime(1500);
 
     timer.pause();
     assert.strictEqual(timer.isRunning, false);
-
     assert.deepEqual(timer.timeLeft, [9, 59]);
 });
 
-test("time remaining given on tick", async () => {
-    const timeRemaining = await new Promise<TimeRemaining>((resolve, _) => {
-        startTimer(
-            600,
-            timeLeft => {
-                resolve(timeLeft);
-            },
-            () => {}
-        );
-    });
+test("time remaining given on tick", () => {
+    let timeRemaining: TimeRemaining | undefined;
+    startTimer(600, timeLeft => (timeRemaining = timeLeft), noop);
+
+    vi.advanceTimersByTime(1000);
 
     assert.deepEqual(timeRemaining, [9, 59]);
 });
 
 test("starting a running timer has no effect", () => {
-    vi.useFakeTimers();
-    try {
-        const timer = startTimer(
-            600,
-            () => {},
-            () => {}
-        );
-        timer.start();
+    const timer = startTimer(600, noop, noop);
+    timer.start();
 
-        vi.advanceTimersByTime(1000);
+    vi.advanceTimersByTime(1000);
 
-        assert.deepEqual(timer.timeLeft, [9, 59]);
-        timer.reset();
-    } finally {
-        vi.useRealTimers();
-    }
+    assert.deepEqual(timer.timeLeft, [9, 59]);
 });
