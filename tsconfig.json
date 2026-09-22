@@ -23,7 +23,7 @@
     },
     "include": [
         "lib/**/*.ts",
-        "bin/**/*.ts",
+        "cli/**/*.ts",
         "resources/**/*.ts",
         "resources/**/*.d.ts",
         "resources/**/*.vue",
