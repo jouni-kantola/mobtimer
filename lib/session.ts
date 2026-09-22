@@ -71,6 +71,13 @@ export function createSession(
         timeRemaining = secondsToMinutesAndSeconds(intervalSeconds);
     }
 
+    function stopTurn() {
+        timer?.reset();
+        timer = null;
+        isPaused = false;
+        resetTimeRemaining();
+    }
+
     function onTick(timeLeft: TimeRemaining) {
         timeRemaining = timeLeft;
         changed();
@@ -122,11 +129,7 @@ export function createSession(
 
     function endBreak() {
         onBreak = false;
-
-        timer?.reset();
-        timer = null;
-        resetTimeRemaining();
-
+        stopTurn();
         switchActiveMember(whosNext(team).index, team);
         changed();
     }
@@ -134,11 +137,8 @@ export function createSession(
     function switchDriver(index: number) {
         if (!canDrive(index, team)) return;
 
-        timer?.reset();
-        timer = null;
-        resetTimeRemaining();
+        stopTurn();
         switchActiveMember(index, team);
-        isPaused = false;
         changed();
     }
 
@@ -149,8 +149,7 @@ export function createSession(
         team[index].isHere = isHere;
 
         if (activeMember.index === index && !isHere) {
-            timer?.reset();
-            resetTimeRemaining();
+            stopTurn();
             switchActiveMember(
                 whosNextAfter(activeMember.index, team).index,
                 team

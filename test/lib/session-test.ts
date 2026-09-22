@@ -176,16 +176,30 @@ test("last member here cannot be marked away", () => {
     assert.isTrue(session.state.team[0].isHere);
 });
 
-// documents current behavior: the GUI's start button stops responding
-test("toggle does nothing after running driver is marked away", () => {
+test("next driver can start after running driver is marked away", () => {
     const { session, driver } = setup();
     session.start();
 
     session.setMemberHere(0, false);
-    session.toggle();
 
-    assert.strictEqual(driver(), "Bo");
     assert.strictEqual(session.state.status, "idle");
+    assert.isTrue(session.toggle());
+    assert.strictEqual(driver(), "Bo");
+    assert.strictEqual(session.state.status, "running");
+});
+
+test("next driver can start after break is skipped while paused", () => {
+    const { session, driver } = setup(["Ann", "Bo"]);
+    session.switchDriver(1);
+    session.start();
+    vi.advanceTimersByTime(60_000);
+    session.togglePause();
+
+    session.endBreak();
+
+    assert.strictEqual(session.state.status, "idle");
+    assert.isTrue(session.toggle());
+    assert.strictEqual(driver(), "Ann");
 });
 
 test("changing interval restarts countdown", () => {
