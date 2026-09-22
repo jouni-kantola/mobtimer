@@ -25,10 +25,11 @@ Options:
   -v, --version            Show version
 
 Keys while running:
-  space  start / pause / resume     n      next driver
-  1-9    make member driver         a 1-9  toggle member away
-  b      skip break                 s      shuffle team
-  + / -  interval +/- 1 minute      q      quit`;
+  enter  start                      space  start / pause / resume
+  n      next driver                1-9    make member driver
+  a 1-9  toggle member away         b      skip break
+  s      shuffle team               + / -  interval +/- 1 minute
+  q      quit`;
 
 export function parseCliArgs(args: string[]): CliOptions {
     const { values } = parseArgs({

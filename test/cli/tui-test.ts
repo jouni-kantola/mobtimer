@@ -73,6 +73,19 @@ test("space starts, pauses and resumes", () => {
     assert.strictEqual(session.state.status, "running");
 });
 
+test("enter starts but does not pause", () => {
+    const { session, press } = setup();
+
+    press(key("\r", "return"));
+    assert.strictEqual(session.state.status, "running");
+    press(key("\r", "return"));
+    assert.strictEqual(session.state.status, "running");
+
+    press(key(" ", "space"));
+    press(key("\r", "return"));
+    assert.strictEqual(session.state.status, "paused");
+});
+
 test("n moves to next driver", () => {
     const { press, driver } = setup();
 
