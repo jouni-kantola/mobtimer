@@ -20,7 +20,7 @@
             :index="index"
             :name="name"
             :isActive="isActive"
-            :onlyOneActiveMember="team.filter(m => m.isHere).length === 1"
+            :onlyOneActiveMember="!canMarkAway(index, team)"
             @notifyMemberStatus="toggleMemberHere"
             @switchDriver="switchDriver"
             @updateMemberName="updateMemberName"
@@ -61,6 +61,8 @@ import {
     adjustTeamSize,
     shuffleTeam,
     whosNext,
+    canMarkAway,
+    canDrive,
 } from "../../lib/team.ts";
 import {
     type TimeRemaining,
@@ -182,6 +184,8 @@ function pause() {
 }
 
 function switchDriver(selectedMemberIndex: number) {
+    if (!canDrive(selectedMemberIndex, team)) return;
+
     timer.value?.reset();
     timer.value = null;
     resetTimeDisplay();
@@ -200,6 +204,8 @@ async function updateMemberName(memberIndex: number, name: string) {
 }
 
 function toggleMemberHere(selectedMemberIndex: number, isHere: boolean) {
+    if (!isHere && !canMarkAway(selectedMemberIndex, team)) return;
+
     const activeMember = getActiveMember(team);
 
     team[selectedMemberIndex].isHere = isHere;
