@@ -65,6 +65,7 @@ import {
 import {
     type TimeRemaining,
     secondsToMinutesAndSeconds,
+    formatTime,
     startTimer,
 } from "../../lib/clock.ts";
 import TeamSize from "./components/TeamSize.vue";
@@ -97,13 +98,6 @@ function updateTimeDisplay(timeLeft: TimeRemaining) {
 
 function resetTimeDisplay() {
     updateTimeDisplay(secondsToMinutesAndSeconds(intervalLength.value));
-}
-
-function formatTime([minutes, seconds]: TimeRemaining) {
-    return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(
-        2,
-        "0"
-    )}`;
 }
 
 async function prepareForNextMember() {

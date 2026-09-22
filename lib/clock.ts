@@ -89,3 +89,28 @@ export function secondsToMinutesAndSeconds(value: number): TimeRemaining {
     const seconds = value % 60;
     return [minutes, seconds];
 }
+
+export function formatTime([minutes, seconds]: TimeRemaining) {
+    return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(
+        2,
+        "0"
+    )}`;
+}
+
+export function toIntervalSeconds(minutes: number, seconds: number) {
+    return minutes * 60 + seconds || 1;
+}
+
+// accepts "600", "90s", "10m", "1m30s" and "10:00"
+export function parseInterval(value: string): number | undefined {
+    const text = value.trim().toLowerCase();
+
+    const clock = text.match(/^(\d+):([0-5]?\d)$/);
+    if (clock) return toIntervalSeconds(Number(clock[1]), Number(clock[2]));
+
+    const units = text.match(/^(?:(\d+)m)?(?:(\d+)s?)?$/);
+    if (units && (units[1] || units[2]))
+        return toIntervalSeconds(Number(units[1] ?? 0), Number(units[2] ?? 0));
+
+    return undefined;
+}
