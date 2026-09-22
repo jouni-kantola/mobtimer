@@ -4,6 +4,8 @@ import { loadSettings } from "../lib/settings.ts";
 import { createTeam, shuffleTeam } from "../lib/team.ts";
 import { type CliOptions, parseCliArgs, usage } from "./args.ts";
 import { createFileStore, defaultConfigPath } from "./config-store.ts";
+import { createNotifier } from "./notify.ts";
+import { runTui } from "./tui.ts";
 
 export async function main(args: string[]) {
     let options: CliOptions;
@@ -53,8 +55,22 @@ export async function main(args: string[]) {
         return 0;
     }
 
-    console.error("mobtimer: interactive timer not implemented yet");
-    return 1;
+    if (!process.stdin.isTTY || !process.stdout.isTTY) {
+        console.error("mobtimer: needs an interactive terminal");
+        return 1;
+    }
+
+    await runTui({
+        team: createTeam(settings.members),
+        intervalSeconds: settings.intervalSeconds,
+        takeBreaks: options.breaks,
+        notify: options.notify
+            ? createNotifier(text => process.stdout.write(text))
+            : undefined,
+        saveMembers: members => void store.saveMembers(members),
+        saveInterval: seconds => void store.saveInterval(seconds),
+    });
+    return 0;
 }
 
 async function readVersion() {
