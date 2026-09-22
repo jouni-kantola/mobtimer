@@ -17,11 +17,11 @@ afterEach(async () => {
 test("config lives in XDG config home, or ~/.config", () => {
     assert.strictEqual(
         defaultConfigPath({ XDG_CONFIG_HOME: "/xdg" }, "/home/me"),
-        "/xdg/mobtimer/config.json"
+        join("/xdg", "mobtimer", "config.json")
     );
     assert.strictEqual(
         defaultConfigPath({}, "/home/me"),
-        "/home/me/.config/mobtimer/config.json"
+        join("/home/me", ".config", "mobtimer", "config.json")
     );
 });
 
