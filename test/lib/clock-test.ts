@@ -1,5 +1,11 @@
 import { afterEach, assert, beforeEach, test, vi } from "vitest";
-import { type TimeRemaining, startTimer } from "../../lib/clock.ts";
+import {
+    type TimeRemaining,
+    formatTime,
+    parseInterval,
+    startTimer,
+    toIntervalSeconds,
+} from "../../lib/clock.ts";
 
 const noop = () => {};
 
@@ -140,4 +146,36 @@ test("resumed timer continues from where it was paused", () => {
     vi.advanceTimersByTime(1000);
 
     assert.deepEqual(timer.timeLeft, [9, 49]);
+});
+
+test("format time left as mm:ss", () => {
+    assert.strictEqual(formatTime([9, 5]), "09:05");
+    assert.strictEqual(formatTime([120, 0]), "120:00");
+});
+
+test("interval from minutes and seconds", () => {
+    assert.strictEqual(toIntervalSeconds(10, 0), 600);
+    assert.strictEqual(toIntervalSeconds(1, 30), 90);
+});
+
+test("interval is at least one second", () => {
+    assert.strictEqual(toIntervalSeconds(0, 0), 1);
+    assert.strictEqual(toIntervalSeconds(NaN, 0), 1);
+});
+
+test("parse interval from text", () => {
+    assert.strictEqual(parseInterval("600"), 600);
+    assert.strictEqual(parseInterval("90s"), 90);
+    assert.strictEqual(parseInterval("10m"), 600);
+    assert.strictEqual(parseInterval("1m30s"), 90);
+    assert.strictEqual(parseInterval("10:00"), 600);
+    assert.strictEqual(parseInterval(" 5M "), 300);
+});
+
+test("unparsable interval is undefined", () => {
+    assert.isUndefined(parseInterval(""));
+    assert.isUndefined(parseInterval("m"));
+    assert.isUndefined(parseInterval("ten"));
+    assert.isUndefined(parseInterval("10:75"));
+    assert.isUndefined(parseInterval("-5"));
 });

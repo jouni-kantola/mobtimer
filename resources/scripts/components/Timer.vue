@@ -21,6 +21,7 @@
 
 <script setup lang="ts">
 import IntervalLength from "./IntervalLength.vue";
+import { toIntervalSeconds } from "../../../lib/clock.ts";
 
 const emit = defineEmits<{
     intervalUpdated: [number];
@@ -39,12 +40,12 @@ const props = defineProps({
 });
 
 function updateIntervalByMinutes(value: number) {
-    const interval = value * 60 + props.seconds || 1;
+    const interval = toIntervalSeconds(value, props.seconds);
     emit("intervalUpdated", interval);
 }
 
 function updateIntervalBySeconds(value: number) {
-    const interval = props.minutes * 60 + value || 1;
+    const interval = toIntervalSeconds(props.minutes, value);
     emit("intervalUpdated", interval);
 }
 </script>
