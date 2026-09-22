@@ -1,15 +1,23 @@
 import { assert, test } from "vitest";
-import { type TimeRemaining, startTimer } from "../resources/scripts/clock";
+import { type TimeRemaining, startTimer } from "../../lib/clock.ts";
 
 test("determine if running", () => {
     const seconds = 1;
-    const timer = startTimer(seconds, () => { }, () => { });
+    const timer = startTimer(
+        seconds,
+        () => {},
+        () => {}
+    );
     assert.ok(timer.isRunning);
 });
 
 test("stopped when interval ends", async () => {
     const seconds = 1;
-    const timer = startTimer(seconds, () => { }, () => { });
+    const timer = startTimer(
+        seconds,
+        () => {},
+        () => {}
+    );
 
     assert.ok(timer.isRunning);
     await new Promise((resolve, _) => {
@@ -23,24 +31,32 @@ test("callbacks every tick", async () => {
     let timesCalled = 0;
 
     await new Promise<void>((resolve, _) => {
-        startTimer(seconds, () => {
-            timesCalled++;
-            if (timesCalled === 2) {
-                resolve();
-            }
-        }, () => { });
+        startTimer(
+            seconds,
+            () => {
+                timesCalled++;
+                if (timesCalled === 2) {
+                    resolve();
+                }
+            },
+            () => {}
+        );
     });
 });
 
 test("notify when countdown done", async () => {
     await new Promise<void>((resolve, _) => {
-        return startTimer(1, () => { }, resolve);
+        return startTimer(1, () => {}, resolve);
     });
 });
 
 test("provide formatted time left", async () => {
     const seconds = 600;
-    const timer = startTimer(seconds, () => { }, () => { });
+    const timer = startTimer(
+        seconds,
+        () => {},
+        () => {}
+    );
 
     await new Promise((resolve, _) => {
         setTimeout(resolve, 1500);
@@ -53,7 +69,11 @@ test("provide formatted time left", async () => {
 });
 
 test("can change timer", async () => {
-    const timer = startTimer(600, () => { }, () => { });
+    const timer = startTimer(
+        600,
+        () => {},
+        () => {}
+    );
     timer.change(300);
     assert.deepEqual(timer.timeLeft, [5, 0]);
     timer.change(1);
@@ -61,7 +81,11 @@ test("can change timer", async () => {
 });
 
 test("can reset started timer", async () => {
-    const timer = startTimer(600, () => { }, () => { });
+    const timer = startTimer(
+        600,
+        () => {},
+        () => {}
+    );
 
     assert.ok(timer.isRunning);
 
@@ -76,7 +100,11 @@ test("can reset started timer", async () => {
 });
 
 test("can pause timer", async () => {
-    const timer = startTimer(600, () => { }, () => { });
+    const timer = startTimer(
+        600,
+        () => {},
+        () => {}
+    );
 
     assert.ok(timer.isRunning);
 
@@ -92,9 +120,13 @@ test("can pause timer", async () => {
 
 test("time remaining given on tick", async () => {
     const timeRemaining = await new Promise<TimeRemaining>((resolve, _) => {
-        startTimer(600, (timeLeft) => {
-            resolve(timeLeft);
-        }, () => { });
+        startTimer(
+            600,
+            timeLeft => {
+                resolve(timeLeft);
+            },
+            () => {}
+        );
     });
 
     assert.deepEqual(timeRemaining, [9, 59]);
