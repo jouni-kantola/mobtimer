@@ -24,6 +24,7 @@ Team and interval are saved to `~/.config/mobtimer/config.json` (or `$XDG_CONFIG
 
 | Key          | Action                             |
 | ------------ | ---------------------------------- |
+| `enter`      | Start                              |
 | `space`      | Start, pause or resume             |
 | `n`          | Next driver                        |
 | `1`–`9`      | Make member driver                 |

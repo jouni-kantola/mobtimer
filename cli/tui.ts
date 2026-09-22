@@ -39,7 +39,7 @@ const statusText = {
 };
 
 export const keyHints =
-    "space start/pause · n next · b skip break · 1-9 driver · a away · s shuffle · +/- interval · q quit";
+    "enter start · space start/pause · n next · b skip break · 1-9 driver · a away · s shuffle · +/- interval · q quit";
 
 export function renderScreen(
     state: SessionState,
@@ -110,6 +110,10 @@ export function createKeyHandler(session: Session, actions: KeyActions) {
                 return actions.quit();
             case "space":
                 session.toggle();
+                return actions.say("");
+            case "return":
+            case "enter":
+                session.start();
                 return actions.say("");
             case "n":
                 session.switchDriver(whosNext(session.state.team).index);
