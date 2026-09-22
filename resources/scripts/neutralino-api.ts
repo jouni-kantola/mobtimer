@@ -7,6 +7,7 @@ import {
     window as neuWindow,
 } from "@neutralinojs/lib";
 import type { Settings, SettingsStore } from "../../lib/settings.ts";
+import { type StatusLabels, nextLine, nowLine } from "../../lib/status.ts";
 
 const trayOptions = {
     OPEN: "OPEN",
@@ -18,11 +19,7 @@ export async function init() {
     await neuWindow.setTitle(`Mob timer v${window.NL_APPVERSION}`);
 }
 
-export async function updateTray(
-    driverName: string,
-    nextMemberName: string,
-    timeRemaning: string
-) {
+export async function updateTray(labels: StatusLabels) {
     await os.setTray({
         icon: import.meta.env.DEV
             ? "/resources/public/trayIcon.png"
@@ -36,10 +33,10 @@ export async function updateTray(
                 text: "-",
             },
             {
-                text: `Now: ${driverName}`,
+                text: nowLine(labels),
             },
             {
-                text: `Next: ${nextMemberName} (in ${timeRemaning})`,
+                text: nextLine(labels),
             },
             {
                 text: "-",
