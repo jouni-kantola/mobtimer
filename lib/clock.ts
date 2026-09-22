@@ -28,6 +28,8 @@ class Timer {
     }
 
     start() {
+        if (this.isRunning) return;
+
         this.clockIntervalId = setInterval(() => {
             if (--this.secondsLeft === 0) {
                 this.clearInterval();

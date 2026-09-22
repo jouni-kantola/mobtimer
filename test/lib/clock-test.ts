@@ -1,4 +1,4 @@
-import { assert, test } from "vitest";
+import { assert, test, vi } from "vitest";
 import { type TimeRemaining, startTimer } from "../../lib/clock.ts";
 
 test("determine if running", () => {
@@ -130,4 +130,23 @@ test("time remaining given on tick", async () => {
     });
 
     assert.deepEqual(timeRemaining, [9, 59]);
+});
+
+test("starting a running timer has no effect", () => {
+    vi.useFakeTimers();
+    try {
+        const timer = startTimer(
+            600,
+            () => {},
+            () => {}
+        );
+        timer.start();
+
+        vi.advanceTimersByTime(1000);
+
+        assert.deepEqual(timer.timeLeft, [9, 59]);
+        timer.reset();
+    } finally {
+        vi.useRealTimers();
+    }
 });
