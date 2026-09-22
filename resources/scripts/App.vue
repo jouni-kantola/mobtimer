@@ -56,7 +56,6 @@ import {
     whosNextAfter,
     switchActiveMember,
     getActiveMember,
-    getLast,
     type Member,
     adjustTeamSize,
     shuffleTeam,
@@ -70,6 +69,10 @@ import {
     formatTime,
     startTimer,
 } from "../../lib/clock.ts";
+import {
+    isBreakNext as isBreakNextFor,
+    statusLabels,
+} from "../../lib/status.ts";
 import TeamSize from "./components/TeamSize.vue";
 
 const props = defineProps({
@@ -128,11 +131,11 @@ async function onEnd() {
 }
 
 function isBreakNext() {
-    return (
-        takeBreaks.value &&
-        getLast(team).index == getActiveMember(team).index &&
-        !onBreak.value
-    );
+    return isBreakNextFor({
+        team,
+        onBreak: onBreak.value,
+        takeBreaks: takeBreaks.value,
+    });
 }
 
 function endBreak() {
@@ -236,9 +239,14 @@ async function randomizeTeamOrder() {
 }
 
 async function updateTrayStatus() {
-    const now = onBreak.value ? "Break" : getActiveMember(team).name;
-    const next = isBreakNext() ? "Break" : whosNext(team).name;
-    await updateTray(now, next, formatTime(timeRemaining.value));
+    await updateTray(
+        statusLabels({
+            team,
+            onBreak: onBreak.value,
+            takeBreaks: takeBreaks.value,
+            timeRemaining: timeRemaining.value,
+        })
+    );
 }
 </script>
 
