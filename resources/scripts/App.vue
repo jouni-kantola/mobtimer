@@ -5,7 +5,7 @@
         @intervalUpdated="onIntervalUpdated"
         @enterKeyDown="start"
     />
-    <button @click="() => (!timer ? start() : pause())">
+    <button @click="onStartClick">
         {{ startButtonText }}
     </button>
     <div class="team-options">
@@ -38,7 +38,7 @@
     </Transition>
 </template>
 <script setup lang="ts">
-import { PropType, reactive, ref } from "vue";
+import { PropType, computed, reactive, ref } from "vue";
 
 import Timer from "./components/Timer.vue";
 import TeamMember from "./components/TeamMember.vue";
@@ -52,27 +52,10 @@ import {
     hideWindow,
     saveIntervalLength,
 } from "./neutralino-api";
-import {
-    whosNextAfter,
-    switchActiveMember,
-    getActiveMember,
-    type Member,
-    adjustTeamSize,
-    shuffleTeam,
-    whosNext,
-    canMarkAway,
-    canDrive,
-} from "../../lib/team.ts";
-import {
-    type TimeRemaining,
-    secondsToMinutesAndSeconds,
-    formatTime,
-    startTimer,
-} from "../../lib/clock.ts";
-import {
-    isBreakNext as isBreakNextFor,
-    statusLabels,
-} from "../../lib/status.ts";
+import { getActiveMember, type Member, canMarkAway } from "../../lib/team.ts";
+import { formatTime } from "../../lib/clock.ts";
+import { type SessionState, createSession } from "../../lib/session.ts";
+import { statusLabels } from "../../lib/status.ts";
 import TeamSize from "./components/TeamSize.vue";
 
 const props = defineProps({
@@ -86,167 +69,73 @@ const props = defineProps({
     },
 });
 
-const takeBreaks = ref(true);
-const startButtonText = ref("Start");
 const team = reactive(props.team);
-const intervalLength = ref(props.intervalLengthInSeconds);
-const timer = ref<ReturnType<typeof startTimer> | null>(null);
-const onBreak = ref(false);
 
-let isPaused = false;
+const session = createSession(
+    { team, intervalSeconds: props.intervalLengthInSeconds },
+    { onChange: render, onTurnEnd: showWindow }
+);
 
-const timeRemaining = ref(secondsToMinutesAndSeconds(intervalLength.value));
+const timeRemaining = ref(session.state.timeRemaining);
+const onBreak = ref(session.state.onBreak);
+const status = ref(session.state.status);
 
-function updateTimeDisplay(timeLeft: TimeRemaining) {
-    timeRemaining.value = timeLeft;
+const startButtonText = computed(() => {
+    if (status.value === "running") return "Pause";
+    if (status.value === "paused") return "Resume";
+    return `Start session for ${getActiveMember(team).name}`;
+});
+
+async function render(state: SessionState) {
+    timeRemaining.value = state.timeRemaining;
+    onBreak.value = state.onBreak;
+    status.value = state.status;
+    await updateTray(statusLabels(state));
 }
 
-function resetTimeDisplay() {
-    updateTimeDisplay(secondsToMinutesAndSeconds(intervalLength.value));
-}
-
-async function prepareForNextMember() {
-    const activeMember = getActiveMember(team);
-    startButtonText.value = `Start session for ${activeMember.name}`;
-    await updateTrayStatus();
-}
-
-async function onTick(timeLeft: TimeRemaining) {
-    updateTimeDisplay(timeLeft);
-    await updateTrayStatus();
-}
-
-async function onEnd() {
-    if (isBreakNext()) {
-        onBreak.value = true;
-        resetTimeDisplay();
-        timer.value = startTimer(intervalLength.value, onTick, onEnd);
-
-        await showWindow();
-    } else {
-        endBreak();
-
-        await showWindow();
-    }
-}
-
-function isBreakNext() {
-    return isBreakNextFor({
-        team,
-        onBreak: onBreak.value,
-        takeBreaks: takeBreaks.value,
-    });
-}
-
-function endBreak() {
-    onBreak.value = false;
-
-    timer?.value?.reset();
-    timer.value = null;
-
-    resetTimeDisplay();
-
-    const { index } = whosNext(team);
-
-    switchActiveMember(index, team);
-    prepareForNextMember();
-}
-
-async function onIntervalUpdated(seconds: number) {
-    intervalLength.value = seconds;
-    timer.value?.change(intervalLength.value);
-    resetTimeDisplay();
-    await updateTrayStatus();
-    await saveIntervalLength(intervalLength.value);
+async function onStartClick() {
+    if (session.toggle()) await hideWindow();
 }
 
 async function start() {
     await hideWindow();
-
-    if (isPaused || timer.value?.isRunning) return false;
-
-    startButtonText.value = "Pause";
-
-    timer.value = startTimer(intervalLength.value, onTick, onEnd);
-
-    isPaused = false;
+    session.start();
 }
 
-function pause() {
-    if (!timer.value) return;
+function endBreak() {
+    session.endBreak();
+}
 
-    if (timer.value.isRunning) {
-        timer.value.pause();
-        isPaused = true;
-        startButtonText.value = "Resume";
-    } else if (isPaused) {
-        timer.value.start();
-        isPaused = false;
-        startButtonText.value = "Pause";
-    }
+async function onIntervalUpdated(seconds: number) {
+    session.setInterval(seconds);
+    await saveIntervalLength(seconds);
 }
 
 function switchDriver(selectedMemberIndex: number) {
-    if (!canDrive(selectedMemberIndex, team)) return;
-
-    timer.value?.reset();
-    timer.value = null;
-    resetTimeDisplay();
-    switchActiveMember(selectedMemberIndex, team);
-    prepareForNextMember();
-    isPaused = false;
+    session.switchDriver(selectedMemberIndex);
 }
 
 async function updateMemberName(memberIndex: number, name: string) {
-    if (memberIndex === getActiveMember(team).index) {
-        startButtonText.value = `Start session for ${name}`;
-    }
-
-    team[memberIndex].name = name;
+    session.renameMember(memberIndex, name);
     await saveTeam(team.map(m => m.name));
 }
 
 function toggleMemberHere(selectedMemberIndex: number, isHere: boolean) {
-    if (!isHere && !canMarkAway(selectedMemberIndex, team)) return;
-
-    const activeMember = getActiveMember(team);
-
-    team[selectedMemberIndex].isHere = isHere;
-
-    if (activeMember.index === selectedMemberIndex && !isHere) {
-        timer.value?.reset();
-        resetTimeDisplay();
-
-        const { index } = whosNextAfter(activeMember.index, team);
-        switchActiveMember(index, team);
-        prepareForNextMember();
-    }
+    session.setMemberHere(selectedMemberIndex, isHere);
 }
 
-async function toggleBreaks(value: boolean) {
-    takeBreaks.value = value;
-    await updateTrayStatus();
+function toggleBreaks(value: boolean) {
+    session.setTakeBreaks(value);
 }
 
 async function updateTeamSize(newSize: number) {
-    adjustTeamSize(team, newSize);
+    session.setTeamSize(newSize);
     await saveTeam(team.map(m => m.name));
 }
 
 async function randomizeTeamOrder() {
-    shuffleTeam(team);
+    session.shuffle();
     await saveTeam(team.map(m => m.name));
-}
-
-async function updateTrayStatus() {
-    await updateTray(
-        statusLabels({
-            team,
-            onBreak: onBreak.value,
-            takeBreaks: takeBreaks.value,
-            timeRemaining: timeRemaining.value,
-        })
-    );
 }
 </script>
 
