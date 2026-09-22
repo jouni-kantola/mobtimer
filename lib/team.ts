@@ -1,5 +1,3 @@
-import { nanoid } from "nanoid";
-
 export type Member = {
     id: string;
     index: number;
@@ -68,9 +66,16 @@ export function getLast(team: Array<Member>) {
     return team.filter(m => m.isHere).slice(-1)[0];
 }
 
+function createId() {
+    if (typeof globalThis.crypto?.randomUUID === "function") {
+        return globalThis.crypto.randomUUID();
+    }
+    return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`;
+}
+
 function addMember(name: string, team: Array<Member>) {
     team.push({
-        id: nanoid(),
+        id: createId(),
         index: team.length,
         name,
         isHere: true,
