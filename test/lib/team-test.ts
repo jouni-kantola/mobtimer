@@ -7,6 +7,8 @@ import {
     getLast,
     adjustTeamSize,
     shuffleTeam,
+    canMarkAway,
+    canDrive,
 } from "../../lib/team.ts";
 
 test("map names to team", () => {
@@ -198,4 +200,28 @@ test("whos next", () => {
 
     assert.strictEqual(next.index, 0);
     assert.strictEqual(next.name, "Member 1");
+});
+
+test("members can be marked away while someone else is here", () => {
+    const team = createTeam(["Member 1", "Member 2", "Member 3"]);
+    team[1].isHere = false;
+
+    assert.isTrue(canMarkAway(0, team));
+    assert.isTrue(canMarkAway(2, team));
+});
+
+test("last member here cannot be marked away", () => {
+    const team = createTeam(["Member 1", "Member 2"]);
+    team[1].isHere = false;
+
+    assert.isFalse(canMarkAway(0, team));
+});
+
+test("only members who are here can drive", () => {
+    const team = createTeam(["Member 1", "Member 2"]);
+    team[1].isHere = false;
+
+    assert.isTrue(canDrive(0, team));
+    assert.isFalse(canDrive(1, team));
+    assert.isFalse(canDrive(99, team));
 });

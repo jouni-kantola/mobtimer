@@ -56,6 +56,14 @@ export function getActiveMember(team: Array<Member>) {
     return team.filter(m => m.isActive)[0];
 }
 
+export function canMarkAway(index: number, team: Array<Member>) {
+    return team.some(m => m.isHere && m.index !== index);
+}
+
+export function canDrive(index: number, team: Array<Member>) {
+    return !!getMemberByIndex(index, team)?.isHere;
+}
+
 export function getLast(team: Array<Member>) {
     return team.filter(m => m.isHere).slice(-1)[0];
 }
