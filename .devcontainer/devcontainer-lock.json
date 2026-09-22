@@ -1,0 +1,9 @@
+{
+    "features": {
+        "ghcr.io/stu-bell/devcontainer-features/claude-code:0": {
+            "version": "0.1.0",
+            "resolved": "ghcr.io/stu-bell/devcontainer-features/claude-code@sha256:f87b4da3f8648db9111cb25c6bd3817d096018d81f3fb596340f7ffdba14409a",
+            "integrity": "sha256:f87b4da3f8648db9111cb25c6bd3817d096018d81f3fb596340f7ffdba14409a"
+        }
+    }
+}
