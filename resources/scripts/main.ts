@@ -1,6 +1,6 @@
 import { createApp } from "vue";
 import App from "./App.vue";
-import { defaultMembers } from "./config";
+import { defaultMembers } from "../../lib/config.ts";
 import {
     getIntervalLength,
     getTeamData,
@@ -9,7 +9,7 @@ import {
     saveIntervalLength,
     saveTeam,
 } from "./neutralino-api";
-import { createTeam } from "./team";
+import { createTeam } from "../../lib/team.ts";
 
 async function initApp() {
     init();

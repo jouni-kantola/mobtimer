@@ -1,5 +1,5 @@
 import { assert, test } from "vitest";
-import { defaultMembers } from "../resources/scripts/config";
+import { defaultMembers } from "../../lib/config.ts";
 import {
     createTeam,
     whosNext,
@@ -7,7 +7,7 @@ import {
     getLast,
     adjustTeamSize,
     shuffleTeam,
-} from "../resources/scripts/team";
+} from "../../lib/team.ts";
 
 test("map names to team", () => {
     const team = createTeam(defaultMembers);

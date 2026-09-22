@@ -61,12 +61,12 @@ import {
     adjustTeamSize,
     shuffleTeam,
     whosNext,
-} from "./team";
+} from "../../lib/team.ts";
 import {
     type TimeRemaining,
     secondsToMinutesAndSeconds,
     startTimer,
-} from "./clock";
+} from "../../lib/clock.ts";
 import TeamSize from "./components/TeamSize.vue";
 
 const props = defineProps({
