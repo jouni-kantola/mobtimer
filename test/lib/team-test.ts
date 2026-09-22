@@ -1,4 +1,4 @@
-import { assert, test } from "vitest";
+import { assert, test, vi } from "vitest";
 import { defaultMembers } from "../../lib/config.ts";
 import {
     createTeam,
@@ -31,6 +31,17 @@ test("map names to team", () => {
     const ids = team.map(member => member.id);
     const uniqueIds = [...new Set(ids)];
     assert.lengthOf(uniqueIds, ids.length);
+});
+
+test("create unique ids without crypto.randomUUID", () => {
+    vi.stubGlobal("crypto", {});
+    try {
+        const team = createTeam(defaultMembers);
+        const ids = team.map(member => member.id);
+        assert.lengthOf([...new Set(ids)], ids.length);
+    } finally {
+        vi.unstubAllGlobals();
+    }
 });
 
 test("whos next when everyone here", () => {
