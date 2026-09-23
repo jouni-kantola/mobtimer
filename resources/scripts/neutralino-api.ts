@@ -70,7 +70,7 @@ export async function hideWindow() {
 }
 
 async function quitApp() {
-    await app.exit();
+    await app.killProcess();
 }
 
 export function registerEvents() {
