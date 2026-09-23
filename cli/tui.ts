@@ -6,7 +6,7 @@ import {
     createSession,
 } from "../lib/session.ts";
 import { type StatusLabels, nextLine, nowLine } from "../lib/status.ts";
-import { whosNext } from "../lib/team.ts";
+import { whosNext, whosPrevious } from "../lib/team.ts";
 import type { Notifier } from "./notify.ts";
 
 export type Key = { name?: string; sequence?: string; ctrl?: boolean };
@@ -39,7 +39,7 @@ const statusText = {
 };
 
 export const keyHints =
-    "enter start · space start/pause · n next · b skip break · 1-9 driver · a away · s shuffle · +/- interval · q quit";
+    "enter start · space start/pause · n/↓ next · ↑ previous · b skip break · 1-9 driver · a away · s shuffle · +/- interval · q quit";
 
 export function renderScreen(
     state: SessionState,
@@ -116,7 +116,11 @@ export function createKeyHandler(session: Session, actions: KeyActions) {
                 session.start();
                 return actions.say("");
             case "n":
+            case "down":
                 session.switchDriver(whosNext(session.state.team).index);
+                return actions.say("");
+            case "up":
+                session.switchDriver(whosPrevious(session.state.team).index);
                 return actions.say("");
             case "b":
                 if (session.state.onBreak) session.endBreak();

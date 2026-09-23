@@ -94,6 +94,20 @@ test("n moves to next driver", () => {
     assert.strictEqual(driver(), "Bo");
 });
 
+test("arrow keys move between drivers, skipping away members", () => {
+    const { session, press, driver } = setup();
+    session.setMemberHere(1, false);
+
+    press(key("\x1b[B", "down"));
+    assert.strictEqual(driver(), "Cy");
+    press(key("\x1b[B", "down"));
+    assert.strictEqual(driver(), "Ann");
+    press(key("\x1b[A", "up"));
+    assert.strictEqual(driver(), "Cy");
+    press(key("\x1b[A", "up"));
+    assert.strictEqual(driver(), "Ann");
+});
+
 test("number picks driver", () => {
     const { press, driver } = setup();
 
