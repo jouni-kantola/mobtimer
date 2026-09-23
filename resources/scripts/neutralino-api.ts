@@ -7,6 +7,7 @@ import {
     window as neuWindow,
 } from "@neutralinojs/lib";
 import type { Settings, SettingsStore } from "../../lib/settings.ts";
+import { type Theme, isTheme } from "./theme.ts";
 import { type StatusLabels, nextLine, nowLine } from "../../lib/status.ts";
 
 const trayOptions = {
@@ -55,6 +56,15 @@ export async function saveTeam(members: string[]) {
 
 export async function saveIntervalLength(seconds: number) {
     await storage.setData("intervalLength", JSON.stringify(seconds));
+}
+
+export async function saveTheme(theme: Theme) {
+    await storage.setData("theme", JSON.stringify(theme));
+}
+
+export async function loadTheme(): Promise<Theme> {
+    const theme = await getData("theme");
+    return isTheme(theme) ? theme : "system";
 }
 
 export async function showWindow() {

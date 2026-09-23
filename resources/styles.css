@@ -7,6 +7,19 @@
     --background-color: #f6edee;
 }
 
+[data-theme="dark"] {
+    --primary: #eb378a;
+    --primary-hover: #ffb9d9;
+    --primary-focus: #ffb9d9;
+    --primary-inverse: #fff;
+    --background-color: rgb(17, 25, 31);
+    --color: #fff;
+}
+
+[data-theme="dark"] .current input[type="text"] {
+    color: rgb(17, 25, 31);
+}
+
 @media only screen and (prefers-color-scheme: dark) {
     :root:not([data-theme]) {
         --primary: #eb378a;
@@ -17,9 +30,14 @@
         --color: #fff;
     }
 
-    .current input[type="text"] {
+    :root:not([data-theme]) .current input[type="text"] {
         color: rgb(17, 25, 31);
     }
+}
+
+.theme-switching,
+.theme-switching * {
+    transition: none !important;
 }
 
 :root {
