@@ -1,6 +1,6 @@
 {
     "name": "mobtimer",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "Mob programming timer for the terminal",
     "keywords": [
         "mob",
