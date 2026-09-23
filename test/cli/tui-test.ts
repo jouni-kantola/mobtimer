@@ -25,7 +25,7 @@ function setup() {
     const handle = createKeyHandler(session, actions);
     const press = (...keys: Key[]) => keys.forEach(handle);
     const driver = () => getActiveMember(session.state.team).name;
-    return { session, actions, press, driver };
+    return { session, actions, press, driver, handle };
 }
 
 const key = (sequence: string, name: string | undefined = sequence): Key => ({
@@ -43,9 +43,9 @@ test("screen shows time, status, now and next, and the team", () => {
     assert.include(screen, "Ready");
     assert.include(screen, "Now: Ann");
     assert.include(screen, "Next: Bo (in 10:00)");
-    assert.include(screen, "1 ▶ Ann");
-    assert.include(screen, "2   Bo");
-    assert.include(screen, "3   Cy (away)");
+    assert.include(screen, "❯ 1 Ann");
+    assert.include(screen, "2 Bo");
+    assert.include(screen, "3 Cy (away)");
     assert.include(screen, "q quit");
 });
 
@@ -94,18 +94,77 @@ test("n moves to next driver", () => {
     assert.strictEqual(driver(), "Bo");
 });
 
-test("arrow keys move between drivers, skipping away members", () => {
+const down = key("\x1b[B", "down");
+const up = key("\x1b[A", "up");
+const enter = key("\r", "return");
+
+test("arrow keys select members, away ones included, without changing driver", () => {
+    const { session, press, driver, handle } = setup();
+    session.setMemberHere(1, false);
+
+    press(down);
+    assert.strictEqual(handle.selected(), 1);
+    press(down, down);
+    assert.strictEqual(handle.selected(), 0);
+    press(up);
+    assert.strictEqual(handle.selected(), 2);
+    assert.strictEqual(driver(), "Ann");
+});
+
+test("enter makes the selected member driver", () => {
+    const { session, press, driver, handle } = setup();
+
+    press(down, down, enter);
+
+    assert.strictEqual(driver(), "Cy");
+    assert.strictEqual(session.state.status, "idle");
+    assert.isUndefined(handle.selected());
+
+    press(enter);
+    assert.strictEqual(session.state.status, "running");
+});
+
+test("enter brings a selected away member back as driver", () => {
     const { session, press, driver } = setup();
     session.setMemberHere(1, false);
 
-    press(key("\x1b[B", "down"));
-    assert.strictEqual(driver(), "Cy");
-    press(key("\x1b[B", "down"));
+    press(down, enter);
+
+    assert.isTrue(session.state.team[1].isHere);
+    assert.strictEqual(driver(), "Bo");
+});
+
+test("a toggles the selected member away and back", () => {
+    const { session, press, driver } = setup();
+
+    press(down, down, key("a"));
+    assert.isFalse(session.state.team[2].isHere);
+
+    press(key("a"));
+    assert.isTrue(session.state.team[2].isHere);
     assert.strictEqual(driver(), "Ann");
-    press(key("\x1b[A", "up"));
-    assert.strictEqual(driver(), "Cy");
-    press(key("\x1b[A", "up"));
-    assert.strictEqual(driver(), "Ann");
+});
+
+test("an away member past 9 can be brought back", () => {
+    const { session, press } = setup();
+    session.setTeamSize(10);
+    session.setMemberHere(9, false);
+
+    press(up, key("a"));
+
+    assert.isTrue(session.state.team[9].isHere);
+});
+
+test("screen marks the selected member", () => {
+    const { session, press, handle } = setup();
+    press(down);
+
+    const screen = renderScreen(session.state, session.labels(), {
+        selected: handle.selected(),
+    }).join("\n");
+
+    assert.include(screen, "› 2 Bo");
+    assert.include(screen, "❯ 1 Ann");
 });
 
 test("number picks driver", () => {
@@ -125,13 +184,25 @@ test("a marks driver away and moves to next driver", () => {
     assert.strictEqual(driver(), "Cy");
 });
 
+test("a pressed again brings the driver back", () => {
+    const { session, press, driver } = setup();
+
+    press(key("a"), key("a"));
+
+    assert.isTrue(session.state.team[0].isHere);
+    assert.strictEqual(driver(), "Bo");
+});
+
 test("a keeps the last member here", () => {
     const { session, press, driver } = setup();
 
-    press(key("a"), key("a"), key("a"));
+    press(key("a"), key("n"), key("a"), key("n"), key("a"));
 
-    assert.isTrue(session.state.team[2].isHere);
-    assert.strictEqual(driver(), "Cy");
+    assert.deepEqual(
+        session.state.team.map(m => m.isHere),
+        [false, true, false]
+    );
+    assert.strictEqual(driver(), "Bo");
 });
 
 test("number brings an away member back as driver", () => {
@@ -142,6 +213,14 @@ test("number brings an away member back as driver", () => {
 
     assert.isTrue(session.state.team[1].isHere);
     assert.strictEqual(driver(), "Bo");
+});
+
+test("r renames the selected member", () => {
+    const { session, press } = setup();
+
+    press(down, key("r"), key("x"), enter);
+
+    assert.strictEqual(session.state.team[1].name, "Box");
 });
 
 test("r renames driver and saves team", () => {

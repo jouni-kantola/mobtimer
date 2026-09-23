@@ -40,19 +40,6 @@ export function whosNextAfter(recentActiveIndex: number, team: Array<Member>) {
     return next;
 }
 
-export function whosPrevious(team: Array<Member>) {
-    const activeMember = getActiveMember(team);
-
-    for (let i = 1; i < team.length; i++) {
-        const previousIndex =
-            (activeMember.index - i + team.length) % team.length;
-        const member = getMemberByIndex(previousIndex, team);
-        if (member.isHere) return member;
-    }
-
-    return activeMember;
-}
-
 function getMemberByIndex(index: number, team: Array<Member>) {
     return team.filter(m => m.index === index)[0];
 }

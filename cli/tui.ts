@@ -6,7 +6,7 @@ import {
     createSession,
 } from "../lib/session.ts";
 import { type StatusLabels } from "../lib/status.ts";
-import { getActiveMember, whosNext, whosPrevious } from "../lib/team.ts";
+import { getActiveMember, whosNext } from "../lib/team.ts";
 import type { Notifier } from "./notify.ts";
 
 export type Key = { name?: string; sequence?: string; ctrl?: boolean };
@@ -39,23 +39,37 @@ const statusText = {
 };
 
 export const keyHints =
-    "enter start · space start/pause · n/↓ next · ↑ previous · b skip/toggle breaks · 1-9 driver · a driver away · r rename driver · s shuffle · </> team size · +/- interval · q quit";
+    "enter start/make selected driver · space start/pause · n next · ↑/↓ select · a away/back · r rename · 1-9 driver · b skip/toggle breaks · s shuffle · </> team size · +/- interval · q quit";
 
 export function renderScreen(
     state: SessionState,
     labels: StatusLabels,
-    { style = plain, message = "" }: { style?: Style; message?: string } = {}
+    {
+        style = plain,
+        message = "",
+        selected,
+    }: { style?: Style; message?: string; selected?: number } = {}
 ) {
     const status = state.onBreak ? "Break" : statusText[state.status];
 
+    // a strong chevron for the driver, a light one for the selected member;
+    // without colors bold and dim look the same, so the selected member
+    // gets a thinner chevron
+    const driverMark = style.bold("❯");
+    const selectedMark = style === plain ? "›" : style.dim("❯");
+
     const members = state.team.map(member => {
         const number = member.index < 9 ? `${member.index + 1}` : " ";
-        const marker = member.isActive ? "▶" : " ";
-        const line = `${number} ${marker} ${member.name}`;
+        const line = `${number} ${member.name}`;
+        const mark = member.isActive
+            ? driverMark
+            : member.index === selected
+              ? selectedMark
+              : " ";
 
-        if (!member.isHere) return style.dim(`${line} (away)`);
-        if (member.isActive) return style.bold(line);
-        return line;
+        if (!member.isHere) return `${mark} ${style.dim(`${line} (away)`)}`;
+        if (member.isActive) return `${mark} ${style.bold(line)}`;
+        return `${mark} ${line}`;
     });
 
     return [
@@ -65,7 +79,7 @@ export function renderScreen(
         `  Now: ${labels.now}`,
         `  Next: ${labels.next} (in ${labels.timeLeft})`,
         "",
-        ...members.map(line => `  ${line}`),
+        ...members.map(line => ` ${line}`),
         "",
         `  ${style.dim(message || keyHints)}`,
     ];
@@ -81,6 +95,26 @@ export type KeyActions = {
 
 export function createKeyHandler(session: Session, actions: KeyActions) {
     let renaming: { index: number; name: string } | undefined;
+    // member picked with the arrow keys, undefined while following the driver
+    let selected: number | undefined;
+
+    const selectedIndex = () =>
+        selected !== undefined && selected < session.state.team.length
+            ? selected
+            : getActiveMember(session.state.team).index;
+
+    function select(change: number) {
+        const size = session.state.team.length;
+        selected = (selectedIndex() + change + size) % size;
+    }
+
+    function makeDriver(index: number) {
+        // an away member is back when picked as driver
+        if (session.state.team[index]?.isHere === false)
+            session.setMemberHere(index, true);
+        session.switchDriver(index);
+        selected = undefined;
+    }
 
     const saveMembers = () =>
         actions.saveMembers(session.state.team.map(m => m.name));
@@ -117,7 +151,7 @@ export function createKeyHandler(session: Session, actions: KeyActions) {
         }
     }
 
-    return (key: Key) => {
+    const onKey = (key: Key) => {
         if (key.ctrl && key.name === "c") return actions.quit();
 
         if (renaming) return editName(key, renaming);
@@ -127,10 +161,8 @@ export function createKeyHandler(session: Session, actions: KeyActions) {
             : undefined;
 
         if (memberNumber !== undefined) {
-            // an away member is back when picked as driver
-            if (session.state.team[memberNumber]?.isHere === false)
-                session.setMemberHere(memberNumber, true);
-            session.switchDriver(memberNumber);
+            if (memberNumber < session.state.team.length)
+                makeDriver(memberNumber);
             return actions.say("");
         }
 
@@ -142,32 +174,40 @@ export function createKeyHandler(session: Session, actions: KeyActions) {
                 session.toggle();
                 return actions.say("");
             case "return":
-            case "enter":
-                session.start();
+            case "enter": {
+                const index = selectedIndex();
+                if (getActiveMember(session.state.team).index !== index)
+                    makeDriver(index);
+                else session.start();
                 return actions.say("");
+            }
             case "n":
+                makeDriver(whosNext(session.state.team).index);
+                return actions.say("");
             case "down":
-                session.switchDriver(whosNext(session.state.team).index);
+                select(1);
                 return actions.say("");
             case "up":
-                session.switchDriver(whosPrevious(session.state.team).index);
+                select(-1);
                 return actions.say("");
             case "b":
                 if (session.state.onBreak) session.endBreak();
                 else session.setTakeBreaks(!session.state.takeBreaks);
                 return actions.say("");
-            case "a":
-                session.setMemberHere(
-                    getActiveMember(session.state.team).index,
-                    false
-                );
+            case "a": {
+                // stay on the member so pressing a again brings them back
+                const index = selectedIndex();
+                session.setMemberHere(index, !session.state.team[index].isHere);
+                selected = index;
                 return actions.say("");
+            }
             case "r": {
-                const { index, name } = getActiveMember(session.state.team);
-                renaming = { index, name };
+                const index = selectedIndex();
+                renaming = { index, name: session.state.team[index].name };
                 return sayRenaming(renaming);
             }
             case "s":
+                selected = undefined;
                 session.shuffle();
                 saveMembers();
                 return actions.say("");
@@ -195,6 +235,10 @@ export function createKeyHandler(session: Session, actions: KeyActions) {
             }
         }
     };
+
+    return Object.assign(onKey, {
+        selected: () => selected,
+    });
 }
 
 export type TuiOptions = SessionOptions & {
@@ -216,6 +260,7 @@ export function runTui({
 }: TuiOptions) {
     const style = process.env.NO_COLOR ? plain : colors;
     let message = "";
+    let selected: () => number | undefined = () => undefined;
 
     const session = createSession(sessionOptions, {
         onChange: () => draw(),
@@ -232,6 +277,7 @@ export function runTui({
         const lines = renderScreen(session.state, session.labels(), {
             style,
             message,
+            selected: selected(),
         });
         // home, overwrite each line, clear the rest of the screen
         stdout.write(
@@ -249,6 +295,7 @@ export function runTui({
                 draw();
             },
         });
+        selected = onKey.selected;
 
         function onKeypress(_: string, key: Key | undefined) {
             onKey(key ?? {});

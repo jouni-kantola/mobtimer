@@ -36,12 +36,13 @@ Team and interval are saved to `~/.config/mobtimer/config.json` (or `$XDG_CONFIG
 
 | Key       | Action                                |
 | --------- | ------------------------------------- |
-| `enter`   | Start                                 |
+| `enter`   | Start, or make selected member driver |
 | `space`   | Start, pause or resume                |
 | `n`       | Next driver                           |
+| `↑` / `↓` | Select member                         |
 | `1`–`9`   | Make member driver (back if away)     |
-| `a`       | Mark driver away                      |
-| `r`       | Rename driver                         |
+| `a`       | Mark selected member away or back     |
+| `r`       | Rename selected member                |
 | `b`       | Skip break, or toggle breaks          |
 | `s`       | Shuffle team                          |
 | `>` / `<` | Add or remove member                  |
