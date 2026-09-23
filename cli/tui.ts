@@ -5,7 +5,7 @@ import {
     type SessionState,
     createSession,
 } from "../lib/session.ts";
-import { type StatusLabels, nextLine, nowLine } from "../lib/status.ts";
+import { type StatusLabels } from "../lib/status.ts";
 import { getActiveMember, whosNext, whosPrevious } from "../lib/team.ts";
 import type { Notifier } from "./notify.ts";
 
@@ -62,8 +62,8 @@ export function renderScreen(
         "",
         `  ${style.inverse(` ${labels.timeLeft} `)}  ${style.bold(status)}${state.takeBreaks ? "" : style.dim("  (no breaks)")}`,
         "",
-        `  ${nowLine(labels)}`,
-        `  ${nextLine(labels)}`,
+        `  Now: ${labels.now}`,
+        `  Next: ${labels.next} (in ${labels.timeLeft})`,
         "",
         ...members.map(line => `  ${line}`),
         "",

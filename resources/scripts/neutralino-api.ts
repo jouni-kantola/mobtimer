@@ -8,7 +8,7 @@ import {
 } from "@neutralinojs/lib";
 import type { Settings, SettingsStore } from "../../lib/settings.ts";
 import { type Theme, isTheme } from "./theme.ts";
-import { type StatusLabels, nextLine, nowLine } from "../../lib/status.ts";
+import type { StatusLabels } from "../../lib/status.ts";
 
 const trayOptions = {
     OPEN: "OPEN",
@@ -34,10 +34,10 @@ export async function updateTray(labels: StatusLabels) {
                 text: "-",
             },
             {
-                text: nowLine(labels),
+                text: `Now: ${labels.now}`,
             },
             {
-                text: nextLine(labels),
+                text: `Next: ${labels.next} (in ${labels.timeLeft})`,
             },
             {
                 text: "-",

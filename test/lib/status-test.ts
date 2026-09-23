@@ -1,10 +1,5 @@
 import { assert, test } from "vitest";
-import {
-    isBreakNext,
-    nextLine,
-    nowLine,
-    statusLabels,
-} from "../../lib/status.ts";
+import { isBreakNext, statusLabels } from "../../lib/status.ts";
 import { createTeam, switchActiveMember } from "../../lib/team.ts";
 
 const status = (overrides = {}) => ({
@@ -54,10 +49,4 @@ test("during break now is break and next is not another break", () => {
     const labels = statusLabels(s);
     assert.strictEqual(labels.now, "Break");
     assert.strictEqual(labels.next, "Ann");
-});
-
-test("status lines", () => {
-    const labels = { now: "Ann", next: "Bo", timeLeft: "09:05" };
-    assert.strictEqual(nowLine(labels), "Now: Ann");
-    assert.strictEqual(nextLine(labels), "Next: Bo (in 09:05)");
 });

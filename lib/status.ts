@@ -33,11 +33,3 @@ export function statusLabels(status: MobStatus): StatusLabels {
         timeLeft: formatTime(status.timeRemaining),
     };
 }
-
-export function nowLine({ now }: StatusLabels) {
-    return `Now: ${now}`;
-}
-
-export function nextLine({ next, timeLeft }: StatusLabels) {
-    return `Next: ${next} (in ${timeLeft})`;
-}
