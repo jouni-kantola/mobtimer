@@ -137,12 +137,10 @@ test("a then other key cancels", () => {
     assert.strictEqual(driver(), "Bo");
 });
 
-test("r then number renames and saves team", () => {
+test("r renames driver and saves team", () => {
     const { session, press, actions } = setup();
 
-    press(key("r"));
-    assert.include(actions.say.mock.lastCall![0], "1-9");
-    press(key("2"));
+    press(key("2"), key("r"));
     assert.include(actions.say.mock.lastCall![0], "Rename Bo: Bo_");
     press(
         key("\x7f", "backspace"),
@@ -165,8 +163,8 @@ test("r then number renames and saves team", () => {
 test("rename is cancelled with escape or an empty name", () => {
     const { session, press, actions } = setup();
 
-    press(key("r"), key("1"), key("x"), key("\x1b", "escape"));
-    press(key("r"), key("2"));
+    press(key("r"), key("x"), key("\x1b", "escape"));
+    press(key("2"), key("r"));
     press(key("\x7f", "backspace"), key("\x7f", "backspace"));
     press(key("\r", "return"));
 
@@ -181,7 +179,7 @@ test("rename is cancelled with escape or an empty name", () => {
 test("keys are typed into the name while renaming", () => {
     const { session, press, driver } = setup();
 
-    press(key("r"), key("1"), key("q"), key("3"), key("\r", "return"));
+    press(key("r"), key("q"), key("3"), key("\r", "return"));
 
     assert.strictEqual(session.state.team[0].name, "Annq3");
     assert.strictEqual(driver(), "Annq3");
