@@ -1,6 +1,6 @@
 # Mob timer
 
-![318569467-e07369a8-0239-42e2-80bb-7aa376a79c19](https://github.com/jouni-kantola/mobtimer/assets/2670127/e2c242c1-b4af-4c70-8c03-5c0dfa031e2a)
+<img width="460" height="445" alt="mobtimer-v3 0 0" src="https://github.com/user-attachments/assets/4f51a863-9490-4e3d-801c-2520505897b8" />
 
 ## Getting started
 
