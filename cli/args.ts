@@ -29,7 +29,8 @@ Keys while running:
   n      next driver                1-9    make member driver
   a 1-9  toggle member away         b      skip / toggle breaks
   r 1-9  rename member              s      shuffle team
-  + / -  interval +/- 1 minute      q      quit`;
+  > / <  add / remove member        + / -  interval +/- 1 minute
+  q      quit`;
 
 export function parseCliArgs(args: string[]): CliOptions {
     const { values } = parseArgs({

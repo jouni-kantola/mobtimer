@@ -230,6 +230,35 @@ test("s shuffles and saves team", () => {
     );
 });
 
+test("> and < add and remove members and save team", () => {
+    const { session, press, actions } = setup();
+
+    press(key(">", undefined));
+    assert.deepEqual(
+        session.state.team.map(m => m.name),
+        ["Ann", "Bo", "Cy", "Member 4"]
+    );
+    press(key("<", undefined), key("<", undefined));
+    assert.deepEqual(
+        session.state.team.map(m => m.name),
+        ["Ann", "Bo"]
+    );
+    assert.deepEqual(actions.saveMembers.mock.lastCall![0], ["Ann", "Bo"]);
+});
+
+test("< keeps the driver and at least one member", () => {
+    const { session, press, driver } = setup();
+    press(key("3"));
+
+    press(key("<", undefined), key("<", undefined), key("<", undefined));
+
+    assert.deepEqual(
+        session.state.team.map(m => m.name),
+        ["Cy"]
+    );
+    assert.strictEqual(driver(), "Cy");
+});
+
 test("+ and - change interval by a minute and save it", () => {
     const { session, press, actions } = setup();
 
