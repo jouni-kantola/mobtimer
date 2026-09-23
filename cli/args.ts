@@ -27,7 +27,7 @@ Options:
 Keys while running:
   enter  start                      space  start / pause / resume
   n      next driver                1-9    make member driver
-  a 1-9  toggle member away         b      skip break
+  a 1-9  toggle member away         b      skip / toggle breaks
   s      shuffle team               + / -  interval +/- 1 minute
   q      quit`;
 

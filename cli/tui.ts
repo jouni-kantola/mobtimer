@@ -39,7 +39,7 @@ const statusText = {
 };
 
 export const keyHints =
-    "enter start · space start/pause · n/↓ next · ↑ previous · b skip break · 1-9 driver · a away · s shuffle · +/- interval · q quit";
+    "enter start · space start/pause · n/↓ next · ↑ previous · b skip/toggle breaks · 1-9 driver · a away · s shuffle · +/- interval · q quit";
 
 export function renderScreen(
     state: SessionState,
@@ -124,6 +124,7 @@ export function createKeyHandler(session: Session, actions: KeyActions) {
                 return actions.say("");
             case "b":
                 if (session.state.onBreak) session.endBreak();
+                else session.setTakeBreaks(!session.state.takeBreaks);
                 return actions.say("");
             case "a":
                 awaitingAwayNumber = true;

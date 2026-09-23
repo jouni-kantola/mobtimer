@@ -149,6 +149,22 @@ test("b skips break", () => {
     assert.strictEqual(driver(), "Ann");
 });
 
+test("b toggles breaks when not on break", () => {
+    const { session, press } = setup();
+    press(key("3"));
+    assert.strictEqual(session.labels().next, "Break");
+
+    press(key("b"));
+
+    assert.isFalse(session.state.takeBreaks);
+    assert.strictEqual(session.labels().next, "Ann");
+
+    press(key("b"));
+
+    assert.isTrue(session.state.takeBreaks);
+    assert.strictEqual(session.labels().next, "Break");
+});
+
 test("s shuffles and saves team", () => {
     const { session, press, actions } = setup();
 
