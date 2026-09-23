@@ -39,7 +39,7 @@ const statusText = {
 };
 
 export const keyHints =
-    "enter start · space start/pause · n/↓ next · ↑ previous · b skip/toggle breaks · 1-9 driver · a away · r rename · s shuffle · +/- interval · q quit";
+    "enter start · space start/pause · n/↓ next · ↑ previous · b skip/toggle breaks · 1-9 driver · a away · r rename · s shuffle · </> team size · +/- interval · q quit";
 
 export function renderScreen(
     state: SessionState,
@@ -182,6 +182,13 @@ export function createKeyHandler(session: Session, actions: KeyActions) {
         }
 
         switch (key.sequence) {
+            case ">":
+            case "<": {
+                const change = key.sequence === "<" ? -1 : 1;
+                session.setTeamSize(session.state.team.length + change);
+                saveMembers();
+                return actions.say("");
+            }
             case "+":
             case "=":
             case "-": {
