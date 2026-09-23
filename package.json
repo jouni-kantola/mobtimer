@@ -1,7 +1,7 @@
 {
     "name": "mobtimer-gui",
     "private": true,
-    "version": "2.8.0",
+    "version": "3.0.0",
     "description": "Mob timer",
     "main": "index.js",
     "workspaces": [
