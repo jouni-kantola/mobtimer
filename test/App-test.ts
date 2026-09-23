@@ -8,6 +8,7 @@ vi.mock("../resources/scripts/neutralino-api", () => ({
     saveIntervalLength: vi.fn(async () => {}),
     showWindow: vi.fn(async () => {}),
     hideWindow: vi.fn(async () => {}),
+    saveTheme: vi.fn(async () => {}),
 }));
 
 import App from "../resources/scripts/App.vue";
@@ -20,6 +21,7 @@ beforeEach(() => {
 afterEach(() => {
     vi.useRealTimers();
     vi.clearAllMocks();
+    document.documentElement.removeAttribute("data-theme");
 });
 
 function mountApp() {
@@ -95,4 +97,35 @@ test("tick updates the countdown", async () => {
         .findAll(".timer input")
         .map(i => (i.element as HTMLInputElement).value);
     assert.deepEqual([minutes, seconds], ["00", "59"]);
+});
+
+test("theme toggle cycles system, light and dark", async () => {
+    const wrapper = mountApp();
+    const toggle = () => wrapper.find(".theme-toggle");
+    const visibleLabel = () =>
+        toggle().find(":scope > span:not(.hidden)").text();
+    const root = document.documentElement;
+
+    assert.include(visibleLabel(), "System");
+    assert.isFalse(root.hasAttribute("data-theme"));
+
+    await toggle().trigger("click");
+    assert.include(visibleLabel(), "Light");
+    assert.strictEqual(root.getAttribute("data-theme"), "light");
+    assert.strictEqual(
+        vi.mocked(neutralino.saveTheme).mock.lastCall![0],
+        "light"
+    );
+
+    await toggle().trigger("click");
+    assert.include(visibleLabel(), "Dark");
+    assert.strictEqual(root.getAttribute("data-theme"), "dark");
+
+    await toggle().trigger("click");
+    assert.include(visibleLabel(), "System");
+    assert.isFalse(root.hasAttribute("data-theme"));
+    assert.strictEqual(
+        vi.mocked(neutralino.saveTheme).mock.lastCall![0],
+        "system"
+    );
 });

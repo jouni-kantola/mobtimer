@@ -12,6 +12,7 @@
         <TeamSize :teamSize="team.length" @updateTeamSize="updateTeamSize" />
         <button class="shuffle" @click="randomizeTeamOrder">Shuffle</button>
         <BreaksToggle @breaksToggled="toggleBreaks" />
+        <ThemeToggle :theme="theme" @themeChanged="onThemeChanged" />
     </div>
     <form>
         <TeamMember
@@ -44,6 +45,7 @@ import Timer from "./components/Timer.vue";
 import TeamMember from "./components/TeamMember.vue";
 import BreaksToggle from "./components/BreaksToggle.vue";
 import BreakAlert from "./components/BreakAlert.vue";
+import ThemeToggle from "./components/ThemeToggle.vue";
 
 import {
     updateTray,
@@ -51,7 +53,9 @@ import {
     showWindow,
     hideWindow,
     saveIntervalLength,
+    saveTheme,
 } from "./neutralino-api";
+import { type Theme, applyTheme } from "./theme.ts";
 import { getActiveMember, type Member, canMarkAway } from "../../lib/team.ts";
 import { formatTime } from "../../lib/clock.ts";
 import { type SessionState, createSession } from "../../lib/session.ts";
@@ -67,6 +71,10 @@ const props = defineProps({
         type: Number,
         required: true,
     },
+    theme: {
+        type: String as PropType<Theme>,
+        default: "system",
+    },
 });
 
 const team = reactive(props.team);
@@ -79,6 +87,7 @@ const session = createSession(
 const timeRemaining = ref(session.state.timeRemaining);
 const onBreak = ref(session.state.onBreak);
 const status = ref(session.state.status);
+const theme = ref(props.theme);
 
 const startButtonText = computed(() => {
     if (status.value === "running") return "Pause";
@@ -131,6 +140,12 @@ function toggleBreaks(value: boolean) {
 async function updateTeamSize(newSize: number) {
     session.setTeamSize(newSize);
     await saveTeam(team.map(m => m.name));
+}
+
+async function onThemeChanged(newTheme: Theme) {
+    theme.value = newTheme;
+    applyTheme(newTheme);
+    await saveTheme(newTheme);
 }
 
 async function randomizeTeamOrder() {
