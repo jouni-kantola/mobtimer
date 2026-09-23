@@ -42,7 +42,8 @@ export type SessionEvents = {
 
 export type Session = ReturnType<typeof createSession>;
 
-// team is mutated in place, so a reactive array stays reactive
+// team is mutated in place, never replaced, so the caller's array
+// (e.g. a reactive one a UI renders from) always shows the current team
 export function createSession(
     { team, intervalSeconds, takeBreaks = true }: SessionOptions,
     { onChange, onTurnEnd }: SessionEvents = {}
