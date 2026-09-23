@@ -137,6 +137,56 @@ test("a then other key cancels", () => {
     assert.strictEqual(driver(), "Bo");
 });
 
+test("r then number renames and saves team", () => {
+    const { session, press, actions } = setup();
+
+    press(key("r"));
+    assert.include(actions.say.mock.lastCall![0], "1-9");
+    press(key("2"));
+    assert.include(actions.say.mock.lastCall![0], "Rename Bo: Bo_");
+    press(
+        key("\x7f", "backspace"),
+        key("\x7f", "backspace"),
+        key("B", "b"),
+        key("ö", undefined),
+        key(" ", "space"),
+        key("n"),
+        key("\r", "return")
+    );
+
+    assert.strictEqual(session.state.team[1].name, "Bö n");
+    assert.deepEqual(actions.saveMembers.mock.lastCall![0], [
+        "Ann",
+        "Bö n",
+        "Cy",
+    ]);
+});
+
+test("rename is cancelled with escape or an empty name", () => {
+    const { session, press, actions } = setup();
+
+    press(key("r"), key("1"), key("x"), key("\x1b", "escape"));
+    press(key("r"), key("2"));
+    press(key("\x7f", "backspace"), key("\x7f", "backspace"));
+    press(key("\r", "return"));
+
+    assert.deepEqual(
+        session.state.team.map(m => m.name),
+        ["Ann", "Bo", "Cy"]
+    );
+    assert.strictEqual(actions.saveMembers.mock.calls.length, 0);
+    assert.strictEqual(actions.quit.mock.calls.length, 0);
+});
+
+test("keys are typed into the name while renaming", () => {
+    const { session, press, driver } = setup();
+
+    press(key("r"), key("1"), key("q"), key("3"), key("\r", "return"));
+
+    assert.strictEqual(session.state.team[0].name, "Annq3");
+    assert.strictEqual(driver(), "Annq3");
+});
+
 test("b skips break", () => {
     const { session, press, driver } = setup();
     press(key("3"), key(" ", "space"));

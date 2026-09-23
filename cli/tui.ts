@@ -39,7 +39,7 @@ const statusText = {
 };
 
 export const keyHints =
-    "enter start · space start/pause · n/↓ next · ↑ previous · b skip/toggle breaks · 1-9 driver · a away · s shuffle · +/- interval · q quit";
+    "enter start · space start/pause · n/↓ next · ↑ previous · b skip/toggle breaks · 1-9 driver · a away · r rename · s shuffle · +/- interval · q quit";
 
 export function renderScreen(
     state: SessionState,
@@ -80,23 +80,66 @@ export type KeyActions = {
 };
 
 export function createKeyHandler(session: Session, actions: KeyActions) {
-    let awaitingAwayNumber = false;
+    let awaitingNumber: "away" | "rename" | undefined;
+    let renaming: { index: number; name: string } | undefined;
 
     const saveMembers = () =>
         actions.saveMembers(session.state.team.map(m => m.name));
 
+    const sayRenaming = ({ index, name }: { index: number; name: string }) =>
+        actions.say(
+            `Rename ${session.state.team[index].name}: ${name}_  (enter save · esc cancel)`
+        );
+
+    function editName(key: Key, edit: { index: number; name: string }) {
+        switch (key.name) {
+            case "return":
+            case "enter": {
+                renaming = undefined;
+                const name = edit.name.trim();
+                if (name) {
+                    session.renameMember(edit.index, name);
+                    saveMembers();
+                }
+                return actions.say("");
+            }
+            case "escape":
+                renaming = undefined;
+                return actions.say("");
+            case "backspace":
+                edit.name = [...edit.name].slice(0, -1).join("");
+                return sayRenaming(edit);
+        }
+
+        const text = key.sequence ?? "";
+        if (!key.ctrl && [...text].length === 1 && text >= " ") {
+            edit.name += text;
+            sayRenaming(edit);
+        }
+    }
+
     return (key: Key) => {
         if (key.ctrl && key.name === "c") return actions.quit();
+
+        if (renaming) return editName(key, renaming);
 
         const memberNumber = /^[1-9]$/.test(key.sequence ?? "")
             ? Number(key.sequence) - 1
             : undefined;
 
-        if (awaitingAwayNumber) {
-            awaitingAwayNumber = false;
+        if (awaitingNumber) {
+            const awaiting = awaitingNumber;
+            awaitingNumber = undefined;
             const member = session.state.team[memberNumber ?? -1];
-            if (member) session.setMemberHere(member.index, !member.isHere);
-            return actions.say("");
+            if (!member) return actions.say("");
+
+            if (awaiting === "away") {
+                session.setMemberHere(member.index, !member.isHere);
+                return actions.say("");
+            }
+
+            renaming = { index: member.index, name: member.name };
+            return sayRenaming(renaming);
         }
 
         if (memberNumber !== undefined) {
@@ -127,8 +170,11 @@ export function createKeyHandler(session: Session, actions: KeyActions) {
                 else session.setTakeBreaks(!session.state.takeBreaks);
                 return actions.say("");
             case "a":
-                awaitingAwayNumber = true;
+                awaitingNumber = "away";
                 return actions.say("Toggle away: press member number 1-9");
+            case "r":
+                awaitingNumber = "rename";
+                return actions.say("Rename: press member number 1-9");
             case "s":
                 session.shuffle();
                 saveMembers();
