@@ -1,4 +1,3 @@
-import { readFile } from "node:fs/promises";
 import { formatTime, secondsToMinutesAndSeconds } from "../lib/clock.ts";
 import { loadSettings } from "../lib/settings.ts";
 import { createTeam, shuffleTeam } from "../lib/team.ts";
@@ -6,6 +5,7 @@ import { type CliOptions, parseCliArgs, usage } from "./args.ts";
 import { createFileStore, defaultConfigPath } from "./config-store.ts";
 import { createNotifier } from "./notify.ts";
 import { runTui } from "./tui.ts";
+import pkg from "./package.json" with { type: "json" };
 
 export async function main(args: string[]) {
     let options: CliOptions;
@@ -22,7 +22,7 @@ export async function main(args: string[]) {
     }
 
     if (options.version) {
-        console.log(await readVersion());
+        console.log(pkg.version);
         return 0;
     }
 
@@ -71,11 +71,4 @@ export async function main(args: string[]) {
         saveInterval: seconds => void store.saveInterval(seconds),
     });
     return 0;
-}
-
-async function readVersion() {
-    const pkg = JSON.parse(
-        await readFile(new URL("../package.json", import.meta.url), "utf-8")
-    );
-    return pkg.version as string;
 }

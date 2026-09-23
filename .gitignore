@@ -9,6 +9,7 @@ coverage/
 # Neutralinojs binaries and builds
 /bin
 /dist
+/cli/dist
 .tmp/
 
 # 3rd party libs
