@@ -28,7 +28,7 @@ Keys while running:
   enter  start                      space  start / pause / resume
   n      next driver                1-9    make member driver
   a 1-9  toggle member away         b      skip / toggle breaks
-  r 1-9  rename member              s      shuffle team
+  r      rename driver              s      shuffle team
   > / <  add / remove member        + / -  interval +/- 1 minute
   q      quit`;
 

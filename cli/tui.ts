@@ -6,7 +6,7 @@ import {
     createSession,
 } from "../lib/session.ts";
 import { type StatusLabels, nextLine, nowLine } from "../lib/status.ts";
-import { whosNext, whosPrevious } from "../lib/team.ts";
+import { getActiveMember, whosNext, whosPrevious } from "../lib/team.ts";
 import type { Notifier } from "./notify.ts";
 
 export type Key = { name?: string; sequence?: string; ctrl?: boolean };
@@ -39,7 +39,7 @@ const statusText = {
 };
 
 export const keyHints =
-    "enter start · space start/pause · n/↓ next · ↑ previous · b skip/toggle breaks · 1-9 driver · a away · r rename · s shuffle · </> team size · +/- interval · q quit";
+    "enter start · space start/pause · n/↓ next · ↑ previous · b skip/toggle breaks · 1-9 driver · a away · r rename driver · s shuffle · </> team size · +/- interval · q quit";
 
 export function renderScreen(
     state: SessionState,
@@ -80,7 +80,7 @@ export type KeyActions = {
 };
 
 export function createKeyHandler(session: Session, actions: KeyActions) {
-    let awaitingNumber: "away" | "rename" | undefined;
+    let awaitingAwayNumber = false;
     let renaming: { index: number; name: string } | undefined;
 
     const saveMembers = () =>
@@ -127,19 +127,11 @@ export function createKeyHandler(session: Session, actions: KeyActions) {
             ? Number(key.sequence) - 1
             : undefined;
 
-        if (awaitingNumber) {
-            const awaiting = awaitingNumber;
-            awaitingNumber = undefined;
+        if (awaitingAwayNumber) {
+            awaitingAwayNumber = false;
             const member = session.state.team[memberNumber ?? -1];
-            if (!member) return actions.say("");
-
-            if (awaiting === "away") {
-                session.setMemberHere(member.index, !member.isHere);
-                return actions.say("");
-            }
-
-            renaming = { index: member.index, name: member.name };
-            return sayRenaming(renaming);
+            if (member) session.setMemberHere(member.index, !member.isHere);
+            return actions.say("");
         }
 
         if (memberNumber !== undefined) {
@@ -170,11 +162,13 @@ export function createKeyHandler(session: Session, actions: KeyActions) {
                 else session.setTakeBreaks(!session.state.takeBreaks);
                 return actions.say("");
             case "a":
-                awaitingNumber = "away";
+                awaitingAwayNumber = true;
                 return actions.say("Toggle away: press member number 1-9");
-            case "r":
-                awaitingNumber = "rename";
-                return actions.say("Rename: press member number 1-9");
+            case "r": {
+                const { index, name } = getActiveMember(session.state.team);
+                renaming = { index, name };
+                return sayRenaming(renaming);
+            }
             case "s":
                 session.shuffle();
                 saveMembers();
