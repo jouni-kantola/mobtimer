@@ -39,7 +39,7 @@ const statusText = {
 };
 
 export const keyHints =
-    "enter start · space start/pause · n/↓ next · ↑ previous · b skip/toggle breaks · 1-9 driver · a away · r rename driver · s shuffle · </> team size · +/- interval · q quit";
+    "enter start · space start/pause · n/↓ next · ↑ previous · b skip/toggle breaks · 1-9 driver · a driver away · r rename driver · s shuffle · </> team size · +/- interval · q quit";
 
 export function renderScreen(
     state: SessionState,
@@ -80,7 +80,6 @@ export type KeyActions = {
 };
 
 export function createKeyHandler(session: Session, actions: KeyActions) {
-    let awaitingAwayNumber = false;
     let renaming: { index: number; name: string } | undefined;
 
     const saveMembers = () =>
@@ -127,14 +126,10 @@ export function createKeyHandler(session: Session, actions: KeyActions) {
             ? Number(key.sequence) - 1
             : undefined;
 
-        if (awaitingAwayNumber) {
-            awaitingAwayNumber = false;
-            const member = session.state.team[memberNumber ?? -1];
-            if (member) session.setMemberHere(member.index, !member.isHere);
-            return actions.say("");
-        }
-
         if (memberNumber !== undefined) {
+            // an away member is back when picked as driver
+            if (session.state.team[memberNumber]?.isHere === false)
+                session.setMemberHere(memberNumber, true);
             session.switchDriver(memberNumber);
             return actions.say("");
         }
@@ -162,8 +157,11 @@ export function createKeyHandler(session: Session, actions: KeyActions) {
                 else session.setTakeBreaks(!session.state.takeBreaks);
                 return actions.say("");
             case "a":
-                awaitingAwayNumber = true;
-                return actions.say("Toggle away: press member number 1-9");
+                session.setMemberHere(
+                    getActiveMember(session.state.team).index,
+                    false
+                );
+                return actions.say("");
             case "r": {
                 const { index, name } = getActiveMember(session.state.team);
                 renaming = { index, name };

@@ -116,22 +116,29 @@ test("number picks driver", () => {
     assert.strictEqual(driver(), "Cy");
 });
 
-test("a then number toggles away", () => {
-    const { session, press, actions } = setup();
-
-    press(key("a"));
-    assert.include(actions.say.mock.lastCall![0], "1-9");
-    press(key("2"));
-    assert.isFalse(session.state.team[1].isHere);
-
-    press(key("a"), key("2"));
-    assert.isTrue(session.state.team[1].isHere);
-});
-
-test("a then other key cancels", () => {
+test("a marks driver away and moves to next driver", () => {
     const { session, press, driver } = setup();
 
-    press(key("a"), key("x"), key("2"));
+    press(key("2"), key("a"));
+
+    assert.isFalse(session.state.team[1].isHere);
+    assert.strictEqual(driver(), "Cy");
+});
+
+test("a keeps the last member here", () => {
+    const { session, press, driver } = setup();
+
+    press(key("a"), key("a"), key("a"));
+
+    assert.isTrue(session.state.team[2].isHere);
+    assert.strictEqual(driver(), "Cy");
+});
+
+test("number brings an away member back as driver", () => {
+    const { session, press, driver } = setup();
+    press(key("2"), key("a"));
+
+    press(key("2"));
 
     assert.isTrue(session.state.team[1].isHere);
     assert.strictEqual(driver(), "Bo");
