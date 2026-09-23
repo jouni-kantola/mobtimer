@@ -1,12 +1,12 @@
 {
-    "name": "mobtimer",
+    "name": "mobtimer-gui",
     "private": true,
     "version": "2.8.0",
     "description": "Mob timer",
     "main": "index.js",
-    "bin": {
-        "mobtimer": "cli/mobtimer.ts"
-    },
+    "workspaces": [
+        "cli"
+    ],
     "engines": {
         "node": ">=24"
     },

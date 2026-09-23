@@ -1,0 +1,36 @@
+{
+    "name": "mobtimer",
+    "version": "0.0.1",
+    "description": "Mob programming timer for the terminal",
+    "keywords": [
+        "mob",
+        "mob-programming",
+        "timer",
+        "cli"
+    ],
+    "type": "module",
+    "bin": {
+        "mobtimer": "dist/mobtimer.js"
+    },
+    "files": [
+        "dist"
+    ],
+    "engines": {
+        "node": ">=24"
+    },
+    "scripts": {
+        "build": "vite build",
+        "prepublishOnly": "npm run build"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/jouni-kantola/mobtimer.git",
+        "directory": "cli"
+    },
+    "author": "Jouni Kantola <jouni@kantola.se> (https://github.com/jouni-kantola)",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/jouni-kantola/mobtimer/issues"
+    },
+    "homepage": "https://github.com/jouni-kantola/mobtimer/tree/main/cli#readme"
+}

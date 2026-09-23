@@ -10,31 +10,7 @@
 
 ## CLI
 
-A terminal mob timer that shares its timer and rotation logic (`lib/`) with the app. It needs Node.js 24.
-
-```sh
-npm install
-npm link            # adds a `mobtimer` command
-mobtimer --team "Ann,Bo,Cy" --interval 10m
-```
-
-Or run it without linking: `npm run cli -- --help`.
-
-Team and interval are saved to `~/.config/mobtimer/config.json` (or `$XDG_CONFIG_HOME/mobtimer/config.json`), so after the first run `mobtimer` is enough. Without saved settings it starts with the same defaults as the app: six members and 10 minute turns, with breaks.
-
-| Key          | Action                             |
-| ------------ | ---------------------------------- |
-| `enter`      | Start                              |
-| `space`      | Start, pause or resume             |
-| `n`          | Next driver                        |
-| `1`–`9`      | Make member driver                 |
-| `a`, `1`–`9` | Toggle member away                 |
-| `b`          | Skip break                         |
-| `s`          | Shuffle team                       |
-| `+` / `-`    | Interval one minute longer/shorter |
-| `q`          | Quit                               |
-
-When a turn ends the terminal bell rings and a desktop notification is shown (turn off with `--no-notify`). `--no-breaks` skips the break after each round. See `mobtimer --help` for all options.
+There's also a terminal version that shares the app's timer and rotation logic. See [cli/README.md](cli/README.md).
 
 ## Binaries
 
